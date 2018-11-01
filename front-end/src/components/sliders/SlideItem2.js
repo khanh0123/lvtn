@@ -6,7 +6,7 @@ class SlideItem2 extends React.Component {
         return (
             <div className="item">
                 <div className="movie-item-contents gradient">
-                    <img src="assets/images/cat/1.jpg" alt="" />
+                    <img src="http://tv.vietbao.vn/images/tv2015/tin-tuc/7f676ece0f-1-23244462-1953720461568286-3268780156402845094-n.jpeg" alt="" />
                     <div className="movie-item-content">
                         <div className="movie-item-content-top">
                             <div className="pull-left">
@@ -23,25 +23,25 @@ class SlideItem2 extends React.Component {
                         </div>
                         <div className="movie-item-content-buttom">
                             <div className="movie-item-title">
-                                <a href="">Hurry Animate Blue Strack New Movie (2018)</a>
+                                <Link to="/phim/abc-123" >DIÊN HY CÔNG LƯỢC</Link>
                             </div>
                             <div className="item-cat">
                                 <ul>
-                                    <li><span>Category :</span><a href="">English Animation Movies</a></li>
+                                    <li><span>Danh mục : </span><span>Phim bộ Trung Quốc</span></li>
                                 </ul>
                                 <div className="item-cat-hover">
                                     <ul>
-                                        <li><span>Release :</span><a href="">October 26, 2017</a></li>
-                                        <li><span>Genre :</span><a href="">Action, Drama</a></li>
+                                        <li><span>Ngày phát hành : </span><span>26/5/2018</span></li>
+                                        <li><span>Thể loại : </span><span>Cổ trang</span></li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="movie-item-beta">
                                 <div className="movie-details">
-                                    <a href=""className="btn btn-button button-detals blck-bg">details</a>
+                                    <Link to="/phim/abc-123"  className="btn btn-button button-detals blck-bg">Chi tiết</Link>
                                 </div>
                                 <div className="view-movie hover-right">
-                                    <a className="blck-bg" href="">15k view</a>
+                                    <a className="blck-bg" href="#">15k lượt xem</a>
                                 </div>
                             </div>
                         </div>

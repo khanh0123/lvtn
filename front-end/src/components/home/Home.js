@@ -44,7 +44,7 @@ class Home extends React.Component {
                     </div>
                 </section>
 
-                <section className="top-rating pt-75">
+                <section className="top-rating pt-75 ">
                     <div className="haddings">
                         <div className="container">
                             <div className="hadding-area">

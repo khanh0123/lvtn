@@ -492,7 +492,7 @@
                 var getOffset = $(".wrap-sticky").offset().top;
                 $(window).on("scroll", function(){  
                     var scrollTop = $(window).scrollTop();
-                    if(scrollTop > getOffset){
+                    if(scrollTop > getOffset &&  $(window).width() > 480){
                         getNav.addClass("sticked");
                     }else {
                         getNav.removeClass("sticked");

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Player from '../video/player';
+import VideoPlayer from '../video/videoplayer';
 import '../../assets/vendors/video-react/video-react.css';
 import parseFB from "../helpers/common";
 import SliderScroll from "../sliders/SliderScroll";
@@ -10,9 +11,16 @@ class Detail extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            render: false
+        }
     }
     componentDidMount() {
         parseFB();
+
+    }
+    componentWillMount() {
+
     }
     render() {
         return (
@@ -29,15 +37,15 @@ class Detail extends React.Component {
                     </div>
                 </div>
 
-                <div className="inner-page">
+                <div className="inner-page details-page">
                     <div className="container">
                         <div className="row">
 
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="details-page">
                                     <div className="details-player" style={{ marginTop: '2em' }}>
-                                        <Player />
-
+                                        {/* <Player /> */}
+                                        <VideoPlayer />
                                     </div>
 
                                 </div>
@@ -65,7 +73,6 @@ class Detail extends React.Component {
                 </div>
 
             </React.Fragment>
-
         )
     }
 }

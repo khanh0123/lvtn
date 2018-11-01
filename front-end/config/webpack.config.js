@@ -9,7 +9,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "build"),
     filename: 'js/bundle.[hash:8].js',
-    chunkFilename: 'js/bundle.[hash:8].chunk.js',
+    chunkFilename: 'js/[name].[chunkhash].js',
     publicPath: "/"
   },
   module: {
@@ -18,7 +18,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
         }
       },
       { 

@@ -9,13 +9,14 @@ class Layout extends React.Component {
         if (this.props.location.pathname !== prevProps.location.pathname) {
             
             window.scrollTo(0, 0);
-            window.setLoading();
-            setTimeout(() => {
-                window.unSetLoading();
-            }, 1000);
+        //     window.setLoading();
+        //     setTimeout(() => {
+        //         window.unSetLoading();
+        //     }, 500);
         }
     }
-    componentDidMount(){        
+    componentDidMount(){   
+        window.scrollTo(0, 0);     
     }
 
     render() {
@@ -28,7 +29,7 @@ class Layout extends React.Component {
 				<div className="to-top" id="back-top">
 					<i className="fa fa-angle-up"></i>
 				</div>
-				<Loading/>
+				{/* <Loading/> */}
 			</div>
 		);
     }

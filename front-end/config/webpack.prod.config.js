@@ -1,27 +1,31 @@
 var path = require('path');
-var webpack = require('webpack');
+// var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require("interpolate-html-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const uglifyJsContents = require('uglify-js');
 const uglifyCssContents = require('uglifycss');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-
+let is_minimize = false;
 
 module.exports = {
   entry: [
-    path.join(__dirname, 'src', 'index.js')
+    path.join(__dirname, '../src', 'index.js')
   ],
   output: {
-    path: path.join(__dirname, '/build'),
-    filename: '[name].[hash:16].js',
+    path: path.join(__dirname, '../build'),
+    filename: 'bundle.[hash:16].js',
     publicPath: '/'
   },
   plugins: [
-    new CleanWebpackPlugin(path.join(__dirname, '/build')),
+    new CleanWebpackPlugin(['build'], {
+      root: process.cwd(),
+      verbose: true,
+      dry: false
+    }),
     new HtmlWebpackPlugin({
       inject: true,
-      template: './public/index.html',
+      template: path.join(__dirname, '../public/index.html'),
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -38,15 +42,24 @@ module.exports = {
     new InterpolateHtmlPlugin({
       PUBLIC_URL: ''
     }),
+
     new CopyWebpackPlugin([{
       from: 'src/assets/',
       to: 'assets/',
       transform: function (fileContent, path) {
-        console.log(`Running copy assets folders with minimize`);
+        if (!is_minimize) {
+          console.log(`Running copy assets folders with minimize ...`);
+          is_minimize = true;
+        }
         let regJS = /\.js$/gi;
         let regCSS = /\.css$/gi;
         if (regJS.test(path)) {
-          return uglifyJsContents.minify(fileContent.toString()).code.toString();
+          try {
+            return path.indexOf(".min.js") == -1 ? uglifyJsContents.minify(fileContent.toString()).code.toString() : fileContent;
+          } catch (error) {
+            return fileContent;
+          }
+
         }
 
         if (regCSS.test(path)) {

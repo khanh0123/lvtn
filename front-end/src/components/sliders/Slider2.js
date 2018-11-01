@@ -1,5 +1,6 @@
 import React from "react";
 import SlideItem2 from "./SlideItem2";
+import SlideItem from "./SlideItem";
 import OwlCarousel from 'react-owl-carousel2';
 
 class Slider2 extends React.Component {
@@ -16,10 +17,10 @@ class Slider2 extends React.Component {
             autoplayHoverPause: false,
             responsive: {
                 0: {
-                    items: 1
+                    items: 2
                 }
                 , 480: {
-                    items: 1
+                    items: 2
                 }
                 , 568: {
                     items: 2

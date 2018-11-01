@@ -1,6 +1,7 @@
 import React from "react";
-import ModalPopup from '../others/Modal';
-// import 'react-modal-video/scss/modal-video.scss';
+import ModalPopup from '../popup/Modal';
+import ReactPlayer from 'react-player'
+
 
 class Trailer extends React.Component {
     constructor() {
@@ -10,7 +11,16 @@ class Trailer extends React.Component {
 
         return (
             <ModalPopup isOpen={this.props.isOpen} onClose={this.props.onClose}>
-                <iframe width="800" height="500" src={this.props.source} frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen></iframe>
+                <ReactPlayer
+                        className='react-player'
+                        url = { 'https://www.youtube.com/watch?v=f6Cswdm601A' }
+                        width='100%'
+                        height='100%'
+                        controls={true}
+                        style={{backgroundImage: "url(https://stanleymovietheater.com/wp-content/uploads/2018/02/Black-Panther-Poster-UnBumf.jpeg)"}}
+                        width='100%'
+                        height='100%'
+                    />
             </ModalPopup>
         )
     }

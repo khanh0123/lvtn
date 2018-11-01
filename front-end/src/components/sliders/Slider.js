@@ -33,7 +33,7 @@ class Slider extends React.Component {
                     items: 3
                 }
                 , 1200: {
-                    items: 3
+                    items: 4
                 }
             }
         };

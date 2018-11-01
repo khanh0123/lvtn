@@ -4,6 +4,9 @@
         "@babel/preset-react"
     ],
     "plugins": [
-        "transform-class-properties"
+        "@babel/plugin-transform-runtime",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-export-default-from",
+        "@babel/plugin-syntax-dynamic-import"
     ]
 }

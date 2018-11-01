@@ -5,8 +5,8 @@ const sources = {
   sintelTrailer: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
   bunnyTrailer: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
   bunnyMovie: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-  local: '/assets/videos/MOVIE.mp4',
-  test: 'http://media.w3.org/2010/05/video/movie_300.webm',
+  local: 'http://clips.vorwaerts-gmbh.de/VfE_html5.mp4',
+  test: 'https://ca01.vieplay.vn/vielive/on-gioi-cau-day-roi-2017-s04-ep01/hls/mapper-fullhd/profile.m3u8',
 };
 
 export default class PlayerControl extends Component {
@@ -14,7 +14,7 @@ export default class PlayerControl extends Component {
     super(props, context);
 
     this.state = {
-      source: sources['local'],
+      source: sources['test'],
     };
 
     this.play = this.play.bind(this);

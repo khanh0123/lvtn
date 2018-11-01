@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {Link} from "react-router-dom"
 import RBCarousel from "react-bootstrap-carousel";
 import "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
 
@@ -75,17 +75,17 @@ class SliderBanner extends React.Component {
                     >
                         <div className="slide-item">
                             <div className="slider-img">
-                                <img src="assets/images/slider/home-1/slider.jpg" />
+                            <div className="bg-top"></div>
+                                <img src="https://static.vieplay.vn/vieplay-image/home_carousel_web/2018/10/10/5pkuvvu2_hau_duy_mat_troi_2016_s01__1920x700._1920_700.jpg" />
                             </div>
                             <div className="slider-contents">
                                 <div className="container">
                                     <div className="row">
                                         <div className="col-md-offset-4 col-lg-offset-4 col-lg-7 col-md-7 col-sm-12  col-xs-12">
                                             <div className="slider-content">
-                                                <h3 className="fadeInUp animated delay-1s animate" >Welcome to Our movie site</h3>
-                                                <h2 className="fadeInUp animated delay-2s animate" >Our special <span className="green">Movies</span></h2>
-                                                <p className="fadeInUp animated delay-3s animate" >Lorem Ipsum is simply dummy text of the printing and typesetting industrioy. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown.</p>
-                                                <a className="fadeInUp animated delay-4s btn btn-button green-bg button-1 animation animate">Xem Ngay</a>
+                                                <h2 className="fadeInUp animated delay-1s animate" >HẬU DUỆ MẶT TRỜI</h2>
+                                                <p className="fadeInUp animated delay-2s animate" >Câu chuyện tình lãng mạn, ngọt ngào làm rung động hàng triệu trái tim của cặp đôi đại úy Yoo Shi Jin và nàng bác sĩ xinh đẹp Kang Mo Yeon khi đang làm nhiệm vụ bảo vệ hòa bình dân t ...</p>
+                                                <Link to="/phim/hau-due-mat-troi-567" className="fadeInUp animated delay-3s btn btn-button green-bg button-1 animation animate">Xem Ngay</Link>
                                             </div>
                                         </div>
                                     </div>
@@ -95,17 +95,18 @@ class SliderBanner extends React.Component {
 
                         <div className="slide-item">
                             <div className="slider-img">
-                                <img src="assets/images/slider/home-1/slider-2.jpg" />
+                                <div className="bg-top"></div>
+                                <img src="https://static.vieplay.vn/vieplay-image/home_carousel_web/2018/10/09/fko5n30c_dien_hy_cong_luoc_2018_s01_1920x7007765f6cef660b1b64d888c030f445c49._1920_700.jpg" className="img-responsive" />
                             </div>
                             <div className="slider-contents">
                                 <div className="container">
                                     <div className="row">
                                         <div className="col-md-offset-4 col-lg-offset-4 col-lg-7 col-md-7 col-sm-12 col-xs-12">
                                             <div className="slider-content">
-                                                <h3 className="delay-1s  animate" >Welcome to Our movie site</h3>
-                                                <h2 className="delay-2s  animate" >Our special <span className="green">Movies</span></h2>
-                                                <p className="delay-3s  animate" >Lorem Ipsum is simply dummy text of the printing and typesetting industrioy. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown.</p>
-                                                <a className="delay-4s btn btn-button green-bg button-1 animation  animate">Read More</a>
+                                                {/* <h3 className="delay-1s  animate" >DIÊN HY CÔNG LƯỢC</h3> */}
+                                                <h2 className="delay-1s  animate" >DIÊN HY CÔNG LƯỢC</h2>
+                                                <p className="delay-2s  animate" >Phim xoay quanh những âm mưu, minh tranh ám đấu chốn hậu cung. Nổi bật là mối tình của hoàng đế và hoàng hậu Như Ý cũng như hé lộ lý do mà Như Ý (Kế hoàng hậu) bị thất sủng, giáng v ...</p>
+                                                <Link to="/phim/dien-hy-dong-luoc-248" className="delay-3s btn btn-button green-bg button-1 animation  animate">Xem ngay</Link>
                                             </div>
                                         </div>
                                     </div>

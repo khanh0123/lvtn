@@ -17,7 +17,10 @@ class Info extends React.Component {
         parseFB();
     }
     action_Trailer() {
-        this.setState({ is_open_trailer: !this.state.is_open_trailer });
+        this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {
+            console.log(this.state.is_open_trailer);
+            
+        });
     }
 
     render() {
@@ -36,8 +39,8 @@ class Info extends React.Component {
                 <div className="inner-page">
                     <div className="container">
                         <div className="details-page">
-                            <div className="details-big-img">
-                                <img src="/assets/images/details/1.jpg" alt="" />
+                            <div className="details-big-img ">
+                                <img src="/assets/images/details/1.jpg" alt="" className="hidden-xs" />
                                 <div className="play-icon">
                                     <Link to="/phim/tham-tu-ma-123/xem-phim" className="flat-icons"><span className="flaticon-play-button" /></Link>
                                 </div>
@@ -125,7 +128,7 @@ class Info extends React.Component {
                                         </div>
 
                                     </div>
-                                    <div className="col-lg-3 col-md-3">
+                                    <div className="col-lg-3 col-md-3 hidden-xs">
                                         <SliderScroll title="Trailer Phim Mới" />
                                         <SliderScroll title="Phim Bộ Hot" />
                                         <SliderScroll title="Phim Lẻ Hot" />

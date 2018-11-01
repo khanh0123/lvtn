@@ -4,8 +4,8 @@ class Loading extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            display:'none',
-            opacity:0,
+            display:'',
+            opacity:1,
             title:'Chào mừng bạn đến với Movie Star. Vui lòng đợi trong giây lát'
         }
     }

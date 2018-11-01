@@ -27,7 +27,7 @@ class Slider extends React.Component {
             autoplayHoverPause: false,
             responsive: {
                 0: {
-                    items: 1
+                    items: 2
                 }
                 , 480: {
                     items: 1, margin: 15
@@ -62,7 +62,7 @@ class Slider extends React.Component {
                             </OwlCarousel>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 hidden-xs">
                         <SliderScroll title=""/>
                     </div>
 

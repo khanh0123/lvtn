@@ -6,7 +6,7 @@ class SlideItem extends React.Component {
         return (
             <div className="item">
                 <div className="movie-item-contents gradient">
-                    <img src="/assets/images/cat/1.jpg" />
+                    <img src="https://2sao.vietnamnetjsc.vn/images/2018/07/29/21/49/dien-hi-cong-luoc-19.JPG" />
                     <div className="movie-item-content">
                         <div className="movie-item-content-top">
                             <div className="pull-left">
@@ -19,29 +19,29 @@ class SlideItem extends React.Component {
                             </div>
                         </div>
                         <div className="movie-item-content-center">
-                            <Link to="/phim/abc-123" className="flat-icons"><span className="flaticon-play-button" /></Link>
+                            <Link to="/phim/abc-123/xem-phim" className="flat-icons" title="Xem ngay"><span className="flaticon-play-button" /></Link>
                         </div>
                         <div className="movie-item-content-buttom">
                             <div className="movie-item-title">
-                               <a href="" >Hurry Animate Blue Strack New Movie (2018)</a>
+                               <Link to="/phim/abc-123" >DIÊN HY CÔNG LƯỢC</Link>
                             </div>
                             <div className="item-cat">
                                 <ul>
-                                    <li><span>Category :</span><a href="">English Animation Movies</a></li>
+                                    <li><span>Danh mục : </span><span>Phim bộ Trung Quốc</span></li>
                                 </ul>
                                 <div className="item-cat-hover">
                                     <ul>
-                                        <li><span>Release :</span><a href="">October 26, 2017</a></li>
-                                        <li><span>Genre :</span><a href="">Action, Drama</a></li>
+                                        <li><span>Ngày phát hành : </span><span>26/5/2018</span></li>
+                                        <li><span>Thể loại : </span><span>Cổ trang</span></li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="movie-item-beta">
                                 <div className="movie-details">
-                                    <a href=""  className="btn btn-button button-detals blck-bg">details</a>
+                                    <Link to="/phim/abc-123"  className="btn btn-button button-detals blck-bg">Chi tiết</Link>
                                 </div>
                                 <div className="view-movie">
-                                    <a href=""  className="blck-bg" >15k view</a>
+                                    <a href=""  className="blck-bg" >15k lượt xem</a>
                                 </div>
                             </div>
                         </div>
