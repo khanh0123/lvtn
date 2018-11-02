@@ -10,12 +10,12 @@ $().ready(function(){
 
     fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
 
-    if( window_width > 767 && fixed_plugin_open == 'Dashboard' ){
-        if($('.fixed-plugin .dropdown').hasClass('show-dropdown')){
-            $('.fixed-plugin .dropdown').addClass('open');
-        }
+    // if( window_width > 767 && fixed_plugin_open == 'Dashboard' ){
+    //     if($('.fixed-plugin .dropdown').hasClass('show-dropdown')){
+    //         $('.fixed-plugin .dropdown').addClass('open');
+    //     }
 
-    }
+    // }
 
     $('.fixed-plugin a').click(function(event){
       // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
@@ -170,34 +170,34 @@ $().ready(function(){
 
     });
 
-    $('#twitter').sharrre({
-      share: {
-        twitter: true
-      },
-      enableHover: false,
-      enableTracking: false,
-      buttons: { twitter: {via: 'CreativeTim'}},
-      click: function(api, options){
-        api.simulateClick();
-        api.openPopup('twitter');
-      },
-      template: '<i class="fa fa-twitter"></i> &middot; 45',
-      url: 'http://demos.creative-tim.com/material-dashboard-pro/examples/dashboard.html'
-    });
+    // $('#twitter').sharrre({
+    //   share: {
+    //     twitter: true
+    //   },
+    //   enableHover: false,
+    //   enableTracking: false,
+    //   buttons: { twitter: {via: 'CreativeTim'}},
+    //   click: function(api, options){
+    //     api.simulateClick();
+    //     api.openPopup('twitter');
+    //   },
+    //   template: '<i class="fa fa-twitter"></i> &middot; 45',
+    //   url: 'http://demos.creative-tim.com/material-dashboard-pro/examples/dashboard.html'
+    // });
 
-    $('#facebook').sharrre({
-      share: {
-        facebook: true
-      },
-      enableHover: false,
-      enableTracking: false,
-      click: function(api, options){
-        api.simulateClick();
-        api.openPopup('facebook');
-      },
-      template: '<i class="fa fa-facebook-square"></i> &middot; 50',
-      url: 'http://demos.creative-tim.com/material-dashboard-pro/examples/dashboard.html'
-    });
+    // $('#facebook').sharrre({
+    //   share: {
+    //     facebook: true
+    //   },
+    //   enableHover: false,
+    //   enableTracking: false,
+    //   click: function(api, options){
+    //     api.simulateClick();
+    //     api.openPopup('facebook');
+    //   },
+    //   template: '<i class="fa fa-facebook-square"></i> &middot; 50',
+    //   url: 'http://demos.creative-tim.com/material-dashboard-pro/examples/dashboard.html'
+    // });
 
 
 });

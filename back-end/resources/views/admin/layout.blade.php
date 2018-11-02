@@ -19,6 +19,7 @@
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    @yield('css')
 </head>
 
 <body>
@@ -30,12 +31,12 @@
         Tip 3: you can change the color of the sidebar with data-background-color="white | black"
     -->
             <div class="logo">
-                <a href="http://www.creative-tim.com" class="simple-text">
+                <a href="#" class="simple-text">
                     Creative Tim
                 </a>
             </div>
             <div class="logo logo-mini">
-                <a href="http://www.creative-tim.com" class="simple-text">
+                <a href="#" class="simple-text">
                     Ct
                 </a>
             </div>
@@ -45,20 +46,20 @@
                         <img src="/assets/img/faces/avatar.jpg" />
                     </div>
                     <div class="info">
-                        <a data-toggle="collapse" href="dashboard.html#collapseExample" class="collapsed">
+                        <a data-toggle="collapse" href="#" class="collapsed">
                             Tania Andrew
                             <b class="caret"></b>
                         </a>
                         <div class="collapse" id="collapseExample">
                             <ul class="nav">
                                 <li>
-                                    <a href="dashboard.html#">My Profile</a>
+                                    <a href="#">My Profile</a>
                                 </li>
                                 <li>
-                                    <a href="dashboard.html#">Edit Profile</a>
+                                    <a href="#">Edit Profile</a>
                                 </li>
                                 <li>
-                                    <a href="dashboard.html#">Settings</a>
+                                    <a href="#">Settings</a>
                                 </li>
                             </ul>
                         </div>
@@ -66,37 +67,25 @@
                 </div>
                 <ul class="nav">
                     <li class="active">
-                        <a href="dashboard.html">
+                        <a href="{{ base_url('admin') }}">
                             <i class="material-icons">dashboard</i>
-                            <p>Dashboard</p>
+                            <p>Trang chính</p>
                         </a>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="dashboard.html#pagesExamples">
+                        <a data-toggle="collapse" href="{{ base_url('admin#config') }}">
                             <i class="material-icons">image</i>
-                            <p>Pages
+                            <p>Cấu hình
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="pagesExamples">
+                        <div class="collapse" id="config">
                             <ul class="nav">
                                 <li>
-                                    <a href="pages/pricing.html">Pricing</a>
+                                    <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
                                 </li>
                                 <li>
-                                    <a href="pages/timeline.html">Timeline</a>
-                                </li>
-                                <li>
-                                    <a href="pages/login.html">Login Page</a>
-                                </li>
-                                <li>
-                                    <a href="pages/register.html">Register Page</a>
-                                </li>
-                                <li>
-                                    <a href="pages/lock.html">Lock Screen Page</a>
-                                </li>
-                                <li>
-                                    <a href="pages/user.html">User Profile</a>
+                                    <a href="{{ base_url('admin/config/add')}}">Thêm cấu hình</a>
                                 </li>
                             </ul>
                         </div>
@@ -296,389 +285,7 @@
                 </div>
             </nav>
             <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header card-header-icon" data-background-color="green">
-                                    <i class="material-icons">language</i>
-                                </div>
-                                <div class="card-content">
-                                    <h4 class="card-title">Global Sales by Top Locations</h4>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="table-responsive table-sales">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/US.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>USA</td>
-                                                            <td class="text-right">
-                                                                2.920
-                                                            </td>
-                                                            <td class="text-right">
-                                                                53.23%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/DE.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>Germany</td>
-                                                            <td class="text-right">
-                                                                1.300
-                                                            </td>
-                                                            <td class="text-right">
-                                                                20.43%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/AU.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>Australia</td>
-                                                            <td class="text-right">
-                                                                760
-                                                            </td>
-                                                            <td class="text-right">
-                                                                10.35%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/GB.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>United Kingdom</td>
-                                                            <td class="text-right">
-                                                                690
-                                                            </td>
-                                                            <td class="text-right">
-                                                                7.87%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/RO.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>Romania</td>
-                                                            <td class="text-right">
-                                                                600
-                                                            </td>
-                                                            <td class="text-right">
-                                                                5.94%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="/assets/img/flags/BR.png">
-                                                                </div>
-                                                            </td>
-                                                            <td>Brasil</td>
-                                                            <td class="text-right">
-                                                                550
-                                                            </td>
-                                                            <td class="text-right">
-                                                                4.34%
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-md-offset-1">
-                                            <div id="worldMap" class="map"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card card-chart">
-                                <div class="card-header" data-background-color="rose" data-header-animation="true">
-                                    <div class="ct-chart" id="websiteViewsChart"></div>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                            <i class="material-icons">refresh</i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">Website Views</h4>
-                                    <p class="category">Last Campaign Performance</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">access_time</i> campaign sent 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-chart">
-                                <div class="card-header" data-background-color="green" data-header-animation="true">
-                                    <div class="ct-chart" id="dailySalesChart"></div>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                            <i class="material-icons">refresh</i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">Daily Sales</h4>
-                                    <p class="category">
-                                        <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">access_time</i> updated 4 minutes ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-chart">
-                                <div class="card-header" data-background-color="blue" data-header-animation="true">
-                                    <div class="ct-chart" id="completedTasksChart"></div>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                            <i class="material-icons">refresh</i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">Completed Tasks</h4>
-                                    <p class="category">Last Campaign Performance</p>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">access_time</i> campaign sent 2 days ago
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-header" data-background-color="orange">
-                                    <i class="material-icons">weekend</i>
-                                </div>
-                                <div class="card-content">
-                                    <p class="category">Bookings</p>
-                                    <h3 class="card-title">184</h3>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons text-danger">warning</i>
-                                        <a href="dashboard.html#pablo">Get More Space...</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-header" data-background-color="rose">
-                                    <i class="material-icons">equalizer</i>
-                                </div>
-                                <div class="card-content">
-                                    <p class="category">Website Visits</p>
-                                    <h3 class="card-title">75.521</h3>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">local_offer</i> Tracked from Google Analytics
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-header" data-background-color="green">
-                                    <i class="material-icons">store</i>
-                                </div>
-                                <div class="card-content">
-                                    <p class="category">Revenue</p>
-                                    <h3 class="card-title">$34,245</h3>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">date_range</i> Last 24 Hours
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-header" data-background-color="blue">
-                                    <i class="fa fa-twitter"></i>
-                                </div>
-                                <div class="card-content">
-                                    <p class="category">Followers</p>
-                                    <h3 class="card-title">+245</h3>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="stats">
-                                        <i class="material-icons">update</i> Just Updated
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <h3>Manage Listings</h3>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card card-product">
-                                <div class="card-image" data-header-animation="true">
-                                    <a href="dashboard.html#pablo">
-                                        <img class="img" src="/assets/img/card-2.jpeg">
-                                    </a>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="View">
-                                            <i class="material-icons">art_track</i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip" data-placement="bottom" title="Remove">
-                                            <i class="material-icons">close</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">
-                                        <a href="dashboard.html#pablo">Cozy 5 Stars Apartment</a>
-                                    </h4>
-                                    <div class="card-description">
-                                        The place is close to Barceloneta Beach and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the main night life in Barcelona.
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="price">
-                                        <h4>$899/night</h4>
-                                    </div>
-                                    <div class="stats pull-right">
-                                        <p class="category"><i class="material-icons">place</i> Barcelona, Spain</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-product">
-                                <div class="card-image" data-header-animation="true">
-                                    <a href="dashboard.html#pablo">
-                                        <img class="img" src="/assets/img/card-3.jpeg">
-                                    </a>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="View">
-                                            <i class="material-icons">art_track</i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip" data-placement="bottom" title="Remove">
-                                            <i class="material-icons">close</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">
-                                        <a href="dashboard.html#pablo">Office Studio</a>
-                                    </h4>
-                                    <div class="card-description">
-                                        The place is close to Metro Station and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the night life in London, UK.
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="price">
-                                        <h4>$1.119/night</h4>
-                                    </div>
-                                    <div class="stats pull-right">
-                                        <p class="category"><i class="material-icons">place</i> London, UK</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card card-product">
-                                <div class="card-image" data-header-animation="true">
-                                    <a href="dashboard.html#pablo">
-                                        <img class="img" src="/assets/img/card-1.jpeg">
-                                    </a>
-                                </div>
-                                <div class="card-content">
-                                    <div class="card-actions">
-                                        <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                            <i class="material-icons">build</i> Fix Header!
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="View">
-                                            <i class="material-icons">art_track</i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-simple" rel="tooltip" data-placement="bottom" title="Edit">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-simple" rel="tooltip" data-placement="bottom" title="Remove">
-                                            <i class="material-icons">close</i>
-                                        </button>
-                                    </div>
-                                    <h4 class="card-title">
-                                        <a href="dashboard.html#pablo">Beautiful Castle</a>
-                                    </h4>
-                                    <div class="card-description">
-                                        The place is close to Metro Station and bus stop just 2 min by walk and near to "Naviglio" where you can enjoy the main night life in Milan.
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="price">
-                                        <h4>$459/night</h4>
-                                    </div>
-                                    <div class="stats pull-right">
-                                        <p class="category"><i class="material-icons">place</i> Milan, Italy</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @yield('main')
             </div>
             <footer class="footer">
                 <div class="container-fluid">
@@ -814,49 +421,36 @@
 <script src="/assets/js/material.min.js" type="text/javascript"></script>
 <script src="/assets/js/perfect-scrollbar.jquery.min.js" type="text/javascript"></script>
 <!-- Forms Validations Plugin -->
-<script src="/assets/js/jquery.validate.min.js"></script>
+<!-- <script src="/assets/js/jquery.validate.min.js"></script> -->
 <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-<script src="/assets/js/moment.min.js"></script>
-<!--  Charts Plugin -->
-<script src="/assets/js/chartist.min.js"></script>
-<!--  Plugin for the Wizard -->
-<script src="/assets/js/jquery.bootstrap-wizard.js"></script>
+<!-- <script src="/assets/js/moment.min.js"></script> -->
+
 <!--  Notifications Plugin    -->
 <script src="/assets/js/bootstrap-notify.js"></script>
 <!--   Sharrre Library    -->
-<script src="/assets/js/jquery.sharrre.js"></script>
+<!-- <script src="/assets/js/jquery.sharrre.js"></script> -->
 <!-- DateTimePicker Plugin -->
-<script src="/assets/js/bootstrap-datetimepicker.js"></script>
-<!-- Vector Map plugin -->
-<script src="/assets/js/jquery-jvectormap.js"></script>
+<!-- <script src="/assets/js/bootstrap-datetimepicker.js"></script> -->
+
 <!-- Sliders Plugin -->
-<script src="/assets/js/nouislider.min.js"></script>
-<!--  Google Maps Plugin    -->
-<script src="https://maps.googleapis.com/maps/api/js"></script>
+<!-- <script src="/assets/js/nouislider.min.js"></script> -->
+
 <!-- Select Plugin -->
-<script src="/assets/js/jquery.select-bootstrap.js"></script>
-<!--  DataTables.net Plugin    -->
-<script src="/assets/js/jquery.datatables.js"></script>
+<!-- <script src="/assets/js/jquery.select-bootstrap.js"></script> -->
+
 <!-- Sweet Alert 2 plugin -->
-<script src="/assets/js/sweetalert2.js"></script>
+<!-- <script src="/assets/js/sweetalert2.js"></script> -->
 <!--	Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-<script src="/assets/js/jasny-bootstrap.min.js"></script>
+<!-- <script src="/assets/js/jasny-bootstrap.min.js"></script> -->
 <!--  Full Calendar Plugin    -->
-<script src="/assets/js/fullcalendar.min.js"></script>
+<!-- <script src="/assets/js/fullcalendar.min.js"></script> -->
 <!-- TagsInput Plugin -->
-<script src="/assets/js/jquery.tagsinput.js"></script>
+<!-- <script src="/assets/js/jquery.tagsinput.js"></script> -->
 <!-- Material Dashboard javascript methods -->
 <script src="/assets/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
 <script src="/assets/js/demo.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
 
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
-
-        demo.initVectorMap();
-    });
-</script>
+@yield('js')
 
 </html>

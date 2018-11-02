@@ -1,0 +1,200 @@
+@extends('admin/layout')
+@section('title', '.:AdminCpannel:.')
+@section('main')
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-icon" data-background-color="purple">
+                    <i class="material-icons">assignment</i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Danh sách cấu hình</h4>
+                    <div class="toolbar">
+                        <!--        Here you can write extra buttons/actions for the toolbar              -->
+                    </div>
+                    @if(!empty($data))
+                    <div class="row">
+                        <div class="col-sm-6">
+                                <span>Hiển thị</span>
+                                <div class="dropdown custom-group" style="display: inline-block">
+                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data->perPage()}}
+                                        <b class="caret"></b>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li class="dropdown-header"></li>
+                                        <li><a href="{{base_url('admin/config?limit=10')}}">10</a></li>
+                                        <li><a href="{{base_url('admin/config?limit=20')}}">20</a></li>
+                                        <li><a href="{{base_url('admin/config?limit=30')}}">30</a></li>
+                                        <li><a href="{{base_url('admin/config?limit=40')}}">40</a></li>
+                                    </ul>
+                                </div>
+                                <span>Kết quả</span>
+
+                        </div>
+                    </div>
+                    @endif
+                    <div class="material-datatables">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Khóa</th>
+                                    <th>Giá trị</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Lần cập nhật cuối</th>
+                                    <th class="text-right">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Khóa</th>
+                                    <th>Giá trị</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Lần cập nhật cuối</th>
+                                    <th class="text-right">Hành động</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach ($data as $value)
+                                <tr>
+                                    <td>{{ $value->key }}</td>
+                                    <td>{{ $value->value }}</td>
+                                    <td>{{ $value->created_at }}</td>
+                                    <td>{{ $value->updated_at }}</td>
+                                    <td class="text-right">
+                                        <a href="{{base_url('admin/')}}" class="btn btn-simple btn-warning btn-icon edit">Sửa</a>
+                                        <a href="datatables.net.html#" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                                
+                            </tbody>
+                        </table>
+                        @if( $data->hasPages() )
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="dataTables_info" role="status" aria-live="polite">
+                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->count() + 1 }} tới {{ $data->currentPage()*$data->count() }} trong tổng số {{ $data->total() }} kết quả
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="dataTables_paginate" style="text-align: right">
+                                    <ul class="pagination" style="margin: 0">
+                                        <li class="paginate_button previous {{ $data->currentPage() <= 1 ? 'disabled' : ''}} " >
+                                            <a href="{{ $data->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
+                                        </li>
+                                        <?php 
+                                            $begin = ($data->currentPage() - 5) < 1 ? 1 : $data->currentPage() - 5;
+                                            $end = ($data->currentPage() + 5) > $data->lastPage() ? $data->lastPage() : $data->currentPage() + 5;
+                                            $stt = 0;
+                                            while($end - $begin < 10 && $end - $begin < $data->lastPage()){
+                                                if($begin > 1 && $stt == 0){
+                                                    $begin--;
+                                                    $stt = 1;
+                                                }
+                                                if($begin == 1 && $stt == 0) {
+                                                    $stt = 1;
+
+                                                }
+                                                if($end < $data->lastPage() && $stt == 1){
+                                                    $stt = 0;
+                                                    $end++;
+                                                }
+                                            }
+
+                                         ?>
+                                        @for($i = $begin ; $i < $end ; $i++)
+                                        <li class="paginate_button {{ $data->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $data->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
+                                        </li>
+                                        @endfor
+                                        <li class="paginate_button next {{ $data->currentPage() >= $data->lastPage() ? 'disabled' : ''}}">
+                                            <a href="{{ $data->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end row -->
+                        @endif
+                    </div>
+                    
+                </div>
+                <!-- end content-->
+            </div>
+            <!--  end card  -->
+        </div>
+        <!-- end col-md-12 -->
+    </div>
+    <!-- end row -->
+</div>
+@stop
+
+@section('css')
+<!-- add custom css here -->
+@stop
+
+@section('js')
+<!--  DataTables.net Plugin    -->
+<script src="/assets/js/jquery.datatables.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('li.disabled>a,li.active>a').click(function(event) {
+            event.preventDefault();
+        });
+        $('#datatables').DataTable({
+            paging: false,
+            // pagingType: "full_numbers",
+            ordering:  false,
+            "bInfo" : false,
+            // "lengthMenu": [
+            // [10, 25, 50, -1],
+            // [10, 25, 50, "All"]
+            // ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Tìm kiếm",
+                paginate:
+                {
+                    previous: "Trước",
+                    next: "Sau",
+                    first: "",
+                    last: ""
+                }
+            },
+            page:{
+
+            }
+
+        });
+
+
+        // var table = $('#datatables').DataTable();
+
+        // // Edit record
+        // table.on('click', '.edit', function() {
+        //     $tr = $(this).closest('tr');
+
+        //     var data = table.row($tr).data();
+        //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
+        // });
+
+        // // Delete a record
+        // table.on('click', '.remove', function(e) {
+        //     $tr = $(this).closest('tr');
+        //     table.row($tr).remove().draw();
+        //     e.preventDefault();
+        // });
+
+        // //Like record
+        // table.on('click', '.like', function() {
+        //     alert('You clicked on Like button');
+        // });
+
+        $('.card .material-datatables label').addClass('form-group');
+    });
+</script>
+@stop

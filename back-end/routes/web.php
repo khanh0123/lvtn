@@ -10,20 +10,22 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-function resource(&$router, $uri, $controller) {
-    $router->get($uri, $controller . '@index');
-    $router->get($uri. '/detail', $controller . '@detail');
-    $router->get($uri. '/detail/{id}', $controller . '@detail');
-    $router->get($uri. '/del/{id}', $controller . '@delele');
+function resource_admin(&$router, $uri, $controller) {
+    $router->get($uri, 'Admin\\'.$controller . '@index');
+    // $router->get("admin/$uri". '/detail', $controller . '@detail');
+    // $router->get("admin/$uri". '/detail/{id}', $controller . '@detail');
+    // $router->get("admin/$uri". '/delete/{id}', $controller . '@delele');
 }
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 
 $router->group(['prefix' => 'admin'], function() use($router) {
     $router->get('/', 'Admin\IndexController@index');
 
-    // resource($router, 'admins', 'Admin');
+    resource_admin($router, 'config', 'ConfigController');
 
+});
+
+Route::get('/', function () {
+    return view('welcome');
 });
