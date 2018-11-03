@@ -17,4 +17,5 @@ class Config extends Model
     				->paginate($limit);    				
     	return $data;
     }
+
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 // use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Redirect;
+
 // use Illuminate\Foundation\Validation\ValidatesRequests;
 // use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -23,16 +25,19 @@ class MainAdminController extends BaseController
         $limit = $request->input('limit', $this->limit);
         $sort = ($request->input('sort') && (int)$request->input('sort') == 1) ? 'asc' : 'desc';
         $result = $this->model->get($limit,$sort);
-        // $result = $result->withPath('admin/config');
         $result = $result->appends($request->all());
-        // echo "<pre>";
-        // var_dump($result);
-        // echo "</pre>";
-        // die();
-        
-        
         return view($this->view_folder."index")
         		->withData($result);
+    }
+    public function detail(Request $request,$id)
+    {
+        $result = $this->model::find($id);
+
+        if(empty($result)){
+            return Redirect::to(base_url($this->view_folder));
+        }
+        return view($this->view_folder."detail")
+                ->withData($result);
     }
 
     /*

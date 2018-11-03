@@ -12,7 +12,7 @@
 */
 function resource_admin(&$router, $uri, $controller) {
     $router->get($uri, 'Admin\\'.$controller . '@index');
-    // $router->get("admin/$uri". '/detail', $controller . '@detail');
+    $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail');
     // $router->get("admin/$uri". '/detail/{id}', $controller . '@detail');
     // $router->get("admin/$uri". '/delete/{id}', $controller . '@delele');
 }

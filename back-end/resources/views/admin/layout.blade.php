@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/favicon.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Material Dashboard PRO by Creative Tim | Premium Bootstrap Admin Template</title>
+    <title>@yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
@@ -85,7 +85,7 @@
                                     <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
                                 </li>
                                 <li>
-                                    <a href="{{ base_url('admin/config/add')}}">Thêm cấu hình</a>
+                                    <a href="{{ base_url('admin/config/add') }}">Thêm cấu hình</a>
                                 </li>
                             </ul>
                         </div>
@@ -226,7 +226,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="dashboard.html#"> Dashboard </a>
+                        <a class="navbar-brand" href="#"> @yield('title') </a>
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">

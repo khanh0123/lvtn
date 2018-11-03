@@ -64,8 +64,8 @@
                                     <td>{{ $value->created_at }}</td>
                                     <td>{{ $value->updated_at }}</td>
                                     <td class="text-right">
-                                        <a href="{{base_url('admin/')}}" class="btn btn-simple btn-warning btn-icon edit">Sửa</a>
-                                        <a href="datatables.net.html#" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        <a href="{{base_url('admin/config/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        <a href="{{base_url('admin/config/delete/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -76,7 +76,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
-                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->count() + 1 }} tới {{ $data->currentPage()*$data->count() }} trong tổng số {{ $data->total() }} kết quả
+                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
                                 </div>
                             </div>
                             <div class="col-sm-7">
@@ -88,24 +88,9 @@
                                         <?php 
                                             $begin = ($data->currentPage() - 5) < 1 ? 1 : $data->currentPage() - 5;
                                             $end = ($data->currentPage() + 5) > $data->lastPage() ? $data->lastPage() : $data->currentPage() + 5;
-                                            $stt = 0;
-                                            while($end - $begin < 10 && $end - $begin < $data->lastPage()){
-                                                if($begin > 1 && $stt == 0){
-                                                    $begin--;
-                                                    $stt = 1;
-                                                }
-                                                if($begin == 1 && $stt == 0) {
-                                                    $stt = 1;
-
-                                                }
-                                                if($end < $data->lastPage() && $stt == 1){
-                                                    $stt = 0;
-                                                    $end++;
-                                                }
-                                            }
 
                                          ?>
-                                        @for($i = $begin ; $i < $end ; $i++)
+                                        @for($i = $begin ; $i <= $end ; $i++)
                                         <li class="paginate_button {{ $data->currentPage() == $i ? 'active' : '' }}">
                                             <a href="{{ $data->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
                                         </li>
