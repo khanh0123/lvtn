@@ -3,7 +3,7 @@
 @section('main')
 <div class="container-fluid">
     <div class="alert alert-light" role="alert">
-        <strong class="">Chi tiết cấu hình</strong>
+        <strong class="">Thêm cấu hình mới</strong>
     </div>
     <form action="" method="post">
         {{ csrf_field()}}
@@ -22,7 +22,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="key" value="{{ $data['key'] }}" required="required">
+                                            <input type="text" class="form-control" name="key" value="" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -32,11 +32,12 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="value" value="{{ $data['value'] }}" required>
+                                            <input type="text" class="form-control" name="value" value="" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
                                 </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -52,11 +53,9 @@
                             </div>
                             <div class="card-content">
 
-                                <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thay Đổi"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
+                                <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thêm"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
 
-                                <a class="btn using-tooltip" href="{{base_url('admin/config')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
-
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/config/del/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <button type="reset" class="btn btn-danger using-tooltip"  data-toggle="tooltip" data-placement="top" title="Làm mới form này"><i class="material-icons">close</i>Làm mới<div class="ripple-container"></div></button>
                             </div>
                         </div>
                     </div>
@@ -74,13 +73,17 @@
     @stop
 
     @section('js')
+
     <!--  DataTables.net Plugin    -->
 <!-- <script src="/assets/js/jquery.datatables.js"></script>
---><script type="text/javascript">
+-->
+<script type="text/javascript">
     $(document).ready(function() {
         $('.using-tooltip').tooltip({animation:true});
+
         $('.menu-left-custom >li.active').removeClass('active');
         $('#config').parent('li').addClass('active');
+        $('#config .add').addClass('active');
         $('#config').collapse();
 
     });

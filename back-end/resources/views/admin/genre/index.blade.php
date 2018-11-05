@@ -1,5 +1,5 @@
 @extends('admin/layout' , ['message' => !empty($message) ? $message : []])
-@section('title', '.:AdminCpannel:.')
+@section('title', 'Danh sách danh mục')
 @section('main')
 <div class="container-fluid">
 
@@ -10,7 +10,7 @@
                     <i class="material-icons">assignment</i>
                 </div>
                 <div class="card-content">
-                    <h4 class="card-title">Danh sách cấu hình</h4>
+                    <h4 class="card-title">Danh sách danh mục</h4>
                     <div class="toolbar">
                         <!--        Here you can write extra buttons/actions for the toolbar              -->
                     </div>
@@ -25,10 +25,10 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-left">
                                         <li class="dropdown-header"></li>
-                                        <li><a href="{{base_url('admin/config?limit=10')}}">10</a></li>
-                                        <li><a href="{{base_url('admin/config?limit=20')}}">20</a></li>
-                                        <li><a href="{{base_url('admin/config?limit=30')}}">30</a></li>
-                                        <li><a href="{{base_url('admin/config?limit=40')}}">40</a></li>
+                                        <li><a href="{{base_url('admin/genre?limit=10')}}">10</a></li>
+                                        <li><a href="{{base_url('admin/genre?limit=20')}}">20</a></li>
+                                        <li><a href="{{base_url('admin/genre?limit=30')}}">30</a></li>
+                                        <li><a href="{{base_url('admin/genre?limit=40')}}">40</a></li>
                                     </ul>
                                 </div>
                                 <span>Kết quả</span>
@@ -40,45 +40,42 @@
                         <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Khóa</th>
-                                    <th>Giá trị</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Lần cập nhật cuối</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Slug</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Khóa</th>
-                                    <th>Giá trị</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Lần cập nhật cuối</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Slug</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
                             <tbody>
                                 @foreach ($data as $value)
                                 <tr>
-                                    <td>{{ $value->key }}</td>
-                                    <td>{{ $value->value }}</td>
-                                    <td>{{ $value->created_at }}</td>
-                                    <td>{{ $value->updated_at }}</td>
+                                    <td>{{ $value->name }}</td>
+                                    <td>{{ $value->slug }}</td>
                                     <td class="text-right">
-                                        <a href="{{base_url('admin/config/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
-                                        <a href="{{base_url('admin/config/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        <a href="{{base_url('admin/genre/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        <a href="{{base_url('admin/genre/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
                                     </td>
                                 </tr>
                                 @endforeach
                                 
                             </tbody>
                         </table>
-                        @if( $data->hasPages() )
+                        
                         <div class="row">
+                            @if($data->count() > 0)
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
                                     Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
                                 </div>
                             </div>
+                            @endif
+                            @if( $data->hasPages() )
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
                                     <ul class="pagination" style="margin: 0">
@@ -101,9 +98,10 @@
                                     </ul>
                                 </div>
                             </div>
+                            @endif
                         </div>
                         <!-- end row -->
-                        @endif
+                        
                     </div>
                     
                 </div>
@@ -128,9 +126,9 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#config').parent('li').addClass('active');
-        $('#config .show').addClass('active');
-        $('#config').collapse();
+        $('#genre').parent('li').addClass('active');
+        $('#genre .show').addClass('active');
+        $('#genre').collapse();
 
         $('#datatables').DataTable({
             paging: false,

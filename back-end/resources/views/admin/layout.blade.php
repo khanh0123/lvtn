@@ -32,25 +32,25 @@
     -->
             <div class="logo">
                 <a href="#" class="simple-text">
-                    Creative Tim
+                    Admin Control
                 </a>
             </div>
             <div class="logo logo-mini">
                 <a href="#" class="simple-text">
-                    Ct
+                    CT
                 </a>
             </div>
             <div class="sidebar-wrapper">
                 <div class="user">
                     <div class="photo">
-                        <img src="/assets/img/faces/avatar.jpg" />
+                        <img src="/assets/img/faces/card-profile1-square.jpg" />
                     </div>
                     <div class="info">
-                        <a data-toggle="collapse" href="#" class="collapsed">
-                            Tania Andrew
+                        <a data-toggle="collapse" href="{{ base_url('admin#profile') }}" class="collapsed">
+                            Nguyễn Ngọc Khánh
                             <b class="caret"></b>
                         </a>
-                        <div class="collapse" id="collapseExample">
+                        <div class="collapse" id="profile">
                             <ul class="nav">
                                 <li>
                                     <a href="#">My Profile</a>
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </div>
-                <ul class="nav">
+                <ul class="nav menu-left-custom">
                     <li class="active">
                         <a href="{{ base_url('admin') }}">
                             <i class="material-icons">dashboard</i>
@@ -74,139 +74,93 @@
                     </li>
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#config') }}">
-                            <i class="material-icons">image</i>
+                            <i class="material-icons">build</i>
                             <p>Cấu hình
                                 <b class="caret"></b>
                             </p>
                         </a>
                         <div class="collapse" id="config">
                             <ul class="nav">
-                                <li>
+                                <li class="show">
                                     <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
                                 </li>
-                                <li>
+                                <li class="add">
                                     <a href="{{ base_url('admin/config/add') }}">Thêm cấu hình</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="dashboard.html#componentsExamples">
-                            <i class="material-icons">apps</i>
-                            <p>Components
+                        <a data-toggle="collapse" href="{{ base_url('admin#rule') }}">
+                            <i class="material-icons">how_to_reg</i>
+                            <p>Quản Lý Quyền
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="componentsExamples">
+                        <div class="collapse" id="rule">
                             <ul class="nav">
-                                <li>
-                                    <a href="components/buttons.html">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="components/grid.html">Grid System</a>
-                                </li>
-                                <li>
-                                    <a href="components/panels.html">Panels</a>
-                                </li>
-                                <li>
-                                    <a href="components/sweet-alert.html">Sweet Alert</a>
-                                </li>
-                                <li>
-                                    <a href="components/notifications.html">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="components/icons.html">Icons</a>
-                                </li>
-                                <li>
-                                    <a href="components/typography.html">Typography</a>
+                                <li class="show">
+                                    <a href="{{ base_url('admin/rule') }}">Danh sách quyền</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="dashboard.html#formsExamples">
-                            <i class="material-icons">content_paste</i>
-                            <p>Forms
+                        <a data-toggle="collapse" href="{{ base_url('admin#category') }}">
+                            <i class="material-icons">category</i>
+                            <p>Quản Lý Danh Mục
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="formsExamples">
+                        <div class="collapse" id="category">
                             <ul class="nav">
-                                <li>
-                                    <a href="forms/regular.html">Regular Forms</a>
+                                <li class="show">
+                                    <a href="{{ base_url('admin/category') }}">Danh sách danh mục</a>
                                 </li>
-                                <li>
-                                    <a href="forms/extended.html">Extended Forms</a>
-                                </li>
-                                <li>
-                                    <a href="forms/validation.html">Validation Forms</a>
-                                </li>
-                                <li>
-                                    <a href="forms/wizard.html">Wizard</a>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/category/add') }}">Thêm danh mục</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="dashboard.html#tablesExamples">
-                            <i class="material-icons">grid_on</i>
-                            <p>Tables
+                        <a data-toggle="collapse" href="{{ base_url('admin#country') }}">
+                            <i class="material-icons">language</i>
+                            <p>Quản Lý Quốc Gia
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="tablesExamples">
+                        <div class="collapse" id="country">
                             <ul class="nav">
-                                <li>
-                                    <a href="tables/regular.html">Regular Tables</a>
+                                <li class="show">
+                                    <a href="{{ base_url('admin/country') }}">Danh sách quốc gia</a>
                                 </li>
-                                <li>
-                                    <a href="tables/extended.html">Extended Tables</a>
-                                </li>
-                                <li>
-                                    <a href="tables/datatables.net.html">DataTables.net</a>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/country/add') }}">Thêm quốc gia</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="dashboard.html#mapsExamples">
-                            <i class="material-icons">place</i>
-                            <p>Maps
+                        <a data-toggle="collapse" href="{{ base_url('admin#genre') }}">
+                            <i class="material-icons">receipt</i>
+                            <p>Quản Lý Thể Loại
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="mapsExamples">
+                        <div class="collapse" id="genre">
                             <ul class="nav">
-                                <li>
-                                    <a href="maps/google.html">Google Maps</a>
+                                <li class="show">
+                                    <a href="{{ base_url('admin/genre') }}">Danh sách thể loại</a>
                                 </li>
-                                <li>
-                                    <a href="maps/fullscreen.html">Full Screen Map</a>
-                                </li>
-                                <li>
-                                    <a href="maps/vector.html">Vector Map</a>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/genre/add') }}">Thêm thể loại</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="widgets.html">
-                            <i class="material-icons">widgets</i>
-                            <p>Widgets</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="charts.html">
-                            <i class="material-icons">timeline</i>
-                            <p>Charts</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="calendar.html">
-                            <i class="material-icons">date_range</i>
-                            <p>Calendar</p>
-                        </a>
-                    </li>
+                    
+                    
                 </ul>
             </div>
         </div>
@@ -230,18 +184,12 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="dashboard.html#pablo" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="material-icons">dashboard</i>
-                                    <p class="hidden-lg hidden-md">Dashboard</p>
-                                </a>
-                            </li>
-                            <li class="dropdown">
+                            <li class="dropdown" title="Thông báo">
                                 <a href="dashboard.html#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">notifications</i>
                                     <span class="notification">5</span>
                                     <p class="hidden-lg hidden-md">
-                                        Notifications
+                                        Thông báo
                                         <b class="caret"></b>
                                     </p>
                                 </a>
@@ -264,16 +212,16 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="dashboard.html#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                                <a data-toggle="collapse" href="{{ base_url('admin#profile') }}" class="collapsed">
                                     <i class="material-icons">person</i>
-                                    <p class="hidden-lg hidden-md">Profile</p>
+                                    <p class="hidden-lg hidden-md">Trang cá nhân</p>
                                 </a>
                             </li>
-                            <li class="separator hidden-lg hidden-md"></li>
+                            <!-- <li class="separator hidden-lg hidden-md"></li> -->
                         </ul>
                         <form class="navbar-form navbar-right" role="search">
                             <div class="form-group form-search is-empty">
-                                <input type="text" class="form-control" placeholder="Search">
+                                <input type="text" class="form-control" placeholder="Tìm kiếm">
                                 <span class="material-input"></span>
                             </div>
                             <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -449,8 +397,45 @@
 <!-- Material Dashboard javascript methods -->
 <script src="/assets/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-<script src="/assets/js/demo.js"></script>
 
+<script src="/assets/js/demo.js"></script>
+<script src="/assets/js/main.js"></script>
 @yield('js')
+<script>
+    function showNotification(type = 'success' , messsage = '' , timer = 2000 , icon = 'notifications' , from = 'top', align = 'right'  ){
+    // type = ['','info','success','warning','danger','rose','primary'];
+
+    // color = Math.floor((Math.random() * 6) + 1);
+
+        $.notify({
+            icon: icon,
+            message: messsage
+        },{
+            type: type,
+            delay:1,
+            timer: 1000,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        $('li.disabled>a,li.active>a').click(function(event) {
+            event.preventDefault();
+        });
+
+        @if(!empty($message))
+            var type = '{{$message['type'] == 'success' ? 'success' : 'danger'}}';
+            var message = '{{ $message['message'] }}';
+            showNotification( type , message);
+        @endif
+
+    });
+</script>
+
+
 
 </html>

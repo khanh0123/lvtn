@@ -121,36 +121,50 @@ if (!function_exists('getRealUserIp')) {
 
 }
 
-if (!function_exists('getStatus')) {
+if (!function_exists('getUriFromUrl')) {
 
-    function getStatus($stt)
+    function getUriFromUrl($url)
     {
-        switch ($stt) {
-            case 1:
-                return 'Hiển thị';
-                break;
-            case 2:
-                return 'Ẩn';
-                break;
-            default:
-                return 'Xóa';
-                break;
+        $reg = '/\/(admin)\/([a-zA-Z]+)(\S+)?/';
+        $matches = array();
+        $check = preg_match($reg,$url,$matches);
+        if($check){
+            return $matches[2];
         }
+        return false;
+        
     }
 
 }
 
 if (!function_exists('base_url')) {
     function base_url($uri = ''){
-        $url = url($uri);
-        return $url;
+        return url($uri);        
     }
 }
 
 if (!function_exists('date')) {
-    function base_url($timestamp = ''){
+    function date($timestamp = ''){
         
         return Date("d/m/y - h:i");
+    }
+}
+
+if (!function_exists('create_slug')) {
+
+    function create_slug($str) {
+        $str = trim(mb_strtolower($str));
+        $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
+        $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
+        $str = preg_replace('/(ì|í|ị|ỉ|ĩ)/', 'i', $str);
+        $str = preg_replace('/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/', 'o', $str);
+        $str = preg_replace('/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/', 'u', $str);
+        $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
+        $str = preg_replace('/(đ)/', 'd', $str);
+        $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
+        $str = preg_replace('/([\s]+)/', '-', $str);
+        $str = trim($str,'-');
+        return $str;
     }
 }
 

@@ -4,24 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\MainAdminController;
-use App\Models\Config;
+use App\Models\Genre;
 use Validator;
-class ConfigController extends MainAdminController
+class GenreController extends MainAdminController
 {
 	protected $model;
-	protected $view_folder = 'admin/config/';
+	protected $view_folder = 'admin/genre/';
 	
 
 	public function __construct(Request $request) {
-        $this->model = new Config;
+        $this->model = new Genre;
         parent::__construct($request);
     }
 
 
     public function setItem($type , $req , &$item){
     	$rules = [
-    		'key' => 'required',
-    		'value' => 'required'
+    		'name' => 'required',
     	];
     	$validator = Validator::make($req->all(), $rules);
         if ($validator->fails()) {
@@ -30,8 +29,10 @@ class ConfigController extends MainAdminController
         		'message' => 'Vui lòng kiểm tra lại các trường nhập'
         	];
         }
-        $item->key = $req->key;
-    	$item->value = $req->value;
+        $slug = $req->slug ? $req->slug : $req->name;
+        $item->name = $req->name;
+    	$item->slug = create_slug($slug);
+    	
         return [
         	'type' => 'success',
         	'message' => $type == 1 ? 'Thêm dữ liệu thành công' : 'Cập nhật thành công',

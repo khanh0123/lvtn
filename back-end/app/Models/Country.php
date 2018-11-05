@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Config extends Model
+class Country extends Model
 {
-    protected $table = 'config';
+    protected $table = 'country';
+    public $timestamps = false;
 
     public function get($limit = 2 , $sort = 'asc')
     {

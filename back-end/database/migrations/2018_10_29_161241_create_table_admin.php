@@ -16,7 +16,7 @@ class CreateTableAdmin extends Migration
         Schema::create('admin', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('role_id');
-            $table->string('email',255);
+            $table->string('email',255)->unique();
             $table->string('password',255);
             $table->tinyInteger('status')->default('1');
             $table->timestamp('created_at')->useCurrent();
