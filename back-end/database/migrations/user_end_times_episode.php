@@ -13,13 +13,14 @@ class CreateTableMovieGenre extends Migration
      */
     public function up()
     {
-        Schema::create('movie_genre', function (Blueprint $table) {
-            $table->integer('gen_id');
-            $table->integer('mov_id');
+        Schema::create('user_end_times_episode', function (Blueprint $table) {
+            $table->integer('user_id');
+            $table->integer('epi_id');
+            $table->timestamp('time_watched');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-            $table->foreign('gen_id', 'fk_movie_genre_genre')->references('id')->on('genre')->onDelete('cascade');
-            $table->foreign('mov_id', 'fk_movie_genre_movie')->references('id')->on('movie')->onDelete('cascade');
+            $table->foreign('user_id', 'fk_user_end_times_episode_user')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('epi_id', 'fk_user_end_times_episode_episode')->references('id')->on('episode')->onDelete('cascade');
         });
     }
 
@@ -30,6 +31,6 @@ class CreateTableMovieGenre extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('movie_genre');
+        Schema::dropIfExists('user_end_times_episode');
     }
 }
