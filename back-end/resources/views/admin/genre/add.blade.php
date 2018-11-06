@@ -37,7 +37,26 @@
                                         </div>
                                     </div>
                                 </div>
-                               
+                                <div class="row">
+                                    <label class="col-sm-2 label-on-left">Tiêu đề seo</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label"></label>
+                                            <input type="text" class="form-control" name="seo_title" value="" >
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label class="col-sm-2 label-on-left">Mô tả seo</label>
+                                    <div class="col-sm-10">
+                                        <div class="form-group label-floating is-empty">
+                                            <label class="control-label"></label>
+                                            <input type="text" class="form-control" name="seo_des" value="" >
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

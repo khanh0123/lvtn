@@ -123,6 +123,11 @@ if (!function_exists('getRealUserIp')) {
 
 if (!function_exists('getUriFromUrl')) {
 
+    /**
+     * Global helpers get uri after admin/
+     * example : admin/config/... => config
+     * @return string if matched else @return false
+     */
     function getUriFromUrl($url)
     {
         $reg = '/\/(admin)\/([a-zA-Z]+)(\S+)?/';
@@ -138,12 +143,22 @@ if (!function_exists('getUriFromUrl')) {
 }
 
 if (!function_exists('base_url')) {
+    /**
+     * Global helpers get full_url with uri
+     * 
+     * @return string
+     */
     function base_url($uri = ''){
         return url($uri);        
     }
 }
 
 if (!function_exists('date')) {
+    /**
+     * Global helpers format output of timestamp
+     * 
+     * @return Datetime
+     */
     function date($timestamp = ''){
         
         return Date("d/m/y - h:i");
@@ -151,7 +166,11 @@ if (!function_exists('date')) {
 }
 
 if (!function_exists('create_slug')) {
-
+    /**
+     * Global helpers create slug from string
+     * 
+     * @return string
+     */
     function create_slug($str) {
         $str = trim(mb_strtolower($str));
         $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
@@ -167,4 +186,79 @@ if (!function_exists('create_slug')) {
         return $str;
     }
 }
+
+
+if (!function_exists('time_in_ms')) {
+    /**
+     * Global helpers get timestamp in milisecond
+     * 
+     * @return double
+     */
+    function time_in_ms(){
+        return round(microtime(true) * 1000);
+    }
+}
+if (!function_exists('generate_id')) {
+    /**
+     * Global helpers auto create id
+     * 
+     * @return string
+     */
+    function generate_id($table_name){
+        $id = substr($table_name, 0, 3).time().uniqid();
+        return $id;
+        
+    }
+}
+if (!function_exists('get_table_name')) {
+    /**
+     * Global helpers get table name from id
+     * 
+     * @return string
+     */
+    function get_table_name($id){
+        
+        $reg = "/^([a-zA-Z]+)([0-9]+)/";
+        $array_table = ['genre','country','category'];
+        $matches = [];
+        $check = preg_match($reg, $id , $matches);
+        if($check){
+            foreach ($array_table as $value) {
+                die;
+                if(substr($value, 0, 3) == $matches[1]){
+                    return $value;
+                }
+            }
+        }
+        return null;
+        
+    }
+}
+if (!function_exists('generate_id_incre')) {
+    /**
+     * Global helpers create id auto increment from string
+     * 
+     * @return string
+     */
+    function auto_generate_id($string = 'cat000001',$max_size = 6){
+        $reg_find = '/(^[a-zA-Z]+)([0]+)?([0-9]+)/';
+        $reg_replace = '/([0-9]+)/';
+        $matches = array();
+        $check = preg_match($reg_find,$string,$matches);
+        if($check){
+            $num = (int)$matches[3];
+            $num++;
+            $num = (string)$num;
+            
+            while (strlen($num) < $max_size) {
+                $num = '0' . $num;
+            }
+            $new_id = preg_replace($reg_replace, $num , $string);            
+            return $new_id;
+        }
+        return false;
+    }
+}
+
+
 

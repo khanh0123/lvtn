@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 // use Illuminate\Foundation\Validation\ValidatesRequests;
 // use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class MainAdminController extends BaseController
 {
-	private $limit = 20;
+	protected $limit = 20;
     public function __construct(Request $request) {
         if (!isset($this->model)) {
             throw new Exception("ModelNotSet");
@@ -67,7 +69,8 @@ class MainAdminController extends BaseController
         
         $result = $this->setItem(2,$request, $item);
         if($result['type'] == 'success'){
-            $item->save();            
+            $item->save();   
+            $result['message'] = 'Cập nhật dữ liệu thành công';         
         }
         return view($this->view_folder."detail")
                 ->withData($item)
@@ -98,7 +101,10 @@ class MainAdminController extends BaseController
         $item = $this->model;
         $result = $this->setItem(1,$request, $item);
         if($result['type'] == 'success'){
+            // if(DB::connection()->getDoctrineColumn($this->model->getTable(), 'id')->getType()->getName() == 'string')
+            //     $item->id = generate_id($this->model->getTable());
             $item->save();
+            $result['message'] = 'Thêm dữ liệu thành công';
         }
         return view($this->view_folder."add")
                 ->withMessage($result); 

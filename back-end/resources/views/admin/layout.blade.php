@@ -159,6 +159,24 @@
                             </ul>
                         </div>
                     </li>
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#menu') }}">
+                            <i class="material-icons">receipt</i>
+                            <p>Quản Lý Menu
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="menu">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/menu') }}">Danh sách menu</a>
+                                </li>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/menu/add') }}">Thêm menu</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     
                     
                 </ul>

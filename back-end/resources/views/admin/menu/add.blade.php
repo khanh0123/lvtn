@@ -1,9 +1,9 @@
 @extends('admin/layout' , ['message' => !empty($message) ? $message : []])
-@section('title', 'Thêm quốc gia')
+@section('title', 'Thêm menu')
 @section('main')
 <div class="container-fluid">
     <div class="alert alert-light" role="alert">
-        <strong class="">Thêm quốc gia mới</strong>
+        <strong class="">Thêm menu mới</strong>
     </div>
     <form action="" method="post">
         {{ csrf_field()}}
@@ -18,7 +18,7 @@
 
                             <div class="card-content form-horizontal">
                                 <div class="row">
-                                    <label class="col-sm-2 label-on-left">Tên danh mục <small>*</small></label>
+                                    <label class="col-sm-2 label-on-left">Tên menu <small>*</small></label>
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
@@ -38,25 +38,16 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label class="col-sm-2 label-on-left">Tiêu đề seo</label>
+                                    <label class="col-sm-2 label-on-left">Chọn menu con</label>
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="seo_title" value="" >
+                                            <input type="text" class="form-control" name="slug" value="" >
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <label class="col-sm-2 label-on-left">Mô tả seo</label>
-                                    <div class="col-sm-10">
-                                        <div class="form-group label-floating is-empty">
-                                            <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="seo_des" value="" >
-                                            <span class="material-input"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                             </div>
                         </div>
                     </div>
@@ -99,11 +90,10 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('.using-tooltip').tooltip({animation:true});
-
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#country').parent('li').addClass('active');
-        $('#country .add').addClass('active');
-        $('#country').collapse();
+        $('#menu').parent('li').addClass('active');
+        $('#menu .add').addClass('active');
+        $('#menu').collapse();
 
         $('input[name="name"]').on('keyup', function(event) {
             event.preventDefault();
