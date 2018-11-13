@@ -18,7 +18,7 @@
 
                             <div class="card-content form-horizontal">
                                 <div class="row">
-                                    <label class="col-sm-2 label-on-left">Tên danh mục <small>*</small></label>
+                                    <label class="col-sm-2 label-on-left">Tên quốc gia <small>*</small></label>
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>

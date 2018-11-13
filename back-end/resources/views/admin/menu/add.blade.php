@@ -39,12 +39,13 @@
                                 </div>
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Chọn menu con</label>
-                                    <div class="col-sm-10">
-                                        <div class="form-group label-floating is-empty">
-                                            <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="slug" value="" >
-                                            <span class="material-input"></span>
-                                        </div>
+                                    <div class="col-sm-5">
+                                        <select class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-success" name="sub_menu[]">
+                                            @foreach($data as $key => $value)
+                                            <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
+                                            @endforeach
+                                      </select>
+
                                     </div>
                                 </div>
                                
@@ -83,10 +84,9 @@
     @stop
 
     @section('js')
+    <!-- Select Plugin -->
+<script src="/assets/js/jquery.select-bootstrap.js"></script>
 
-    <!--  DataTables.net Plugin    -->
-<!-- <script src="/assets/js/jquery.datatables.js"></script>
--->
 <script type="text/javascript">
     $(document).ready(function() {
         $('.using-tooltip').tooltip({animation:true});

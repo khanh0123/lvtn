@@ -198,18 +198,7 @@ if (!function_exists('time_in_ms')) {
         return round(microtime(true) * 1000);
     }
 }
-if (!function_exists('generate_id')) {
-    /**
-     * Global helpers auto create id
-     * 
-     * @return string
-     */
-    function generate_id($table_name){
-        $id = substr($table_name, 0, 3).time().uniqid();
-        return $id;
-        
-    }
-}
+
 if (!function_exists('get_table_name')) {
     /**
      * Global helpers get table name from id
@@ -234,7 +223,31 @@ if (!function_exists('get_table_name')) {
         
     }
 }
-if (!function_exists('generate_id_incre')) {
+
+if (!function_exists('generate_id')) {
+    /**
+     * Global helpers auto create id
+     * 
+     * @return string
+     */
+    function generate_id($table_name){
+        $id = substr($table_name, 0, 3).time().uniqid();
+        return $id;
+        
+    }
+}
+
+if (!function_exists('encode_password')) {
+    /**
+     * Global helpers auto create id
+     * 
+     * @return string
+     */
+    function encode_password($password){
+        return hash("sha256", md5($password));
+    }
+}
+if (!function_exists('auto_generate_id')) {
     /**
      * Global helpers create id auto increment from string
      * 

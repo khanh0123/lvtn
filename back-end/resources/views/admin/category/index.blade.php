@@ -59,7 +59,9 @@
                                     <td>{{ $value->slug }}</td>
                                     <td class="text-right">
                                         <a href="{{base_url('admin/category/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        @if (session()->get('permission')->canDelete)
                                         <a href="{{base_url('admin/category/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

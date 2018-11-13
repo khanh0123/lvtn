@@ -59,14 +59,16 @@
                                     <td>{{ $value->slug }}</td>
                                     <td class="text-right">
                                         <a href="{{base_url('admin/genre/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        @if (session()->get('permission')->canDelete)
                                         <a href="{{base_url('admin/genre/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
                                 
                             </tbody>
                         </table>
-                        
+                        @if( $data->hasPages() )
                         <div class="row">
                             @if($data->count() > 0)
                             <div class="col-sm-5">
@@ -75,7 +77,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if( $data->hasPages() )
+                            
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
                                     <ul class="pagination" style="margin: 0">
@@ -98,10 +100,10 @@
                                     </ul>
                                 </div>
                             </div>
-                            @endif
+                            
                         </div>
                         <!-- end row -->
-                        
+                        @endif
                     </div>
                     
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\MainAdminController;
 use App\Models\Category;
+use App\Models\Max_id;
 use Validator;
 class CategoryController extends MainAdminController
 {
@@ -35,8 +36,22 @@ class CategoryController extends MainAdminController
         
         $item->name = ucwords($req->name);
         $item->slug = create_slug($req->slug ? $req->slug : $req->name);
-        if($type == 1){
-            $item->id = generate_id($this->model->getTable());
+        if($type == 'insert'){
+
+            $result = Max_id::where(['table_name' => 'category'])->first();
+            if(empty($result)){
+                Max_id::insert(['table_name' => 'category','max_id' => 'cat000000']);
+                $max_id = 'cat000000';
+            } else {                
+                $max_id = $result->max_id;
+            }
+
+            // var_dump($max_id);die;
+            // $item->id = generate_id($this->model->getTable());
+            $id_auto = auto_generate_id($max_id,6);
+            $item->id =  $id_auto;
+            Max_id::where(['table_name' => 'category'])->update(['max_id' => $id_auto]);
+            
         }
         return [
             'type' => 'success'

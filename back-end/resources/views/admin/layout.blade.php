@@ -53,13 +53,10 @@
                         <div class="collapse" id="profile">
                             <ul class="nav">
                                 <li>
-                                    <a href="#">My Profile</a>
+                                    <a href="#">Trang cá nhân</a>
                                 </li>
                                 <li>
-                                    <a href="#">Edit Profile</a>
-                                </li>
-                                <li>
-                                    <a href="#">Settings</a>
+                                    <a href="#">Thiết lập</a>
                                 </li>
                             </ul>
                         </div>
@@ -72,39 +69,61 @@
                             <p>Trang chính</p>
                         </a>
                     </li>
+                    
+                    @if (Session::get('permission')->canDelete)
                     <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#config') }}">
-                            <i class="material-icons">build</i>
-                            <p>Cấu hình
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="config">
-                            <ul class="nav">
-                                <li class="show">
-                                    <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
-                                </li>
-                                <li class="add">
-                                    <a href="{{ base_url('admin/config/add') }}">Thêm cấu hình</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#rule') }}">
-                            <i class="material-icons">how_to_reg</i>
+                        <a data-toggle="collapse" href="{{ base_url('admin#permission') }}">
+                            <i class="material-icons">pan_tool</i>
                             <p>Quản Lý Quyền
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="rule">
+                        <div class="collapse" id="permission">
                             <ul class="nav">
                                 <li class="show">
-                                    <a href="{{ base_url('admin/rule') }}">Danh sách quyền</a>
+                                    <a href="{{ base_url('admin/permission') }}">Danh sách quyền</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#group') }}">
+                            <i class="material-icons">group</i>
+                            <p>Quản Lý Nhóm Admin
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="group">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/group') }}">Danh sách nhóm</a>
+                                </li>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/group/add') }}">Thêm nhóm</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#user') }}">
+                            <i class="material-icons">how_to_reg</i>
+                            <p>Quản Lý Admin
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="user">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/user') }}">Danh sách Admin</a>
+                                </li>
+                                <li class="add">
+                                    <a href="{{ base_url('admin/user/add') }}">Thêm admin</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    @endif
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#category') }}">
                             <i class="material-icons">category</i>
@@ -117,9 +136,11 @@
                                 <li class="show">
                                     <a href="{{ base_url('admin/category') }}">Danh sách danh mục</a>
                                 </li>
+                                @if (Session::get('permission')->canWrite)
                                 <li class="add">
                                     <a href="{{ base_url('admin/category/add') }}">Thêm danh mục</a>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
@@ -135,15 +156,17 @@
                                 <li class="show">
                                     <a href="{{ base_url('admin/country') }}">Danh sách quốc gia</a>
                                 </li>
+                                @if (Session::get('permission')->canWrite)
                                 <li class="add">
                                     <a href="{{ base_url('admin/country/add') }}">Thêm quốc gia</a>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#genre') }}">
-                            <i class="material-icons">receipt</i>
+                            <i class="material-icons">album</i>
                             <p>Quản Lý Thể Loại
                                 <b class="caret"></b>
                             </p>
@@ -153,15 +176,17 @@
                                 <li class="show">
                                     <a href="{{ base_url('admin/genre') }}">Danh sách thể loại</a>
                                 </li>
+                                @if (Session::get('permission')->canWrite)
                                 <li class="add">
                                     <a href="{{ base_url('admin/genre/add') }}">Thêm thể loại</a>
                                 </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#menu') }}">
-                            <i class="material-icons">receipt</i>
+                            <i class="material-icons">menu</i>
                             <p>Quản Lý Menu
                                 <b class="caret"></b>
                             </p>
@@ -171,9 +196,31 @@
                                 <li class="show">
                                     <a href="{{ base_url('admin/menu') }}">Danh sách menu</a>
                                 </li>
+                                @if (Session::get('permission')->canWrite)
                                 <li class="add">
                                     <a href="{{ base_url('admin/menu/add') }}">Thêm menu</a>
                                 </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#config') }}">
+                            <i class="material-icons">build</i>
+                            <p>Quản Lý Cấu hình
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="config">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
+                                </li>
+                                @if (Session::get('permission')->canWrite)
+                                <li class="add">
+                                    <a href="{{ base_url('admin/config/add') }}">Thêm cấu hình</a>
+                                </li>
+                                @endif
                             </ul>
                         </div>
                     </li>
@@ -218,22 +265,34 @@
                                     <li>
                                         <a href="dashboard.html#">You have 5 new tasks</a>
                                     </li>
-                                    <li>
-                                        <a href="dashboard.html#">You're now friend with Andrew</a>
-                                    </li>
-                                    <li>
-                                        <a href="dashboard.html#">Another Notification</a>
-                                    </li>
-                                    <li>
-                                        <a href="dashboard.html#">Another One</a>
-                                    </li>
                                 </ul>
                             </li>
-                            <li>
-                                <a data-toggle="collapse" href="{{ base_url('admin#profile') }}" class="collapsed">
+                            <li class="dropdown" title="Admin">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">person</i>
-                                    <p class="hidden-lg hidden-md">Trang cá nhân</p>
+                                    <p class="hidden-lg hidden-md">
+                                    Trang cá nhân
+                                        <b class="caret"></b>
+                                    </p>
                                 </a>
+                                <form method="POST" action="{{base_url('admin/logout')}}" id="formLogout">
+                                    @csrf
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="admin/profile">Trang cá nhân</a>
+                                        </li>
+
+                                        <li>
+
+                                            <a href="javascript:void(0)" onclick="document.getElementById('formLogout').submit()">Đăng xuất</a>
+                                            <noscript>
+                                              <input type="submit" value="Đăng xuất" />
+                                          </noscript>
+
+                                        </li>
+
+                                    </ul>
+                                </form>
                             </li>
                             <!-- <li class="separator hidden-lg hidden-md"></li> -->
                         </ul>
@@ -420,26 +479,6 @@
 <script src="/assets/js/main.js"></script>
 @yield('js')
 <script>
-    function showNotification(type = 'success' , messsage = '' , timer = 2000 , icon = 'notifications' , from = 'top', align = 'right'  ){
-    // type = ['','info','success','warning','danger','rose','primary'];
-
-    // color = Math.floor((Math.random() * 6) + 1);
-
-        $.notify({
-            icon: icon,
-            message: messsage
-        },{
-            type: type,
-            delay:1,
-            timer: 1000,
-            placement: {
-                from: from,
-                align: align
-            }
-        });
-    }
-</script>
-<script>
     $(document).ready(function() {
         $('li.disabled>a,li.active>a').click(function(event) {
             event.preventDefault();
@@ -448,7 +487,7 @@
         @if(!empty($message))
             var type = '{{$message['type'] == 'success' ? 'success' : 'danger'}}';
             var message = '{{ $message['message'] }}';
-            showNotification( type , message);
+            showNotification( type , message , 4000);
         @endif
 
     });

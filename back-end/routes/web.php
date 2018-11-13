@@ -10,30 +10,60 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-function resource_admin(&$router, $uri, $controller) {
-    $router->get($uri, 'Admin\\'.$controller . '@index')->name('Admin.'.$uri.'.index');
-    $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail')->name('Admin.'.$uri.'.detail');
-    $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update');
-    $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete');
-    $router->get($uri.'/add', 'Admin\\'.$controller . '@add')->name('Admin.'.$uri.'.add');
-    $router->post($uri.'/add', 'Admin\\'.$controller . '@store');
-    // $router->get("admin/$uri". '/delete/{id}', $controller . '@delele');
-}
 
 
+
+$router->get('/' , function(){ return view('welcome');});
 
 $router->group(['prefix' => 'admin'], function() use($router) {
-    $router->get('/', 'Admin\IndexController@index');
+	$router->get('/login', 'Admin\AdminController@login');
+    $router->post('/login', 'Admin\AdminController@doLogin');
+	$router->post('/logout', 'Admin\AdminController@logout');
 
-    resource_admin($router, 'config', 'ConfigController');
-    resource_admin($router, 'category', 'CategoryController');
-    resource_admin($router, 'genre', 'GenreController');
-    resource_admin($router, 'country', 'CountryController');
-    resource_admin($router, 'rule', 'RuleController');
-    resource_admin($router, 'menu', 'MenuController');
+    
+    $router->group(['middleware' => ['auth.admin']], function() use($router) {
+        $router->get('/', 'Admin\IndexController@index')->name('Admin.index');
 
+        $router->get('/permission', 'Admin\PermissionController@index')->name('Admin.permission.index')->middleware('auth.master');
+        $router->get('user/lock/{id}', 'Admin\AdminController@lockuser')->middleware('auth.master');
+        $router->get('user/unlock/{id}', 'Admin\AdminController@unlockuser')->middleware('auth.master');
+        resource_admin($router, 'user', 'AdminController' , 'auth.master');
+        resource_admin($router, 'group', 'AdminGroupController' , 'auth.master');
+
+        resource_admin($router, 'config', 'ConfigController');
+        resource_admin($router, 'category', 'CategoryController');
+        resource_admin($router, 'genre', 'GenreController');
+        resource_admin($router, 'country', 'CountryController');
+        resource_admin($router, 'menu', 'MenuController');
+    });
 });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+function resource_admin(&$router, $uri, $controller , $middleware = null) {
+
+    if(empty($middleware)){
+        $router->get($uri, 'Admin\\'.$controller . '@index')->name('Admin.'.$uri.'.index');
+        $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail')->name('Admin.'.$uri.'.detail');
+        $router->get($uri.'/add', 'Admin\\'.$controller . '@add')->name('Admin.'.$uri.'.add')->middleware('auth.writer');
+        $router->post($uri.'/add', 'Admin\\'.$controller . '@store')->middleware('auth.writer');
+
+        $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update')->middleware('auth.editer');
+
+        $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete')->middleware('auth.master');
+    } else {
+        $router->group(['middleware' => $middleware] , function() use($router,$uri,$controller){
+
+            $router->get($uri, 'Admin\\'.$controller . '@index')->name('Admin.'.$uri.'.index');
+            $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail')->name('Admin.'.$uri.'.detail');
+            $router->get($uri.'/add', 'Admin\\'.$controller . '@add')->name('Admin.'.$uri.'.add');
+            $router->post($uri.'/add', 'Admin\\'.$controller . '@store');
+            $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update');
+            $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete');
+
+        });
+    }
+    
+
+    
+}

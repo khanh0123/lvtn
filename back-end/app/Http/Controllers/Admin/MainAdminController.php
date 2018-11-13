@@ -28,7 +28,7 @@ class MainAdminController extends BaseController
      */
     public function index(Request $request) {        
         $limit = $request->input('limit', $this->limit);
-        $sort = intval($request->input('sort' , 0)) == 1 ? 'desc' : 'asc';
+        $sort = (int)$request->input('sort' , 0) == 1 ? 'desc' : 'asc';
         $result = $this->model->get($limit,$sort);
         $result = $result->appends($request->all());
         $message = session()->get( 'message' );
@@ -40,7 +40,9 @@ class MainAdminController extends BaseController
      * Show view add new item.
      */
     public function add(Request $request) {
-        return view($this->view_folder."add");
+        $message = session()->get( 'message' );
+        return view($this->view_folder."add")
+            ->withMessage($message);
     }
 
     /*
@@ -53,8 +55,10 @@ class MainAdminController extends BaseController
         if(empty($item)){
             return abort(404);
         }
+        $message = session()->get( 'message' );
         return view($this->view_folder."detail")
-                ->withData($item);
+                ->withData($item)
+                ->withMessage($message);
     }
 
     /*
@@ -67,7 +71,7 @@ class MainAdminController extends BaseController
             return abort(404);
         }
         
-        $result = $this->setItem(2,$request, $item);
+        $result = $this->setItem('update',$request, $item);
         if($result['type'] == 'success'){
             $item->save();   
             $result['message'] = 'Cập nhật dữ liệu thành công';         
@@ -99,7 +103,7 @@ class MainAdminController extends BaseController
     public function store(Request $request) {
 
         $item = $this->model;
-        $result = $this->setItem(1,$request, $item);
+        $result = $this->setItem('insert',$request, $item);
         if($result['type'] == 'success'){
             // if(DB::connection()->getDoctrineColumn($this->model->getTable(), 'id')->getType()->getName() == 'string')
             //     $item->id = generate_id($this->model->getTable());
@@ -108,7 +112,24 @@ class MainAdminController extends BaseController
         }
         return view($this->view_folder."add")
                 ->withMessage($result); 
-        return response()->json($item, 200);
+    }
+
+
+    protected function check_exist_slug($slug)
+    {
+        $data = DB::table('genre')->where(['slug' => $slug ])->get();
+        if(count($data )> 0){
+            return true;
+        }
+        $data = DB::table('category')->where(['slug' => $slug ])->get();
+        if(count($data )> 0){
+            return true;
+        }
+        $data = DB::table('country')->where(['slug' => $slug ])->get();
+        if(count($data )> 0){
+            return true;
+        }
+        return false;
     }
     
 }

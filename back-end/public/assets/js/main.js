@@ -3,7 +3,7 @@ function create_slug(input)
   
     //Đổi chữ hoa thành chữ thường
     var slug = input.toLowerCase();
- 
+    
     //Đổi ký tự có dấu thành không dấu
     slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
     slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
@@ -28,4 +28,22 @@ function create_slug(input)
     $.trim(slug);
     //In slug ra textbox có id “slug”
     return slug;
+}
+function showNotification(type = 'success' , messsage = '' , timer = 4000 , icon = 'notifications' , from = 'top', align = 'right'  ){
+    // type = ['','info','success','warning','danger','rose','primary'];
+
+    // color = Math.floor((Math.random() * 6) + 1);
+
+    $.notify({
+        icon: icon,
+        message: messsage
+    },{
+        type: type,
+        delay:1,
+        timer: timer,
+        placement: {
+            from: from,
+            align: align
+        }
+    });
 }

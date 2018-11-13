@@ -18,5 +18,13 @@ class Category extends Model
     				->paginate($limit);    				
     	return $data;
     }
+    public function getall($sort = 'desc'){
+        $data = DB::table($this->table)
+                    // ->select('id','key','value','created_at','updated_at')
+                    ->orderBy('id', $sort)
+                    ->get();
+        return $data;
+
+    }
 
 }

@@ -15,6 +15,8 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \App\Http\Middleware\CheckForMaintenanceMode::class,
+        // \App\Http\Middleware\Authenticate::class,
+        // \App\Http\Middleware\AuthAdmin::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -52,6 +54,11 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.admin' => \App\Http\Middleware\AuthAdmin::class,
+        'auth.writer' => \App\Http\Middleware\WriterUser::class,
+        'auth.editer' => \App\Http\Middleware\EditerUser::class,
+        'auth.master' => \App\Http\Middleware\SupperAdmin::class,
+
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,

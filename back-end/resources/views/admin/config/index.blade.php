@@ -65,7 +65,9 @@
                                     <td>{{ $value->updated_at }}</td>
                                     <td class="text-right">
                                         <a href="{{base_url('admin/config/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        @if (session()->get('permission')->canDelete)
                                         <a href="{{base_url('admin/config/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

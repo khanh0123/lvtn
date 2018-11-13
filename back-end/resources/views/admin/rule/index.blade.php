@@ -60,14 +60,14 @@
                                 
                             </tbody>
                         </table>
-                        
+                        @if( $data->hasPages() )
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
                                     Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
                                 </div>
                             </div>
-                            @if( $data->hasPages() )
+                            
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
                                     <ul class="pagination" style="margin: 0">
@@ -90,10 +90,10 @@
                                     </ul>
                                 </div>
                             </div>
-                            @endif
+                            
                         </div>
                         <!-- end row -->
-                        
+                        @endif
                     </div>
                     
                 </div>
