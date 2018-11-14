@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableCountry extends Migration
+class CreateTableUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateTableCountry extends Migration
      */
     public function up()
     {
-        Schema::create('country', function (Blueprint $table) {
-            $table->string('id',255)->primary();
-            $table->string('name',100);
-            $table->string('seo_des',255);
-            $table->string('seo_title',255);
+        Schema::create('user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('email',255);
+            $table->string('password',255);
+            $table->string('hash');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->tinyInteger('is_social')->default('1');
+            $table->tinyInteger('status')->default('1');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
@@ -30,6 +34,6 @@ class CreateTableCountry extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('country');
+        Schema::dropIfExists('user');
     }
 }

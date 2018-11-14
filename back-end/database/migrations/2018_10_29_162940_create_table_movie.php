@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use DB;
+
 class CreateTableMovie extends Migration
 {
     /**
@@ -28,10 +28,12 @@ class CreateTableMovie extends Migration
             $table->doubleval('avg_rate');
             $table->string('slug');
             $table->integer('epi_num');
-            $table->integer('cat_id');
+            $table->string('cat_id')->unsigned();
+            $table->integer('ad_id')->unsigned();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('cat_id', 'fk_movie_category')->references('id')->on('category')->onDelete('cascade');
+            $table->foreign('ad_id', 'fk_movie_admin')->references('id')->on('admin')->onDelete('cascade');
         });
     }
 

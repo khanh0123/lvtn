@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableCountry extends Migration
+class CreateTableEpisode extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateTableCountry extends Migration
      */
     public function up()
     {
-        Schema::create('country', function (Blueprint $table) {
-            $table->string('id',255)->primary();
-            $table->string('name',100);
-            $table->string('seo_des',255);
-            $table->string('seo_title',255);
+        Schema::create('episode', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('mov_id')->unsigned();
+            $table->string('link_play');
+            $table->string('slug');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
-        });
-    }
+            $table->foreign('mov_id', 'fk_episode_movie')->references('id')->on('movie')->onDelete('cascade');
+        });    }
 
     /**
      * Reverse the migrations.
@@ -30,6 +30,6 @@ class CreateTableCountry extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('country');
+        Schema::dropIfExists('episode');
     }
 }

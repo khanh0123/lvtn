@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use DB;
+
 class CreateTableCategory extends Migration
 {
     /**
@@ -13,9 +13,11 @@ class CreateTableCategory extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('cat_name');
+        Schema::create('country', function (Blueprint $table) {
+            $table->string('id',255)->primary();
+            $table->string('name',100);
+            $table->string('seo_des',255);
+            $table->string('seo_title',255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });

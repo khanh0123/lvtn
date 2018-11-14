@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableCountry extends Migration
+
+class CreateTableRule extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +14,10 @@ class CreateTableCountry extends Migration
      */
     public function up()
     {
-        Schema::create('country', function (Blueprint $table) {
-            $table->string('id',255)->primary();
-            $table->string('name',100);
-            $table->string('seo_des',255);
-            $table->string('seo_title',255);
+        Schema::create('rule', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('rule_name');
+            $table->integer('rule_type');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
@@ -30,6 +30,6 @@ class CreateTableCountry extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('country');
+        Schema::dropIfExists('rule');
     }
 }
