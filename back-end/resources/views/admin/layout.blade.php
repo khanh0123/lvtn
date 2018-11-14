@@ -70,7 +70,7 @@
                         </a>
                     </li>
                     
-                    @if (Session::get('permission')->canDelete)
+                    @if (Session::get('permission')->isAdmin)
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#permission') }}">
                             <i class="material-icons">pan_tool</i>

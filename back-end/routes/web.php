@@ -50,7 +50,7 @@ function resource_admin(&$router, $uri, $controller , $middleware = null) {
 
         $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update')->middleware('auth.editer');
 
-        $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete')->middleware('auth.master');
+        $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete')->middleware('auth.editer.delete');
     } else {
         $router->group(['middleware' => $middleware] , function() use($router,$uri,$controller){
 

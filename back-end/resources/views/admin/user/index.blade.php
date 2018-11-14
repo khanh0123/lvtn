@@ -64,7 +64,7 @@
                                     <td>{{ $value->email }}</td>
                                     <td>{{ $value->first_name }}</td>
                                     <td>{{ $value->last_name }}</td>
-                                    <td>{{ $value->status === 1 ? 'Hoạt động' : 'Vô hiệu hóa' }}</td>
+                                    <td>{{ $value->status === 1 ? 'Kích hoạt' : 'Vô hiệu hóa' }}</td>
                                     <td>{{ $value->created_at }}</td>
                                     <td >
                                         <a href="{{base_url('admin/user/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>

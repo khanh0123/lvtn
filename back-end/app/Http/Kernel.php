@@ -57,6 +57,7 @@ class Kernel extends HttpKernel
         'auth.admin' => \App\Http\Middleware\AuthAdmin::class,
         'auth.writer' => \App\Http\Middleware\WriterUser::class,
         'auth.editer' => \App\Http\Middleware\EditerUser::class,
+        'auth.editer.delete' => \App\Http\Middleware\EditerDelete::class,
         'auth.master' => \App\Http\Middleware\SupperAdmin::class,
 
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

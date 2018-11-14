@@ -21,7 +21,7 @@ class Admin extends Model
     public function get_permission_user($gad_id)
     {
     	$data = DB::table('admin_group_permission')
-    				->select('gad_id','per_id','canRead','canWrite','canUpdate','canDelete')
+    				->select('gad_id','per_id','canRead','canWrite','canUpdate','canDelete','isAdmin')
                     ->join('permission' , 'admin_group_permission.per_id' , '=' , 'permission.id')
     				->join('admin_group' , 'admin_group.id' , '=' , 'admin_group_permission.gad_id')
                     ->where('admin_group.id' , $gad_id)

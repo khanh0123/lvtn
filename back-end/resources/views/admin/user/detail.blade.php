@@ -59,7 +59,7 @@
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Trạng thái </label>
                                     <div class="col-sm-10">
-                                        <label class="text-success label-on-left" style="color: {{$data['status'] === 1 ? '#4caf50' : 'red'}} ">{{$data['status'] !== 1 ? 'Vô hiệu hóa' : 'Hoạt động'}}</label>
+                                        <label class="text-success label-on-left" style="color: {{$data['status'] === 1 ? '#4caf50' : 'red'}} ">{{$data['status'] !== 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}}</label>
                                             
                                     </div>
                                 </div>
