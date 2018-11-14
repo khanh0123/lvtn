@@ -14,10 +14,10 @@ class CreateTableUserRatingMovie extends Migration
     public function up()
     {
         Schema::create('user_rating_movie', function (Blueprint $table) {
-            $table->integer('user_id');            
-            $table->integer('mov_id');          
+            $table->integer('user_id')->unsigned()->index();            
+            $table->integer('mov_id')->unsigned()->index();          
             $table->integer('rating');
-            $table->foreign('user_id', 'fk_user_rating_movie_user')->references('id')->on('user')->onDelete('cascade');
+            $table->foreign('user_id','fk_user_rating_movie_user')->references('id')->on('user')->onDelete('cascade');
             $table->foreign('mov_id', 'fk_user_rating_movie_movie')->references('id')->on('movie')->onDelete('cascade');
         });
     }

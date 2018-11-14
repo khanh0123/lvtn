@@ -14,8 +14,8 @@ class CreateTableMovieCountry extends Migration
     public function up()
     {
         Schema::create('movie_country', function (Blueprint $table) {
-            $table->string('cot_id');
-            $table->integer('mov_id');
+            $table->string('cot_id',255);
+            $table->integer('mov_id')->unsigned()->index();
             $table->foreign('cot_id', 'fk_movie_country_country')->references('id')->on('country')->onDelete('cascade');
             $table->foreign('mov_id', 'fk_movie_country_movie')->references('id')->on('movie')->onDelete('cascade');
         });

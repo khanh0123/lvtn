@@ -13,9 +13,13 @@ class CreateTableGenre extends Migration
      */
     public function up()
     {
-        Schema::create('country', function (Blueprint $table) {
+        Schema::create('genre', function (Blueprint $table) {
+            // $table->collation = 'utf8_unicode_ci';
+            // $table->charset = 'utf8';
+
             $table->string('id',255)->primary();
             $table->string('name',100);
+            $table->string('slug',100);
             $table->string('seo_des',255);
             $table->string('seo_title',255);
             $table->timestamp('created_at')->useCurrent();

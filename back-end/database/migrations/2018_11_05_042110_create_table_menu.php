@@ -13,11 +13,11 @@ class CreateTableMenu extends Migration
      */
     public function up()
     {
-        Schema::create('movie_genre', function (Blueprint $table) {
+        Schema::create('menu', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('slug');
-            $table->text('sub_men');
+            $table->text('sub_menu');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
