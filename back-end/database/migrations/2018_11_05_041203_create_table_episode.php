@@ -20,6 +20,7 @@ class CreateTableEpisode extends Migration
             $table->string('slug');
             $table->text('images');
             $table->string('short_des');
+            $table->integer('episode');
             $table->string('long_des');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
