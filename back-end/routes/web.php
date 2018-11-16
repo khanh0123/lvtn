@@ -35,6 +35,7 @@ $router->group(['prefix' => 'admin'], function() use($router) {
         resource_admin($router, 'genre', 'GenreController');
         resource_admin($router, 'country', 'CountryController');
         resource_admin($router, 'menu', 'MenuController');
+        resource_admin($router, 'movie', 'MovieController');
     });
 });
 

@@ -280,26 +280,26 @@ demo = {
 
     initMaterialWizard: function(){
         // Code for the Validator
-        var $validator = $('.wizard-card form').validate({
-    		  rules: {
-    		    firstname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    lastname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    email: {
-    		      required: true,
-    		      minlength: 3,
-    		    }
-            },
+     //    var $validator = $('.wizard-card form').validate({
+    	// 	  rules: {
+    	// 	    firstname: {
+    	// 	      required: true,
+    	// 	      minlength: 3
+    	// 	    },
+    	// 	    lastname: {
+    	// 	      required: true,
+    	// 	      minlength: 3
+    	// 	    },
+    	// 	    email: {
+    	// 	      required: true,
+    	// 	      minlength: 3,
+    	// 	    }
+     //        },
 
-            errorPlacement: function(error, element) {
-                $(element).parent('div').addClass('has-error');
-             }
-    	});
+     //        errorPlacement: function(error, element) {
+     //            $(element).parent('div').addClass('has-error');
+     //         }
+    	// });
 
         // Wizard Initialization
       	$('.wizard-card').bootstrapWizard({
@@ -308,17 +308,18 @@ demo = {
             'previousSelector': '.btn-previous',
 
             onNext: function(tab, navigation, index) {
-            	var $valid = $('.wizard-card form').valid();
-            	if(!$valid) {
-            		$validator.focusInvalid();
-            		return false;
-            	}
+            	// var $valid = $('.wizard-card form').valid();
+            	// if(!$valid) {
+            	// 	$validator.focusInvalid();
+            	// 	return false;
+            	// }
             },
 
             onInit : function(tab, navigation, index){
 
               //check number of tabs and fill the entire row
               var $total = navigation.find('li').length;
+
               $width = 100/$total;
               var $wizard = navigation.closest('.wizard-card');
 
@@ -327,6 +328,7 @@ demo = {
               if($display_width < 600 && $total > 3){
                   $width = 50;
               }
+              console.log($total);
 
                navigation.find('li').css('width',$width + '%');
                $first_li = navigation.find('li:first-child a').html();
@@ -337,13 +339,13 @@ demo = {
            },
 
             onTabClick : function(tab, navigation, index){
-                var $valid = $('.wizard-card form').valid();
+                // var $valid = $('.wizard-card form').valid();
 
-                if(!$valid){
-                    return false;
-                } else{
-                    return true;
-                }
+                // if(!$valid){
+                //     return false;
+                // } else{
+                //     return true;
+                // }
             },
 
             onTabShow: function(tab, navigation, index) {
@@ -438,7 +440,7 @@ demo = {
         });
 
         function refreshAnimation($wizard, index){
-            total_steps = $wizard.find('li').length;
+            total_steps = $wizard.find('li.wizard-menu-top').length;
             move_distance = $wizard.width() / total_steps;
             step_width = move_distance;
             move_distance *= index;

@@ -30,7 +30,7 @@ class CreateTableMovie extends Migration
             $table->text('images');
             $table->string('short_des');
             $table->string('long_des');
-            $table->double('runtime');
+            $table->int('runtime');
             $table->double('release_date');
             $table->integer('total_rate');
             $table->double('avg_rate');            

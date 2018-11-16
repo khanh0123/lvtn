@@ -153,13 +153,13 @@ if (!function_exists('base_url')) {
     }
 }
 
-if (!function_exists('date')) {
+if (!function_exists('customDate')) {
     /**
      * Global helpers format output of timestamp
      * 
      * @return Datetime
      */
-    function date($timestamp = ''){
+    function customDate($timestamp = ''){
         
         return Date("d/m/y - h:i");
     }
@@ -230,13 +230,17 @@ if (!function_exists('generate_id')) {
      * 
      * @return string
      */
-    function generate_id($table_name){
+    function generate_id($table_name = ''){
         $id = substr($table_name, 0, 3).time().uniqid();
         return $id;
         
     }
 }
-
+if (!function_exists('generateRandomString')) {
+    function generateRandomString($length = 10) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+}
 if (!function_exists('encode_password')) {
     /**
      * Global helpers auto create id

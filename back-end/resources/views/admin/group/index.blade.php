@@ -146,7 +146,8 @@
                     next: "Sau",
                     first: "",
                     last: ""
-                }
+                },
+                emptyTable: "Không có dữ liệu nào"
             },
             page:{
 

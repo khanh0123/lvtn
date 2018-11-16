@@ -16,8 +16,10 @@
     <link href="{{asset('assets/css/material-dashboard.css')}}" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="{{asset('assets/css/demo.css')}}" rel="stylesheet" />
+    
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{{asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" />
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"> -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
     @yield('css')
 </head>
@@ -32,7 +34,7 @@
     -->
             <div class="logo">
                 <a href="#" class="simple-text">
-                    Admin Control
+                    Quản Trị Hệ Thống
                 </a>
             </div>
             <div class="logo logo-mini">
@@ -47,16 +49,16 @@
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="{{ base_url('admin#profile') }}" class="collapsed">
-                            Nguyễn Ngọc Khánh
+                            {{ session()->get('user')->first_name }} {{ session()->get('user')->last_name }} 
                             <b class="caret"></b>
                         </a>
                         <div class="collapse" id="profile">
                             <ul class="nav">
                                 <li>
-                                    <a href="#">Trang cá nhân</a>
+                                    <a href="/admin/profile">Trang cá nhân</a>
                                 </li>
                                 <li>
-                                    <a href="#">Thiết lập</a>
+                                    <a href="/admin/settings">Thiết lập</a>
                                 </li>
                             </ul>
                         </div>
@@ -124,6 +126,26 @@
                         </div>
                     </li>
                     @endif
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#movie') }}">
+                            <i class="material-icons">movie</i>
+                            <p>Quản Lý Phim
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="movie">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/movie') }}">Danh sách phim</a>
+                                </li>
+                                @if (Session::get('permission')->canWrite)
+                                <li class="add">
+                                    <a href="{{ base_url('admin/movie/add') }}">Thêm phim mới</a>
+                                </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#category') }}">
                             <i class="material-icons">category</i>
@@ -252,7 +274,7 @@
                             <li class="dropdown" title="Thông báo">
                                 <a href="dashboard.html#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">notifications</i>
-                                    <span class="notification">5</span>
+                                    <span class="notification">2</span>
                                     <p class="hidden-lg hidden-md">
                                         Thông báo
                                         <b class="caret"></b>

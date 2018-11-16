@@ -1,5 +1,5 @@
 @extends('admin/layout' , ['message' => !empty($message) ? $message : []])
-@section('title', 'Danh sách danh mục')
+@section('title', 'Danh sách phim')
 @section('main')
 <div class="container-fluid">
 
@@ -10,7 +10,7 @@
                     <i class="material-icons">assignment</i>
                 </div>
                 <div class="card-content">
-                    <h4 class="card-title">Danh sách danh mục</h4>
+                    <h4 class="card-title">Danh sách phim</h4>
                     <div class="toolbar">
                         <!--        Here you can write extra buttons/actions for the toolbar              -->
                     </div>
@@ -25,10 +25,10 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-left">
                                         <li class="dropdown-header"></li>
-                                        <li><a href="{{base_url('admin/genre?limit=10')}}">10</a></li>
-                                        <li><a href="{{base_url('admin/genre?limit=20')}}">20</a></li>
-                                        <li><a href="{{base_url('admin/genre?limit=30')}}">30</a></li>
-                                        <li><a href="{{base_url('admin/genre?limit=40')}}">40</a></li>
+                                        <li><a href="{{base_url('admin/menu?limit=10')}}">10</a></li>
+                                        <li><a href="{{base_url('admin/menu?limit=20')}}">20</a></li>
+                                        <li><a href="{{base_url('admin/menu?limit=30')}}">30</a></li>
+                                        <li><a href="{{base_url('admin/menu?limit=40')}}">40</a></li>
                                     </ul>
                                 </div>
                                 <span>Kết quả</span>
@@ -40,15 +40,23 @@
                         <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>Tên danh mục</th>
-                                    <th>Slug</th>
+                                    <th>Tên phim</th>
+                                    <th>Danh mục</th>
+                                    <th>Số tập</th>
+                                    <th>Ngày ra rạp</th>
+                                    <th>Phim hot</th>
+                                    <th>Phim mới</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Tên danh mục</th>
-                                    <th>Slug</th>
+                                    <th>Tên phim</th>
+                                    <th>Danh mục</th>
+                                    <th>Số tập</th>
+                                    <th>Ngày ra rạp</th>
+                                    <th>Phim hot</th>
+                                    <th>Phim mới</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
@@ -56,11 +64,14 @@
                                 @foreach ($data as $value)
                                 <tr>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->slug }}</td>
+                                    <td>{{ $value->type == 1 ? 'Phim Bộ' : 'Phim Lẻ' }}</td>
+                                    <td>{{ $value->release_date }}</td>
+                                    <td>{{ $value->is_hot ? 'Y' : 'N' }}</td>
+                                    <td>{{ $value->is_new ? 'Y' : 'N' }}</td>
                                     <td class="text-right">
-                                        <a href="{{base_url('admin/genre/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        <a href="{{base_url('admin/menu/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
                                         @if (session()->get('permission')->canDelete)
-                                        <a href="{{base_url('admin/genre/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        <!-- <a href="{{base_url('admin/menu/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a> -->
                                         @endif
                                     </td>
                                 </tr>
@@ -70,13 +81,11 @@
                         </table>
                         @if( $data->hasPages() )
                         <div class="row">
-                            @if($data->count() > 0)
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
                                     Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
                                 </div>
                             </div>
-                            @endif
                             
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
@@ -128,9 +137,9 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#genre').parent('li').addClass('active');
-        $('#genre .show').addClass('active');
-        $('#genre').collapse();
+        $('#movie').parent('li').addClass('active');
+        $('#movie .show').addClass('active');
+        $('#movie').collapse();
 
         $('#datatables').DataTable({
             paging: false,
