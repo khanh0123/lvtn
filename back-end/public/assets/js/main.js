@@ -44,6 +44,7 @@ function showNotification(type = 'success' , messsage = '' , timer = 4000 , icon
         placement: {
             from: from,
             align: align
-        }
+        },
+        z_index: 9999,
     });
 }

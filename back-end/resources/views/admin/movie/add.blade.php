@@ -105,7 +105,7 @@
                                                 <label class="col-sm-4 label-on-left">Ngày phát hành <small></small></label>
                                                 <div class="col-sm-8">
                                                     <div class="form-group">
-                                                            <input type="date" class="form-control" value="<?php echo date("Y-m-d");?>" name="release_date">
+                                                        <input type="date" class="form-control" value="<?php echo date("Y-m-d");?>" name="release_date">
                                                     </div>
                                                 </div>
                                             </div>
@@ -131,7 +131,7 @@
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">
                                                             <label>
-                                                                <input type="checkbox" name="is_hot" value="0"> Phim Mới
+                                                                <input type="checkbox" name="is_new" value="0"> Phim Mới
                                                             </label>
                                                         </div>
                                                     </div>
@@ -141,7 +141,7 @@
                                             <div class="row">
                                                 <label class="col-sm-3 label-on-left">Chọn danh mục</label>
                                                 <div class="col-sm-5">
-                                                    <select class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="cat_id" required data-name="Danh mục">
+                                                    <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="cat_id" required data-name="Danh mục">
                                                         @foreach($dataCat as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
@@ -153,7 +153,7 @@
                                             <div class="row">
                                                 <label class="col-sm-3 label-on-left">Chọn thể loại</label>
                                                 <div class="col-sm-5">
-                                                    <select class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-danger" name="genre[]" required data-name="Thể loại">
+                                                    <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-danger" name="genre[]" required data-name="Thể loại">
                                                         @foreach($dataGen as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
@@ -165,7 +165,7 @@
                                             <div class="row">
                                                 <label class="col-sm-3 label-on-left">Chọn quốc gia</label>
                                                 <div class="col-sm-5">
-                                                    <select class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-secondary" name="country[]" required data-name="Quốc gia">
+                                                    <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-secondary" name="country[]" required data-name="Quốc gia">
                                                         @foreach($dataCot as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
@@ -185,123 +185,131 @@
                                                         <span class="fileinput-new">Chọn ảnh</span>
                                                         <span class="fileinput-exists">Thay đổi</span>
                                                         <input type="file" name="images[]" multiple required data-name="Ảnh">
-                                                        <div class="ripple-container"></div></span>
-                                                        <a href="extended.html#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
-                                                    </div>
+                                                        <div class="ripple-container"></div>
+                                                    </span>
+                                                    <a href="extended.html#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 </div>
-                                <div class="tab-pane" id="seoinfo">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <h4 class="info-text"> Nhập thông tin SEO cho phim </h4>
-                                        </div>
-                                        <div class="col-sm-11 col-sm-offset-1">
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">Tiêu đề</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-11 col-sm-offset-1">
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">Mô tả ngắn</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-11 col-sm-offset-1">
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">Mô tả đầy đủ</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        
+
+                            </div>
+                            <div class="tab-pane" id="seoinfo">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h4 class="info-text"> Nhập thông tin SEO cho phim </h4>
                                     </div>
-                                </div>
-                            </div>
-<!--                             <div class="wizard-footer">
-                                <div class="pull-right">
-                                    <input type='button' class='btn btn-next btn-fill btn-rose btn-wd' name='next' value='Next' />
-                                    <input type='button' class='btn btn-finish btn-fill btn-rose btn-wd' name='finish' value='Finish' />
-                                </div>
-                                <div class="pull-left">
-                                    <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
-                                </div>
-                                <div class="clearfix"></div>
-                            </div> -->
-                        </div>
-                    </div>
-                    <!-- wizard container -->
-                </div>
-                <!-- end col-8 -->
-                <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header card-header-text" data-background-color="rose">
-                                    <h4 class="card-title">Hành động</h4>
-                                </div>
-                                <div class="card-content">
+                                    <div class="col-sm-11 col-sm-offset-1">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Tiêu đề</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-11 col-sm-offset-1">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Mô tả ngắn</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-11 col-sm-offset-1">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Mô tả đầy đủ</label>
+                                            <input type="text" class="form-control">
+                                        </div>
+                                    </div>
 
-                                    <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thêm" onClick="return validateMovie();"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
-
-                                    <button type="reset" class="btn btn-danger using-tooltip"  data-toggle="tooltip" data-placement="top" title="Làm mới form này"><i class="material-icons">close</i>Làm mới<div class="ripple-container"></div></button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end row -->
-            </form>
-            <!-- end form -->
+                <!-- wizard container -->
+            </div>
+            <!-- end col-8 -->
+            <div class="col-md-3">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header card-header-text" data-background-color="rose">
+                                <h4 class="card-title">Hành động</h4>
+                            </div>
+                            <div class="card-content">
 
+                                <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thêm" onClick="return validateMovie();"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
+
+                                <button type="reset" class="btn btn-danger using-tooltip"  data-toggle="tooltip" data-placement="top" title="Làm mới form này"><i class="material-icons">close</i>Làm mới<div class="ripple-container"></div></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        @stop
+        <!-- end row -->
+    </form>
+    <!-- end form -->
 
-        @section('css')
-        <!-- add custom css here -->
-        <!-- Latest compiled and minified CSS -->
-        <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css"> -->
-        @stop
+</div>
+@stop
 
-        @section('js')
+@section('css')
+<!-- add custom css here -->
+<!-- Latest compiled and minified CSS -->
+<!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css"> -->
+@stop
 
-        <!--  Plugin for the Wizard -->
-        <script src="/assets/js/jquery.bootstrap-wizard.js"></script>
-        <!-- Select Plugin -->
-        <script src="/assets/js/jquery.select-bootstrap.js"></script>
-        <!--    Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
-        <script src="/assets/js/jasny-bootstrap.min.js"></script>
+@section('js')
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('.using-tooltip').tooltip({animation:true});
-                $('.menu-left-custom >li.active').removeClass('active');
-                $('#menu').parent('li').addClass('active');
-                $('#menu .add').addClass('active');
-                $('#menu').collapse();
+<!--  Plugin for the Wizard -->
+<script src="/assets/js/jquery.bootstrap-wizard.js"></script>
+<!-- Select Plugin -->
+<script src="/assets/js/jquery.select-bootstrap.js"></script>
+<!--    Plugin for Fileupload, full documentation here: http://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script src="/assets/js/jasny-bootstrap.min.js"></script>
 
-                $('input[name="name"]').on('keyup', function(event) {
-                    event.preventDefault();
-                    $('input[name="slug"]').val(create_slug($(this).val()));
-                });
-                demo.initMaterialWizard();
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.using-tooltip').tooltip({animation:true});
+        $('.menu-left-custom >li.active').removeClass('active');
+        $('#movie').parent('li').addClass('active');
+        $('#movie .add').addClass('active');
+        $('#movie').collapse();
+
+        $('input[name="name"]').on('keyup', function(event) {
+            event.preventDefault();
+            $('input[name="slug"]').val(create_slug($(this).val()));
+        });
+
+        $('input[name="is_hot"],input[name="is_new"]').on('change', function(event) {
+            event.preventDefault();
+            if($(this).is(':checked')){
+                $(this).val(1);
+            } else {
+                $(this).val(0);
+            }
+        });
+        demo.initMaterialWizard();
 
 
-            });
-            function validateMovie(){
-                    var input = $('input[required]');
-                    var select = $('select[required]');
-                    for(var k = 0; k < input.length; k++){
-                        if($(input[k]).val() == ''){
-                            var name = $(input[k]).data('name');
-                            showNotification('warning' , `${name} không được để trống` , 3000);
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-        </script>
-        @stop
+    });
+    function validateMovie(){
+        var input = $('input[required]');
+        var select = $('select[required]');
+        for(var k = 0; k < input.length; k++){
+            if($(input[k]).val() == ''){
+                var name = $(input[k]).data('name');
+                showNotification('warning' , `${name} không được để trống` , 3000);
+                return false;
+            }
+        }
+        for(var k = 0; k < select.length; k++){
+            if($(select[k]).val() == ''){
+                var name = $(select[k]).data('name');
+                showNotification('warning' , `${name} không được để trống` , 3000);
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+@stop

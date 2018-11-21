@@ -20,7 +20,8 @@
     <!--     Fonts and icons     -->
     <link href="{{asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" />
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" /> -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/font-roboto-material-icon.css')}}" />
     @yield('css')
 </head>
 
@@ -73,7 +74,7 @@
                     </li>
                     
                     @if (Session::get('permission')->isAdmin)
-                    <li>
+                    <!-- <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#permission') }}">
                             <i class="material-icons">pan_tool</i>
                             <p>Quản Lý Quyền
@@ -87,39 +88,27 @@
                                 </li>
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
 
                     <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#group') }}">
+                        <a data-toggle="collapse" href="{{ base_url('admin#groupAdmin') }}">
                             <i class="material-icons">group</i>
-                            <p>Quản Lý Nhóm Admin
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="group">
-                            <ul class="nav">
-                                <li class="show">
-                                    <a href="{{ base_url('admin/group') }}">Danh sách nhóm</a>
-                                </li>
-                                <li class="add">
-                                    <a href="{{ base_url('admin/group/add') }}">Thêm nhóm</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#user') }}">
-                            <i class="material-icons">how_to_reg</i>
                             <p>Quản Lý Admin
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="user">
+                        <div class="collapse" id="groupAdmin">
                             <ul class="nav">
-                                <li class="show">
+                                <li class="group show">
+                                    <a href="{{ base_url('admin/group') }}">Danh sách nhóm</a>
+                                </li>
+                                <li class="group add">
+                                    <a href="{{ base_url('admin/group/add') }}">Thêm nhóm</a>
+                                </li>
+                                <li class="admin show">
                                     <a href="{{ base_url('admin/user') }}">Danh sách Admin</a>
                                 </li>
-                                <li class="add">
+                                <li class="admin add">
                                     <a href="{{ base_url('admin/user/add') }}">Thêm admin</a>
                                 </li>
                             </ul>
@@ -147,26 +136,43 @@
                         </div>
                     </li>
                     <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#category') }}">
+                        <a data-toggle="collapse" href="{{ base_url('admin#catcotgen') }}">
                             <i class="material-icons">category</i>
-                            <p>Quản Lý Danh Mục
+                            <p>Quản Lý DM QG TL
                                 <b class="caret"></b>
                             </p>
                         </a>
-                        <div class="collapse" id="category">
-                            <ul class="nav">
-                                <li class="show">
+                        <div class="collapse" id="catcotgen">
+                            <ul class="nav show">
+                                <li class="category">
                                     <a href="{{ base_url('admin/category') }}">Danh sách danh mục</a>
                                 </li>
+                                <li class="country">
+                                    <a href="{{ base_url('admin/country') }}">Danh sách quốc gia</a>
+                                </li>
+                                <li class="genre">
+                                    <a href="{{ base_url('admin/genre') }}">Danh sách thể loại</a>
+                                </li>
+                                
+                            </ul>
+                            <ul class="nav add">
+                                
                                 @if (Session::get('permission')->canWrite)
-                                <li class="add">
+                                <li class="category">
                                     <a href="{{ base_url('admin/category/add') }}">Thêm danh mục</a>
+                                </li>
+
+                                <li class="country">
+                                    <a href="{{ base_url('admin/country/add') }}">Thêm quốc gia</a>
+                                </li>
+                                <li class="genre">
+                                    <a href="{{ base_url('admin/genre/add') }}">Thêm thể loại</a>
                                 </li>
                                 @endif
                             </ul>
                         </div>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#country') }}">
                             <i class="material-icons">language</i>
                             <p>Quản Lý Quốc Gia
@@ -174,18 +180,9 @@
                             </p>
                         </a>
                         <div class="collapse" id="country">
-                            <ul class="nav">
-                                <li class="show">
-                                    <a href="{{ base_url('admin/country') }}">Danh sách quốc gia</a>
-                                </li>
-                                @if (Session::get('permission')->canWrite)
-                                <li class="add">
-                                    <a href="{{ base_url('admin/country/add') }}">Thêm quốc gia</a>
-                                </li>
-                                @endif
-                            </ul>
+                            
                         </div>
-                    </li>
+                    </li> -->
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#genre') }}">
                             <i class="material-icons">album</i>
@@ -504,6 +501,10 @@
     $(document).ready(function() {
         $('li.disabled>a,li.active>a').click(function(event) {
             event.preventDefault();
+        });
+        $('.main-panel').on('scroll', function(event) {
+            $('.btn-group.bootstrap-select.open').removeClass('open');
+            $('.dropdown-menu.open').removeClass('open');
         });
 
         @if(!empty($message))

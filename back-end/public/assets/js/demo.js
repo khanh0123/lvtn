@@ -513,7 +513,7 @@ demo = {
 
         var RoundedLineChart = new Chartist.Line('#roundedLineChart', dataRoundedLineChart, optionsRoundedLineChart);
 
-        md.startAnimationForLineChart(RoundedLineChart);
+        //md.startAnimationForLineChart(RoundedLineChart);
 
 
         /*  **************** Straight Lines Chart - single line with points ******************** */
@@ -540,7 +540,7 @@ demo = {
 
         var straightLinesChart = new Chartist.Line('#straightLinesChart', dataStraightLinesChart, optionsStraightLinesChart);
 
-        md.startAnimationForLineChart(straightLinesChart);
+        //md.startAnimationForLineChart(straightLinesChart);
 
 
         /*  **************** Coloured Rounded Line Chart - Line Chart ******************** */
@@ -573,7 +573,7 @@ demo = {
 
         var colouredRoundedLineChart = new Chartist.Line('#colouredRoundedLineChart', dataColouredRoundedLineChart, optionsColouredRoundedLineChart);
 
-        md.startAnimationForLineChart(colouredRoundedLineChart);
+        //md.startAnimationForLineChart(colouredRoundedLineChart);
 
 
         /*  **************** Coloured Rounded Line Chart - Line Chart ******************** */
@@ -608,7 +608,7 @@ demo = {
 
         var colouredBarsChart = new Chartist.Line('#colouredBarsChart', dataColouredBarsChart, optionsColouredBarsChart);
 
-        md.startAnimationForLineChart(colouredBarsChart);
+        //md.startAnimationForLineChart(colouredBarsChart);
 
 
 
@@ -655,7 +655,7 @@ demo = {
         var simpleBarChart = Chartist.Bar('#simpleBarChart', dataSimpleBarChart, optionsSimpleBarChart, responsiveOptionsSimpleBarChart);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(simpleBarChart);
+        //md.startAnimationForBarChart(simpleBarChart);
 
 
         var dataMultipleBarsChart = {
@@ -688,7 +688,7 @@ demo = {
         var multipleBarsChart = Chartist.Bar('#multipleBarsChart', dataMultipleBarsChart, optionsMultipleBarsChart, responsiveOptionsMultipleBarsChart);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(multipleBarsChart);
+        //md.startAnimationForBarChart(multipleBarsChart);
     },
 
     initDashboardPageCharts: function(){
@@ -713,7 +713,7 @@ demo = {
 
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
 
-        md.startAnimationForLineChart(dailySalesChart);
+        //md.startAnimationForLineChart(dailySalesChart);
 
 
 
@@ -738,7 +738,7 @@ demo = {
         var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
 
         // start animation for the Completed Tasks Chart - Line Chart
-        md.startAnimationForLineChart(completedTasksChart);
+        //md.startAnimationForLineChart(completedTasksChart);
 
 
         /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
@@ -771,7 +771,7 @@ demo = {
         var websiteViewsChart = Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(websiteViewsChart);
+        //md.startAnimationForBarChart(websiteViewsChart);
 
     },
 

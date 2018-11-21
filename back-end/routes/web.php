@@ -13,7 +13,7 @@
 
 
 
-$router->get('/' , function(){ return view('welcome');});
+// $router->get('/' , function(){ return view('welcome');});
 
 $router->group(['prefix' => 'admin'], function() use($router) {
 	$router->get('/login', 'Admin\AdminController@login');
@@ -34,7 +34,9 @@ $router->group(['prefix' => 'admin'], function() use($router) {
         resource_admin($router, 'category', 'CategoryController');
         resource_admin($router, 'genre', 'GenreController');
         resource_admin($router, 'country', 'CountryController');
-        resource_admin($router, 'menu', 'MenuController');
+        resource_admin($router, 'menu', 'MenuController');        
+        resource_admin($router, 'movie/{mov_id}/episode', 'EpisodeController');
+        $router->post('movie/{mov_id}/episode/clone', 'Admin\EpisodeController@clone')->middleware('auth.writer');
         resource_admin($router, 'movie', 'MovieController');
     });
 });

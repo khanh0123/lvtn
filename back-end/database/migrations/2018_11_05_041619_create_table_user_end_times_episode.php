@@ -16,7 +16,8 @@ class CreateTableUserEndTimesEpisode extends Migration
         Schema::create('user_end_times_episode', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->index();
             $table->integer('epi_id')->unsigned()->index();
-            $table->timestamp('time_watched');
+            $table->double('time_watched');
+            $table->double('time_current');
             $table->foreign('user_id', 'fk_user_end_times_episode_user')->references('id')->on('user')->onDelete('cascade');
             $table->foreign('epi_id', 'fk_user_end_times_episode_episode')->references('id')->on('episode')->onDelete('cascade');
         });

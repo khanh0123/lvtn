@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 class Movie extends Model
 {
     protected $table = 'movie';
+    // public function getDateFormat()
+    // {
+    //     return 'U';
+    // }
 
     public function get($limit = 20 , $sort = 'asc')
     {

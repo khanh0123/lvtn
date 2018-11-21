@@ -159,9 +159,24 @@ if (!function_exists('customDate')) {
      * 
      * @return Datetime
      */
-    function customDate($timestamp = ''){
-        
-        return Date("d/m/y - h:i");
+    function customDate($time = '' , $format = 'normal'){
+
+        switch ($format) {
+            case 'normal':
+                $format = "d/m/y";
+                break;
+            case 'daytime':
+                $format = "d/m/y - h:i";
+                break;
+            default:
+                break;
+        }
+        if(is_numeric($time))
+            return Date($format , $time);
+        else if(is_string($time)){
+            return Date($format , strtotime($time));
+        }
+        return Date($format,time());
     }
 }
 

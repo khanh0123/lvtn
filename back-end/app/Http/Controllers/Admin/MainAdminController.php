@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class MainAdminController extends BaseController
 {
 	protected $limit = 20;
-    public function __construct(Request $request) {
+    public function __construct(Request $request , $variable = null) {
         if (!isset($this->model)) {
             throw new Exception("ModelNotSet");
         }
@@ -26,14 +26,16 @@ class MainAdminController extends BaseController
     /*
      * Show list item.
      */
-    public function index(Request $request) {        
+    public function index(Request $request ) {        
         $limit = $request->input('limit', $this->limit);
-        $sort = (int)$request->input('sort' , 0) == 1 ? 'desc' : 'asc';
+        $sort = $request->input('sort') == 'asc' ? 'asc' : 'desc';
         $result = $this->model->get($limit,$sort);
         $result = $result->appends($request->all());
         $message = session()->get( 'message' );
-        return view($this->view_folder."index")
-        		->withData($result)
+        return view($this->view_folder."index" , compact('mov_id'))
+                ->withData($result)
+                ->withSort($sort)
+        		->withLimit($limit)
                 ->withMessage($message);
     }
     /*

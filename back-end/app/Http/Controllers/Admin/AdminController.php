@@ -28,12 +28,13 @@ class AdminController extends MainAdminController
 
     	$rules = [
     		'email' => 'required|email',
-    		'first_name' => 'required',
+            'first_name' => 'required',
     		'last_name' => 'required',
     		'gad_id' => 'required',
     	];
         $validator = Validator::make($req->all(), $rules);
         if ($validator->fails()) {
+            
             return [
                 'type' => 'error',
                 'message' => 'Vui lòng kiểm tra lại các trường nhập'
@@ -41,12 +42,12 @@ class AdminController extends MainAdminController
         }
     	if($type == 'insert'){    	
 
-            $rules['password'] = 'required|min:6';
+            $rules = ['password' => 'required|min:6'];
             $validator = Validator::make($req->all(), $rules);
             if ($validator->fails()) {
                 return [
                     'type' => 'error',
-                    'message' => 'Vui lòng kiểm tra lại các trường nhập'
+                    'message' => 'Mật khẩu phải chứa ít nhất 6 kí tự'
                 ];
             }
 	
@@ -55,7 +56,7 @@ class AdminController extends MainAdminController
     		if($user){
     			return [
     				'type' => 'error',
-    				'message' => 'Email đã tồn tại'
+    				'message' => 'Email đã tồn tại. Vui lòng sử dụng email khác'
     			];
     		}
             $item->password = encode_password($req->password);

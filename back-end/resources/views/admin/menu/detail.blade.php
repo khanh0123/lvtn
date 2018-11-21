@@ -40,7 +40,7 @@
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Chọn menu con</label>
                                     <div class="col-sm-10">
-                                        <select class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-success" name="sub_menu[]" >
+                                        <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-success" name="sub_menu[]" >
                                             @foreach($data2 as $key => $value)
                                             <?php 
                                                 $seleted = in_array($value->id,$data->sub_menu) ? true : false;

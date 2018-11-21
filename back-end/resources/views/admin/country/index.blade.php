@@ -126,10 +126,10 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#country').parent('li').addClass('active');
-        $('#country .show').addClass('active');
-        $('#country').collapse();
-
+        $('#catcotgen').parent('li').addClass('active');
+        $('#catcotgen').collapse();
+        $('.show .country ').addClass('active');
+        
         $('#datatables').DataTable({
             paging: false,
             // pagingType: "full_numbers",

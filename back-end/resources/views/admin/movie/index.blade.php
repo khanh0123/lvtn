@@ -19,20 +19,36 @@
                         <div class="col-sm-6">
                                 <span>Hiển thị</span>
                                 <div class="dropdown custom-group" style="display: inline-block">
-                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data->perPage()}}
+                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $limit }}
                                         <b class="caret"></b>
                                         <div class="ripple-container"></div>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-left">
                                         <li class="dropdown-header"></li>
-                                        <li><a href="{{base_url('admin/menu?limit=10')}}">10</a></li>
-                                        <li><a href="{{base_url('admin/menu?limit=20')}}">20</a></li>
-                                        <li><a href="{{base_url('admin/menu?limit=30')}}">30</a></li>
-                                        <li><a href="{{base_url('admin/menu?limit=40')}}">40</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=10&sort=$sort") }}">10</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=20&sort=$sort") }}">20</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=30&sort=$sort") }}">30</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=40&sort=$sort") }}">40</a></li>
                                     </ul>
                                 </div>
                                 <span>Kết quả</span>
 
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-right">
+                                <span>Sắp xếp</span>
+                                <div class="dropdown custom-group" style="display: inline-block">
+                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $sort == 'asc' ? 'Tăng dần' : 'Giảm dần' }}
+                                        <b class="caret"></b>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li class="dropdown-header"></li>
+                                        <li><a href="{{ base_url("admin/movie?sort=asc&limit=$limit") }}">Tăng dần</a></li>
+                                        <li><a href="{{ base_url("admin/movie?sort=desc&limit=$limit") }}">Giảm dần</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     @endif
@@ -46,6 +62,7 @@
                                     <th>Ngày ra rạp</th>
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
+                                    <th>Lần cập nhật cuối</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
@@ -57,6 +74,7 @@
                                     <th>Ngày ra rạp</th>
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
+                                    <th>Lần cập nhật cuối</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
@@ -65,14 +83,14 @@
                                 <tr>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->type == 1 ? 'Phim Bộ' : 'Phim Lẻ' }}</td>
-                                    <td>{{ $value->release_date }}</td>
-                                    <td>{{ $value->is_hot ? 'Y' : 'N' }}</td>
-                                    <td>{{ $value->is_new ? 'Y' : 'N' }}</td>
+                                    <td>{{ $value->epi_num }}</td>
+                                    <td>{{ customDate($value->release_date) }}</td>
+                                    <td >{!! "<i class='material-icons'>" . ($value->is_hot ? 'done' : 'clear'). "</i>" !!}</td>
+                                    <td>{!! "<i class='material-icons'>" . ($value->is_new ? 'done' : 'clear'). "</i>" !!}</td>
+                                    <td>{{ customDate($value->updated_at , 'daytime') }}</td>
                                     <td class="text-right">
-                                        <a href="{{base_url('admin/menu/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
-                                        @if (session()->get('permission')->canDelete)
-                                        <!-- <a href="{{base_url('admin/menu/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a> -->
-                                        @endif
+                                        <a href="{{ base_url('admin/movie/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
+                                        <a href="{{ base_url('admin/movie/'.$value->id.'/episode') }}" class="btn btn-simple btn-success btn-icon">Quản Lý Tập</a>
                                     </td>
                                 </tr>
                                 @endforeach

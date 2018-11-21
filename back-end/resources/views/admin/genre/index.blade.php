@@ -128,9 +128,10 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#genre').parent('li').addClass('active');
-        $('#genre .show').addClass('active');
-        $('#genre').collapse();
+        $('#catcotgen').parent('li').addClass('active');
+        $('#catcotgen').collapse();
+        $('.show .genre').addClass('active');
+        
 
         $('#datatables').DataTable({
             paging: false,

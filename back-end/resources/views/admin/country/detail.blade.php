@@ -104,8 +104,8 @@
     $(document).ready(function() {
         $('.using-tooltip').tooltip({animation:true});
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#country').parent('li').addClass('active');
-        $('#country').collapse();
+        $('#catcotgen').parent('li').addClass('active');
+        $('#catcotgen').collapse();
 
         $('input[name="name"]').on('keyup', function(event) {
             event.preventDefault();

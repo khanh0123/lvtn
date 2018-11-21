@@ -101,9 +101,10 @@
         $('.using-tooltip').tooltip({animation:true});
 
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#category').parent('li').addClass('active');
-        $('#category .add').addClass('active');
-        $('#category').collapse();
+        $('#catcotgen').parent('li').addClass('active');
+        $('#catcotgen').collapse();
+        $('.add .category').addClass('active');
+        
 
         $('input[name="name"]').on('keyup', function(event) {
             event.preventDefault();

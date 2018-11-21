@@ -126,9 +126,9 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#category').parent('li').addClass('active');
-        $('#category .show').addClass('active');
-        $('#category').collapse();
+        $('#catcotgen').parent('li').addClass('active');
+        $('.show .category').addClass('active');
+        $('#catcotgen').collapse();
 
         $('#datatables').DataTable({
             paging: false,

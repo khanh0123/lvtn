@@ -173,7 +173,7 @@ class AdminGroupController extends MainAdminController
     }
     private function getDataNeed(){
     	$ad_group_model = new Permission();
-    	$data = $ad_group_model->getall();
+    	$data = $ad_group_model->getall();        
     	return $data;
     }
 }

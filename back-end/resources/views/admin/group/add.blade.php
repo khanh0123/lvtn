@@ -30,7 +30,7 @@
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Chọn nhóm quyền</label>
                                     <div class="col-sm-5">
-                                        <select class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="per_id" required>
+                                        <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="per_id" required>
                                             @foreach($data as $key => $value)
                                             <option data-tokens="{{$value->name}}" value="{{$value->id}}" >{{$value->name}}</option>
                                             @endforeach
@@ -81,9 +81,9 @@
         $('.using-tooltip').tooltip({animation:true});
 
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#group').parent('li').addClass('active');
-        $('#group .add').addClass('active');
-        $('#group').collapse();
+        $('#groupAdmin').parent('li').addClass('active');
+        $('#groupAdmin .group.add').addClass('active');
+        $('#groupAdmin').collapse();
 
     });
 </script>

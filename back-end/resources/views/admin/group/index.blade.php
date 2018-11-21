@@ -41,12 +41,14 @@
                             <thead>
                                 <tr>
                                     <th>Tên nhóm</th>
+                                    <th>Nhóm quyền</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Tên nhóm</th>
+                                    <th>Nhóm quyền</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
@@ -54,6 +56,7 @@
                                 @foreach ($data as $value)
                                 <tr>
                                     <td>{{ $value->name }}</td>
+                                    <td>{{ $value->gad_per_name ? $value->gad_per_name : '' }}</td>
                                     <td class="text-right">
                                         <a href="{{base_url('admin/group/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
                                         @if (session()->get('permission')->canDelete)
@@ -123,9 +126,9 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#group').parent('li').addClass('active');
-        $('#group .show').addClass('active');
-        $('#group').collapse();
+        $('#groupAdmin').parent('li').addClass('active');
+        $('#groupAdmin .group.show').addClass('active');
+        $('#groupAdmin').collapse();
 
         $('#datatables').DataTable({
             paging: false,

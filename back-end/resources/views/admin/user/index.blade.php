@@ -132,9 +132,9 @@
     $(document).ready(function() {
         
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#user').parent('li').addClass('active');
-        $('#user .show').addClass('active');
-        $('#user').collapse();
+        $('#groupAdmin').parent('li').addClass('active');
+        $('#groupAdmin .admin.show').addClass('active');
+        $('#groupAdmin').collapse();
 
         $('#datatables').DataTable({
             paging: false,

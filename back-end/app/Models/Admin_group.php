@@ -17,20 +17,21 @@ class Admin_group extends Model
         return $data;
 
     }
-    public function get($limit = 2 , $sort = 'asc')
+    public function get($limit = 2 , $sort = 'desc')
     {
     	$data = DB::table($this->table)
-    				// ->select('id','key','value','created_at','updated_at')
+    				->select('id','admin_group.name as name','admin_group_permission.name as gad_per_name','gad_id','per_id')
+                    ->join('admin_group_permission' , 'gad_id' , '=' , 'id')
     				->orderBy('id', $sort)
-    				->paginate($limit);    				
+    				->paginate($limit);		
     	return $data;
     }
 
     public function findById($id)
     {
         $data = DB::table($this->table)
-                    ->join('admin_group_permission', 'admin_group.id', '=', 'admin_group_permission.gad_id')
                     ->select('id','name','gad_id','per_id','admin_group.created_at','admin_group.updated_at')
+                    ->join('admin_group_permission', 'admin_group.id', '=', 'admin_group_permission.gad_id')
                     ->where('id' , $id)
                     ->first();     
         return $data;
@@ -40,7 +41,7 @@ class Admin_group extends Model
     {
         $data = DB::table('admin')
                     ->where('gad_id' , $id)
-                    ->first();  
+                    ->first();
         return $data;
     }
 }

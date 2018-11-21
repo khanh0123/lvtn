@@ -9,7 +9,7 @@ class Permission extends Model
 {
     protected $table = 'permission';
 
-    public function get($limit = 2 , $sort = 'desc')
+    public function get($limit = 2 , $sort = 'asc')
     {
     	$data = DB::table($this->table)
     				// ->select('id','key','value','created_at','updated_at')
@@ -17,7 +17,7 @@ class Permission extends Model
     				->paginate($limit);    				
     	return $data;
     }
-    public function getall($sort = 'desc'){
+    public function getall($sort = 'asc'){
         $data = DB::table($this->table)
                     // ->select('id','key','value','created_at','updated_at')
                     ->orderBy('id', $sort)
