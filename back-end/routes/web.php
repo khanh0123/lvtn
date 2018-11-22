@@ -15,10 +15,19 @@
 
 // $router->get('/' , function(){ return view('welcome');});
 
+
+
+$router->group(['prefix' => 'api/v1'], function() use($router) {
+
+    $router->get('/menu' , 'Api/MenuController@get');
+
+}); 
+
+
 $router->group(['prefix' => 'admin'], function() use($router) {
-	$router->get('/login', 'Admin\AdminController@login');
+    $router->get('/login', 'Admin\AdminController@login');
     $router->post('/login', 'Admin\AdminController@doLogin');
-	$router->post('/logout', 'Admin\AdminController@logout');
+    $router->post('/logout', 'Admin\AdminController@logout');
 
     
     $router->group(['middleware' => ['auth.admin']], function() use($router) {
@@ -40,9 +49,6 @@ $router->group(['prefix' => 'admin'], function() use($router) {
         resource_admin($router, 'movie', 'MovieController');
     });
 });
-
-
-
 function resource_admin(&$router, $uri, $controller , $middleware = null) {
 
     if(empty($middleware)){
@@ -65,8 +71,5 @@ function resource_admin(&$router, $uri, $controller , $middleware = null) {
             $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete');
 
         });
-    }
-    
-
-    
+    }  
 }
