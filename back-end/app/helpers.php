@@ -228,7 +228,6 @@ if (!function_exists('get_table_name')) {
         $check = preg_match($reg, $id , $matches);
         if($check){
             foreach ($array_table as $value) {
-                die;
                 if(substr($value, 0, 3) == $matches[1]){
                     return $value;
                 }

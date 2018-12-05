@@ -123,7 +123,7 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="row">
-                                                <label class="col-sm-4 label-on-left">Chọn mục</label>
+                                                <label class="col-sm-3 label-on-left">Chọn mục</label>
                                                 <div class="form-group label-floating is-empty">
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">

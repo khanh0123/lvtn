@@ -338,6 +338,22 @@ class MovieController extends MainAdminController
         
     }
 
+    public function search(Request $request)
+    {
+        $res = [];
+        $mov_name = $request->mov_name;
+        // $default_select = ['id','title','name'];
+        if(empty($mov_name)){
+            $res['error'] = true;
+            $res['msg'] = 'Tên phim không được để trống';
+        } else {
+            $data = $this->model->search(['name','like',"%$mov_name%"]);
+            $res['success'] = true;
+            $res['data'] = $data;
+        }
+        return Response()->json($res,200);
+    }
+
     private function getDataNeed(){
         $cat_model = new Category();
         $gen_model = new Genre();

@@ -14,7 +14,17 @@ class Config extends Model
     	$data = DB::table($this->table)
     				// ->select('id','key','value','created_at','updated_at')
     				->orderBy('id', $sort)
-    				->paginate($limit);    				
+    				->whereNotIn('key' , ['banner'])
+    				->paginate($limit);
+    	return $data;
+    }
+    public function getById($id)
+    {
+    	$data = DB::table($this->table)
+    				// ->select('id','key','value','created_at','updated_at')
+    				->where('id' , $id)
+    				->whereNotIn('key' , ['banner'])
+    				->first();
     	return $data;
     }
 

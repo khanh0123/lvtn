@@ -155,9 +155,10 @@
                                 </li>
                                 
                             </ul>
+                            @if (Session::get('permission')->canWrite)
                             <ul class="nav add">
                                 
-                                @if (Session::get('permission')->canWrite)
+                                
                                 <li class="category">
                                     <a href="{{ base_url('admin/category/add') }}">Thêm danh mục</a>
                                 </li>
@@ -168,8 +169,9 @@
                                 <li class="genre">
                                     <a href="{{ base_url('admin/genre/add') }}">Thêm thể loại</a>
                                 </li>
-                                @endif
+                                
                             </ul>
+                            @endif
                         </div>
                     </li>
                     <!-- <li>
@@ -183,7 +185,7 @@
                             
                         </div>
                     </li> -->
-                    <li>
+                    <!-- <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#genre') }}">
                             <i class="material-icons">album</i>
                             <p>Quản Lý Thể Loại
@@ -202,7 +204,7 @@
                                 @endif
                             </ul>
                         </div>
-                    </li>
+                    </li> -->
                     <li>
                         <a data-toggle="collapse" href="{{ base_url('admin#menu') }}">
                             <i class="material-icons">menu</i>
@@ -218,6 +220,26 @@
                                 @if (Session::get('permission')->canWrite)
                                 <li class="add">
                                     <a href="{{ base_url('admin/menu/add') }}">Thêm menu</a>
+                                </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a data-toggle="collapse" href="{{ base_url('admin#banner') }}">
+                            <i class="material-icons">swap_horizontal_circle</i>
+                            <p>Quản Lý Banner
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                        <div class="collapse" id="banner">
+                            <ul class="nav">
+                                <li class="show">
+                                    <a href="{{ base_url('admin/banner') }}">Danh sách banner</a>
+                                </li>
+                                @if (Session::get('permission')->canWrite)
+                                <li class="add">
+                                    <a href="{{ base_url('admin/banner/add') }}">Thêm banner</a>
                                 </li>
                                 @endif
                             </ul>
@@ -290,11 +312,33 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">person</i>
                                     <p class="hidden-lg hidden-md">
-                                    Trang cá nhân
+                                    Cá nhân
                                         <b class="caret"></b>
                                     </p>
                                 </a>
+
                                 <form method="POST" action="{{base_url('admin/logout')}}" id="formLogout">
+                                    @csrf
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="admin/profile">Trang cá nhân</a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)" data-toggle="modal" data-target="#modalChangePass">Đổi mật khẩu</a>
+                                        </li>
+                                        <li>
+    
+                                            <a href="javascript:void(0)" onclick="document.getElementById('formLogout').submit()">Đăng xuất</a>
+                                            <noscript>
+                                              <input type="submit" value="Đăng xuất" />
+                                          </noscript>
+
+                                        </li>
+                                       
+
+                                    </ul>
+                                 </form>
+                                <!-- <form method="POST" action="{{base_url('admin/changepass')}}" id="formChangepass">
                                     @csrf
                                     <ul class="dropdown-menu">
                                         <li>
@@ -311,7 +355,7 @@
                                         </li>
 
                                     </ul>
-                                </form>
+                                </form> -->
                             </li>
                             <!-- <li class="separator hidden-lg hidden-md"></li> -->
                         </ul>
@@ -457,6 +501,63 @@
             </ul>
         </div>
     </div>
+
+    <!-- modal change pass -->
+    <div class="modal fade" id="modalChangePass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form id="RegisterValidation" action="{{ base_url('admin/changepass')}}" method="POST" novalidate="novalidate">
+           {{ csrf_field() }}
+           <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Đổi mật khẩu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="card">
+
+                            <div class="card-content">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Mật khẩu cũ
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_old" type="password" required aria-required="true" id="password_old">
+                                    <span class="material-input"></span>
+                                </div>
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Mật khẩu mới
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_new" type="password" required aria-required="true" id="password_new">
+                                    <span class="material-input"></span>
+                                </div>
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Xác nhận lại mật khẩu
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_new_confirm" id="password_new_confirm" type="password" required="true" equalto="#password_new" aria-required="true">
+                                    <span class="material-input"></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">                            
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-success" >Xác nhận</button>                        
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <!--  End Modal -->
 </body>
 <!--   Core JS Files   -->
 <script src="/assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>

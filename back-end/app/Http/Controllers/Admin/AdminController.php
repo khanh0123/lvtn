@@ -180,6 +180,7 @@ class AdminController extends MainAdminController
         }
     	return view($this->view_folder.'login');
     }
+
     public function doLogin(Request $request)
     {
     	if($request->session()->has('user')){
@@ -226,6 +227,48 @@ class AdminController extends MainAdminController
     			return redirect('/admin');
     		}
     	}
+    }
+
+    public function changepass(Request $request)
+    {
+        $password_current = $request->password_old;
+        $password_new = $request->password_new;
+        $user = $this->model::find($request->authUser->id);
+        if(empty($password_current) || empty($password_new) ) {
+            $message = [
+                'type' => 'error' , 
+                'message' => 'Mật khẩu hiện tại và mật khẩu mới không được để trống'
+            ];
+              
+        } else if(strlen($password_new) < 6){
+            $message = [
+                'type' => 'error' , 
+                'message' => 'Mật khẩu phải trên 6 kí tự'
+            ];
+
+        } else if($user->password !== encode_password($password_current)) {
+            $message = [
+                'type' => 'error' , 
+                'message' => 'Mật khẩu hiện tại chưa chính xác'
+            ];
+        } else {
+            $user->password = encode_password($password_current);
+
+            if($user->save()){
+                $message = [
+                    'type' => 'success' , 
+                    'message' => 'Cập nhật mật khẩu thành công'
+                ];
+            } else {
+                $message = [
+                    'type' => 'error' , 
+                    'message' => 'Có lỗi! Cập nhật mật khẩu không thành công'
+                ];
+            }
+            
+        }
+        return Redirect::back()
+                ->withMessage($message);
     }
 
     public function lockuser(Request $request,$id)

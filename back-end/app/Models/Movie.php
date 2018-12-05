@@ -21,4 +21,13 @@ class Movie extends Model
     	return $data;
     }
 
+    public function search(Array $data,$field_get = [])
+    {
+        $data = DB::table($this->table)
+                    ->select('id','name','title')
+                    ->where([$data])
+                    ->first();              
+        return $data;
+    }
+
 }

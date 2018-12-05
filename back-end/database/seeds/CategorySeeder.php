@@ -56,7 +56,7 @@ class CategorySeeder extends Seeder
     			[
     				'id' => 'cot000003',
     				'name' => 'Phim Trung Quốc',
-    				'slug' => 'phim-trung-quot'
+    				'slug' => 'phim-trung-quoc'
     			],
     		]);
     		DB::table('max_id')->insert([

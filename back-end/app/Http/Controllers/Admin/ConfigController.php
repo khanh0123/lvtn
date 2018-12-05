@@ -17,6 +17,55 @@ class ConfigController extends MainAdminController
         parent::__construct($request);
     }
 
+    public function detail(Request $request,$id)
+    {
+        $item = $this->model->getById($id);
+
+        if(empty($item)){
+            return abort(404);
+        }
+        $message = session()->get( 'message' );
+        return view($this->view_folder."detail")
+                ->withData($item)
+                ->withMessage($message);
+    }
+
+    /*
+     * Update item that belongs to passed id.
+     */
+    public function update(Request $request,$id)
+    {
+        $item = $this->model->getById($id);
+        if(empty($item)){
+            return abort(404);
+        }
+        
+        $result = $this->setItem('update',$request, $item);
+        if($result['type'] == 'success'){
+            $item->save();   
+            $result['message'] = 'Cập nhật dữ liệu thành công';         
+        }
+        return view($this->view_folder."detail")
+                ->withData($item)
+                ->withMessage($result);
+
+        
+    }
+    /*
+     * Delete item that belongs to passed id.
+     */
+
+    public function delete(Request $request, $id) {
+        $item = $this->model->getById($id);
+        if(empty($item)){
+            return abort('404');
+        }
+        $item->delete();
+
+        return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
+                ->withMessage(['type' => 'success','message' => 'Xóa dữ liệu thành công']);
+    }
+
 
     public function setItem($type , $req , &$item){
     	$rules = [
