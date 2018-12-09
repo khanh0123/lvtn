@@ -24,6 +24,11 @@ class CategorySeeder extends Seeder
     				'name' => 'Phim Lẻ',
     				'slug' => 'phim-le'
     			],
+                [
+                    'id' => 'cat000003',
+                    'name' => 'Phim Chiếu Rạp',
+                    'slug' => 'phim-chieu-rap'
+                ],
     		]);
     		DB::table('genre')->insert([
     			[
@@ -44,19 +49,19 @@ class CategorySeeder extends Seeder
     		]);
     		DB::table('country')->insert([
     			[
-    				'id' => 'cot000001',
+    				'id' => 'cou000001',
     				'name' => 'Phim Việt Nam',
     				'slug' => 'phim-viet-nam'
     			],
     			[
-    				'id' => 'cot000002',
+    				'id' => 'cou000002',
     				'name' => 'Phim Mỹ',
     				'slug' => 'phim-my'
     			],
     			[
-    				'id' => 'cot000003',
+    				'id' => 'cou000003',
     				'name' => 'Phim Trung Quốc',
-    				'slug' => 'phim-trung-quot'
+    				'slug' => 'phim-trung-quoc'
     			],
     		]);
     		DB::table('max_id')->insert([

@@ -86,7 +86,7 @@ class MovieController extends MainAdminController
         
         $item->is_hot = (int)$req->input('is_hot', 0);
         $item->is_new = (int)$req->input('is_new', 0);
-        $item->type = (int)$req->input('type', 0);
+        // $item->type = (int)$req->input('type', 0);
         $item->runtime = (int)$req->input('runtime', 0);
         $item->epi_num = (int)$req->input('epi_num', 1);
         $item->title = $req->input('title', '');
@@ -121,7 +121,7 @@ class MovieController extends MainAdminController
                 }
             }
             
-        }     
+        }
         
 		//upload multiple images
 		if($files = $req->file('images')){
@@ -152,7 +152,6 @@ class MovieController extends MainAdminController
     }
 
     public function store(Request $request) {
-
 
         $item = $this->model;
         $result = $this->setItem('insert',$request, $item);
@@ -336,6 +335,22 @@ class MovieController extends MainAdminController
                 ->withMessage($result);
 
         
+    }
+
+    public function search(Request $request)
+    {
+        $res = [];
+        $mov_name = $request->mov_name;
+        // $default_select = ['id','title','name'];
+        if(empty($mov_name)){
+            $res['error'] = true;
+            $res['msg'] = 'Tên phim không được để trống';
+        } else {
+            $data = $this->model->search(['name','like',"%$mov_name%"]);
+            $res['success'] = true;
+            $res['data'] = $data;
+        }
+        return Response()->json($res,200);
     }
 
     private function getDataNeed(){

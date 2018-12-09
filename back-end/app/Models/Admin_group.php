@@ -30,7 +30,7 @@ class Admin_group extends Model
     public function findById($id)
     {
         $data = DB::table($this->table)
-                    ->select('id','name','gad_id','per_id','admin_group.created_at','admin_group.updated_at')
+                    ->select('id','admin_group.name','gad_id','per_id','admin_group.created_at','admin_group.updated_at')
                     ->join('admin_group_permission', 'admin_group.id', '=', 'admin_group_permission.gad_id')
                     ->where('id' , $id)
                     ->first();     

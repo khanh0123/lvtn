@@ -63,6 +63,7 @@
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
                                     <th>Lần cập nhật cuối</th>
+                                    <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
@@ -75,6 +76,7 @@
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
                                     <th>Lần cập nhật cuối</th>
+                                    <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
@@ -88,7 +90,15 @@
                                     <td >{!! "<i class='material-icons'>" . ($value->is_hot ? 'done' : 'clear'). "</i>" !!}</td>
                                     <td>{!! "<i class='material-icons'>" . ($value->is_new ? 'done' : 'clear'). "</i>" !!}</td>
                                     <td>{{ customDate($value->updated_at , 'daytime') }}</td>
-                                    <td class="text-right">
+                                    <td class="text-center">
+                                        <form method="post" action="{{base_url('admin/banner/add')}}" class="d-block">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" value="{{$value->id}}" name="mov_id">
+                                            <button type="submit" class="btn btn-simple btn-info btn-icon edit">Chọn</button>
+                                        </form>
+                                    </td>
+                                    <td class="text-right">                                       
+                                        
                                         <a href="{{ base_url('admin/movie/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
                                         <a href="{{ base_url('admin/movie/'.$value->id.'/episode') }}" class="btn btn-simple btn-success btn-icon">Quản Lý Tập</a>
                                     </td>

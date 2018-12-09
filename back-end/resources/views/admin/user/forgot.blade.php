@@ -6,7 +6,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/apple-icon.png" />
     <link rel="icon" type="image/png" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/favicon.png" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Admin Login</title>
+    <title>Quên mật khẩu</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />    
     <!-- Bootstrap core CSS     -->
@@ -29,7 +29,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="../dashboard.html">Quản Trị Hệ Thống</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -41,7 +40,7 @@
                     </li> -->
                     <li class=" active ">
                         <a href="login.html">
-                            <i class="material-icons">fingerprint</i> Đăng Nhập
+                            <i class="material-icons">fingerprint</i> Quên mật khẩu
                         </a>
                     </li>
                 </ul>
@@ -55,25 +54,15 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                            @if(!isset($requestCode) || !$requestCode)
                             <form method="post" action="">
                                 {{ csrf_field() }}
                                 <div class="card card-login card-hidden">
                                     <div class="card-header text-center" data-background-color="rose">
-                                        <h4 class="card-title">Đăng Nhập</h4>
-                                        <!-- <div class="social-line">
-                                            <a href="login.html#btn" class="btn btn-just-icon btn-simple">
-                                                <i class="fa fa-facebook-square"></i>
-                                            </a>
-                                            <a href="login.html#pablo" class="btn btn-just-icon btn-simple">
-                                                <i class="fa fa-twitter"></i>
-                                            </a>
-                                            <a href="login.html#eugen" class="btn btn-just-icon btn-simple">
-                                                <i class="fa fa-google-plus"></i>
-                                            </a>
-                                        </div> -->
+                                        <h4 class="card-title">Quên mật khẩu</h4>
                                     </div>
                                     <p class="category text-center">
-                                        Đăng nhập vào hệ thống
+                                        Nhập email của bạn
                                     </p>
                                     <div class="card-content">
                                         <div class="input-group">
@@ -85,52 +74,48 @@
                                                 <input type="email" class="form-control" name="email">
                                             </div>
                                         </div>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">
-                                                <i class="material-icons">lock_outline</i>
-                                            </span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">Mật khẩu</label>
-                                                <input type="password" class="form-control" name="password">
-                                            </div>
-                                        </div>
-                                        <div class="text-right"><a href="{{base_url().'/admin/forgotpassword'}}">Quên mật khẩu?</a></div>
                                     </div>
 
                                     <div class="footer text-center">
-                                        <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg" >Đăng nhập</button>
+                                        <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg" >Xác nhận</button>
                                     </div>
                                 </div>
                             </form>
+                            @else
+                            <form method="post" action="{{base_url().'/admin/confirmCodeChangePass'}}">
+                                {{ csrf_field() }}
+                                <div class="card card-login card-hidden">
+                                    <div class="card-header text-center" data-background-color="rose">
+                                        <h4 class="card-title">Quên mật khẩu</h4>
+                                    </div>
+                                    <p class="category text-center">
+                                        Nhập code
+                                    </p>
+                                    <div class="card-content">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">code</i>
+                                            </span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">Nhập mã xác thực từ email</label>
+                                                <input type="text" class="form-control" name="code">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="footer text-center">
+                                        <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg" >Xác nhận</button>
+                                    </div>
+                                </div>
+                            </form>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
             <footer class="footer">
                 <div class="container">
-                    <nav class="pull-left">
-                        <!-- <ul>
-                            <li>
-                                <a href="#">
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Company
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Portfolio
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    Blog
-                                </a>
-                            </li>
-                        </ul> -->
+                    <nav class="pull-left">                        
                     </nav>
                     <p class="copyright pull-right">
                         &copy;
