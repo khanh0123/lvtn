@@ -19,7 +19,10 @@
 
 $router->group(['prefix' => 'api/v1'], function() use($router) {
 
-    $router->get('/menu' , 'Api/MenuController@get');
+    $router->get('/menu' , 'Api\MenuController@get');    
+    $router->get('/cm/page/home' , 'Api\MovieController@get');    
+    $router->get('/search/{q}' , 'Api\SearchController@get_genre');    
+
 
 }); 
 
