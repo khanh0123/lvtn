@@ -26,6 +26,9 @@ $router->group(['prefix' => 'api/v1'], function() use($router) {
 
 $router->group(['prefix' => 'admin'], function() use($router) {
     $router->get('/login', 'Admin\AdminController@login');
+    $router->get('/forgotpassword', 'Admin\AdminController@forgot');
+    $router->post('/forgotpassword', 'Admin\AdminController@doForgot');
+    $router->post('/confirmCodeChangePass', 'Admin\AdminController@confirmCodeChangePass');
     $router->post('/login', 'Admin\AdminController@doLogin');
     $router->post('/logout', 'Admin\AdminController@logout');
     $router->post('/changepass', 'Admin\AdminController@changepass');

@@ -28,5 +28,13 @@ class Admin extends Model
                     ->first();
     	return $data;
     }
+    public function getByEmail($email)
+    {
+        $data = DB::table($this->table)
+                    ->select('id','email','first_name','last_name','status','created_at','updated_at')
+                    ->where("email",$email)
+                    ->first();
+        return $data;
+    }
 
 }

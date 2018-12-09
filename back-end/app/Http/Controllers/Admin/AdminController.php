@@ -271,6 +271,48 @@ class AdminController extends MainAdminController
                 ->withMessage($message);
     }
 
+    public function forgot(Request $request)
+    {
+        return view($this->view_folder.'forgot');
+    }
+
+    public function doForgot(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['email' => 'required|email']);
+        if ($validator->fails()) {
+            
+            $message = [
+                'type' => 'error',
+                'message' => 'Email không hợp lệ'
+            ];
+            return view($this->view_folder."forgot")
+                ->withMessage($message);
+        } else {
+            $user = $this->model->getByEmail($request->email);
+            
+            if(empty($user)){
+                $message = [
+                    'type' => 'error',
+                    'message' => 'Email không tồn tại. Vui lòng kiểm tra và thử lại.'
+                ];
+                return view($this->view_folder."forgot")
+                    ->withMessage($message);
+                
+            } else {
+                $message = [
+                    'type' => 'success',
+                    'message' => 'Một đường link lấy lại mật khẩu đã được gửi tới email của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn'
+                ];
+                return view($this->view_folder."forgot")
+                    ->withMessage($message)
+                    ->withRequestCode(true);
+            }
+
+            
+
+        }
+    }
+
     public function lockuser(Request $request,$id)
     {
         $user = $this->model->find($id);
