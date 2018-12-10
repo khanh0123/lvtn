@@ -75,7 +75,7 @@ class CategorySeeder extends Seeder
     			],
     			[
     				'table_name' => 'country',
-    				'max_id' => 'cot000003'
+    				'max_id' => 'cou000003'
     			],
     		]);
     	}
