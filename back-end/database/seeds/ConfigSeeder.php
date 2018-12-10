@@ -15,7 +15,7 @@ class ConfigSeeder extends Seeder
     	if(count($result) == 0){
     		DB::table('config')->insert([
     			'key' => 'banner',
-    			'value' => [],
+    			'value' => '',
     		]);
     	}
     }
