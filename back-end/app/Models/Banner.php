@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Banner
 {
-    protected $table = 'config';
+    protected $table = 'json_table';
 
     public function get()
     {
@@ -16,7 +16,8 @@ class Banner
     				// ->orderBy('id', $sort)
     				->where('key' , 'banner')
     				->first();
-    	return !empty($data) ? json_decode($data->value) : [];
+        
+    	return ( !empty($data) && !empty($data->value) )? json_decode($data->value) : [];
     }
     public function getById($id)
     {

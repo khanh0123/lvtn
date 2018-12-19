@@ -32,7 +32,7 @@ class MainAdminController extends BaseController
         $result = $this->model->get($limit,$sort);
         $result = $result->appends($request->all());
         $message = session()->get( 'message' );
-        return view($this->view_folder."index" , compact('mov_id'))
+        return view($this->view_folder."index" )
                 ->withData($result)
                 ->withSort($sort)
         		->withLimit($limit)

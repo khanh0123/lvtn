@@ -25,10 +25,11 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-left">
                                         <li class="dropdown-header"></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=10&sort=$sort") }}">10</a></li>
                                         <li><a href="{{ base_url("admin/movie?limit=20&sort=$sort") }}">20</a></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=30&sort=$sort") }}">30</a></li>
                                         <li><a href="{{ base_url("admin/movie?limit=40&sort=$sort") }}">40</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=60&sort=$sort") }}">60</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=80&sort=$sort") }}">80</a></li>
+                                        <li><a href="{{ base_url("admin/movie?limit=100&sort=$sort") }}">100</a></li>
                                     </ul>
                                 </div>
                                 <span>Kết quả</span>
@@ -84,7 +85,7 @@
                                 @foreach ($data as $value)
                                 <tr>
                                     <td>{{ $value->name }}</td>
-                                    <td>{{ $value->type == 1 ? 'Phim Bộ' : 'Phim Lẻ' }}</td>
+                                    <td>{{ $value->cat_name }}</td>
                                     <td>{{ $value->epi_num }}</td>
                                     <td>{{ customDate($value->release_date) }}</td>
                                     <td >{!! "<i class='material-icons'>" . ($value->is_hot ? 'done' : 'clear'). "</i>" !!}</td>

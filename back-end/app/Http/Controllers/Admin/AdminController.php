@@ -224,7 +224,7 @@ class AdminController extends MainAdminController
                         $session->save();
                     }
                 }
-    			return redirect('/admin');
+    			return redirect()->back();
     		}
     	}
     }

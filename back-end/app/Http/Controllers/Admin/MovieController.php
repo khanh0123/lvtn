@@ -12,6 +12,7 @@ use App\Models\Country;
 use App\Models\Movie_genre;
 use App\Models\Movie_country;
 use Validator;
+use Image;
 
 class MovieController extends MainAdminController
 {
@@ -24,7 +25,6 @@ class MovieController extends MainAdminController
         $this->model = new Movie;
         parent::__construct($request);
     }
-
     /*
      * Show view add new item.
      */
@@ -46,27 +46,23 @@ class MovieController extends MainAdminController
     		'runtime' => 'required',
     		'release_date' => 'required',
     		'epi_num' => 'required',
-    		'cat_id' => 'required',
-    		'genre' => 'required|array',
-    		'country' => 'required|array',
+    		'cat_id' => 'required|exists:category,id',
+            'genre' => 'required|array',
+    		'genre.*' => 'required|exists:genre,id',
+            'country' => 'required|array',
+    		'country.*' => 'required|exists:country,id',
 
     	];
-
-
-        
     	if($type === 'insert'){
-            $rules['images'] = 'required|array';
-            $rules['images.*'] = 'image|mimes:jpeg,jpg,bmp,png|max:10000';
+            $rules['image'] = 'required|image|mimes:jpeg,jpg,bmp,png|max:10000';
         }
         else if($type === 'update'){
-            $rules['listidimages_old'] = 'array';            
+            $rules['listidimages_old'] = 'array';
             
             if(empty($req->listidimages_old) || count($req->listidimages_old) == 0){
-                $rules['images'] = 'required|array';
-                $rules['images.*'] = 'image|mimes:jpeg,jpg,bmp,png|max:10000';
+                $rules['image'] = 'required|image|mimes:jpeg,jpg,bmp,png|max:10000';
             } else {
-                $rules['images'] = 'array';
-                $rules['images.*'] = 'image|mimes:jpeg,jpg,bmp,png|max:10000|nullable';
+                $rules['image'] = 'image|mimes:jpeg,jpg,bmp,png|max:10000|nullable';
             }
     		
     	}
@@ -82,15 +78,12 @@ class MovieController extends MainAdminController
         	];
         }
         $item->name = $req->name;
-        $item->slug = $req->slug;
-        
+        $item->slug = $req->slug;        
         $item->is_hot = (int)$req->input('is_hot', 0);
         $item->is_new = (int)$req->input('is_new', 0);
-        // $item->type = (int)$req->input('type', 0);
         $item->runtime = (int)$req->input('runtime', 0);
         $item->epi_num = (int)$req->input('epi_num', 1);
-        $item->title = $req->input('title', '');
-        $item->short_des = $req->input('short_des', '');
+        $item->short_des = substr($req->input('short_des', ''), 0 , 120);
         $item->long_des = $req->input('long_des', '');
         $item->release_date = strtotime($req->input('release_date',date("Y-m-d")));
         $item->ad_id = $req->authUser->id;
@@ -109,39 +102,56 @@ class MovieController extends MainAdminController
         	];
 		}
 
-        $images = [];
+        $images = [
+            'poster' => [],
+            'thumbnail' => []
+        ];
 
-        if($type == 'update'){
-            $images_old = $req->input('listidimages_old' , []);
-            foreach ($item->images as $index => $img) {
-                if(in_array($img->id, $images_old) ){                    
-                    array_push($images, $img);
-                } else {
-                    File::delete(public_path().$img->path);
-                }
-            }
+        //upload images and generate thumbnail
+        if( $req->file('image') ){
+            $file = $req->file('image');
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
             
+            $name = preg_replace("/\ /", '-', $filename).'-'.time().'.'.$extension;
+            $file->move('uploaded/',$name);
+            $id = generate_id();
+            $images['poster'] = [
+                'id' => $id,
+                'path' => '/uploaded/' . $name
+            ];
+            Image::make(public_path().'/uploaded/' . $name)->resize(600, 390)->save(public_path('/uploaded/thumbnail/' . $name));
+            $images['thumbnail'] = [
+                'id' => $id,
+                'path' => '/uploaded/thumbnail/' . $name
+            ];
         }
         
-		//upload multiple images
-		if($files = $req->file('images')){
-			foreach($files as $file){
-				$filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-				$extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-				
-				$name = preg_replace("/\ /", '-', $filename).'-'.time().'.'.$extension;
-				$file->move('uploaded/',$name);
-				$images[] = [
-					'id' => generate_id(),
-					'path' => '/uploaded/' . $name
-				];
-			}
-		}
+        if($type == 'update'){
+            $images_old = $req->input('listidimages_old' , []);
+            
+            if(in_array($item->images->poster->id, $images_old) && empty($images['poster'])){
+                $images['poster'] = $item->images->poster;
+                $images['thumbnail'] = $item->images->thumbnail;
 
-        if(empty($images)){
+            } else {
+                
+                if(!empty($item->images->poster->path)){
+                    $path = preg_replace("/^(\/)(.*)/", "$2",$item->images->poster->path );
+                    
+                    File::delete(public_path( $path ));
+                }
+                if(!empty($item->images->thumbnail->path)){
+                    $path = preg_replace("/^(\/)(.*)/", "$2",$item->images->thumbnail->path );
+                    File::delete(public_path($path));
+                }
+            }   
+        }
+
+        if(empty($images['poster'])){
             return [
                 'type' => 'error',
-                'message' => 'Hãy chọn ảnh cho phim'
+                'message' => 'Hãy chọn ảnh poster'
             ];
         }
 		$item->images = json_encode($images);
@@ -346,7 +356,7 @@ class MovieController extends MainAdminController
             $res['error'] = true;
             $res['msg'] = 'Tên phim không được để trống';
         } else {
-            $data = $this->model->search(['name','like',"%$mov_name%"]);
+            $data = $this->model->search(['movie.name','like',"%$mov_name%"]);
             $res['success'] = true;
             $res['data'] = $data;
         }

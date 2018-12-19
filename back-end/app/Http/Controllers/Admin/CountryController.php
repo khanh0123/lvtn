@@ -14,6 +14,7 @@ class CountryController extends MainAdminController
 	protected $rules = [
         'name' => 'required',
         'slug' => '',
+        'country_code' => '',
         'seo_des' => '',
         'seo_title' => '',
     ];
@@ -34,6 +35,7 @@ class CountryController extends MainAdminController
             ];
         }
         
+        $item->country_code = $req->country_code;
         $item->name = ucwords($req->name);
         $item->slug = create_slug($req->slug ? $req->slug : $req->name);
         if($type == 'insert'){

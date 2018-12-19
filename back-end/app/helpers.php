@@ -186,7 +186,11 @@ if (!function_exists('create_slug')) {
      * 
      * @return string
      */
-    function create_slug($str) {
+    function create_slug($str,$replace = "-") {        
+
+        // if($replace)){
+        //     $replace = "-";
+        // }
         $str = trim(mb_strtolower($str));
         $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
         $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
@@ -196,8 +200,8 @@ if (!function_exists('create_slug')) {
         $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
         $str = preg_replace('/(đ)/', 'd', $str);
         $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
-        $str = preg_replace('/([\s]+)/', '-', $str);
-        $str = trim($str,'-');
+        $str = preg_replace('/([\s]+)/', $replace, $str);
+        $str = trim($str,$replace);
         return $str;
     }
 }
@@ -271,7 +275,7 @@ if (!function_exists('auto_generate_id')) {
      * 
      * @return string
      */
-    function auto_generate_id($string = 'cat000001',$max_size = 6){
+    function auto_generate_id($string = '',$max_size = 3){
         $reg_find = '/(^[a-zA-Z]+)([0]+)?([0-9]+)/';
         $reg_replace = '/([0-9]+)/';
         $matches = array();

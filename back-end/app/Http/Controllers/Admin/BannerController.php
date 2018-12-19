@@ -50,6 +50,7 @@ class BannerController extends MainAdminController
         $result = $this->model->get();
         
         $message = session()->get( 'message' );
+        
         return view($this->view_folder."index")
                 ->withData($result)
                 ->withMessage($message);
