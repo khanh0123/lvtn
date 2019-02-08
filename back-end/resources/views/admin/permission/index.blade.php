@@ -82,7 +82,7 @@
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
-                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
+                                    Hiển thị {{ $data['info']->count() == 0 ? '0 kết quả' : ( 'từ '.  (($data['info']->currentPage()-1)*$data['info']->perPage() + 1 ).' tới '. (($data['info']->currentPage()-1)*$data['info']->perPage() + $data['info']->count()) .' trong tổng số '. ($data['info']->total() .' kết quả') ) }}
                                 </div>
                             </div>
                             

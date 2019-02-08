@@ -37,7 +37,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($data as $key => $value)
+                                @foreach ($data['info'] as $key => $value)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $value->mov_name }}</td>

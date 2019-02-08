@@ -14,70 +14,139 @@
 
 
 $router->get('/' , 'TestController@index');
+$router->get('/getlink' , 'Admin\VideoController@getLink');
 
 
 
 $router->group(['prefix' => 'api/v1'], function() use($router) {
 
-    $router->get('/menu' , 'Api/MenuController@get');
+    $router->get('/menu' , ['as' => "Api.MenuController.get", 'uses' => 'Api/MenuController@get']);
 
 }); 
 
 $router->get("getdata" , 'Admin\MovieController@getdata');
 
 $router->group(['prefix' => 'admin'], function() use($router) {
-    $router->get('/login', 'Admin\AdminController@login');
-    $router->get('/forgotpassword', 'Admin\AdminController@forgot');
-    $router->post('/forgotpassword', 'Admin\AdminController@doForgot');
-    $router->post('/confirmCodeChangePass', 'Admin\AdminController@confirmCodeChangePass');
-    $router->post('/login', 'Admin\AdminController@doLogin');
-    $router->post('/logout', 'Admin\AdminController@logout');
-    $router->post('/changepass', 'Admin\AdminController@changepass');
+    $router->get('/login', ['as' => "Admin.AdminController.login", 'uses' => 'Admin\AdminController@login']);
+    $router->get('/forgotpassword', ['as' => "Admin.AdminController.forgot", 'uses' => 'Admin\AdminController@forgot']);
+    $router->post('/forgotpassword', ['as' => "Admin.AdminController.doForgot", 'uses' => 'Admin\AdminController@doForgot']);
+    $router->post('/confirmCodeChangePass', ['as' => "Admin.AdminController.confirmCodeChangePass", 'uses' => 'Admin\AdminController@confirmCodeChangePass']);
+    $router->post('/login', ['as' => "Admin.AdminController.doLogin", 'uses' => 'Admin\AdminController@doLogin']);
+    $router->post('/logout', ['as' => "Admin.AdminController.logout", 'uses' => 'Admin\AdminController@logout']);
+    // $router->post('/changepass', ['as' => "Admin.AdminController.changepass", 'uses' => 'Admin\AdminController@changepass']);
 
     
     $router->group(['middleware' => ['auth.admin']], function() use($router) {
-        $router->get('/', 'Admin\IndexController@index')->name('Admin.index');
-        $router->post('/changepass', 'Admin\AdminController@changepass')->name('Admin.admin.changepass');
+        $router->get('/', [
+            'as'   => "Admin.IndexController.index", 
+            'uses' => 'Admin\IndexController@index'
+        ]);
+        $router->post('/changepass', [
+            'as'   => "Admin.AdminController.changepass", 
+            'uses' => 'Admin\AdminController@changepass'
+        ]);
 
-        $router->get('/permission', 'Admin\PermissionController@index')->name('Admin.permission.index')->middleware('auth.master');
-        $router->get('user/lock/{id}', 'Admin\AdminController@lockuser')->middleware('auth.master');
-        $router->get('user/unlock/{id}', 'Admin\AdminController@unlockuser')->middleware('auth.master');
+
+        $router->get('/permission', [
+            'as'         => "Admin.PermissionController.index", 
+            'uses'       => 'Admin\PermissionController@index' , 
+            'middleware' => 'auth.master'
+        ]);
+        $router->get('user/lock/{id}', [
+            'as'         => "Admin.AdminController.lockuser", 
+            'uses'       => 'Admin\AdminController@lockuser', 
+            'middleware' => 'auth.master'
+        ]);
+        $router->get('user/unlock/{id}', [
+            'as'         => "Admin.AdminController.unlockuser", 
+            'uses'       => 'Admin\AdminController@unlockuser',
+            'middleware' => 'auth.master'
+        ]);
+        
+        // resource_admin($router, 'movie/{mov_id}/episode', 'EpisodeController');
+        $router->get('movie/{mov_id}/episode', [
+            'as'   => "Admin.EpisodeController._index", 
+            'uses' => "Admin\\EpisodeController@_index"
+        ]);
+        $router->any("movie/{mov_id}/episode/detail/{id}", [
+            'as'   => "Admin.EpisodeController._detail", 
+            'uses' => "Admin\\EpisodeController@_detail"
+        ]);
+        $router->any('movie/{mov_id}/episode/add', [
+            'as'         => "Admin.EpisodeController.store", 
+            'uses'       => "Admin\\EpisodeController@store",
+            'middleware' => 'auth.writer',
+        ]);
+
+        $router->get('movie/{mov_id}/episode/del/{id}', [
+            'as'         => "Admin.EpisodeController._delete", 
+            'uses'       => "Admin\\EpisodeController@_delete",
+            'middleware' => 'auth.editer.delete'
+        ]);
+        $router->post('movie/{mov_id}/episode/clone', [
+            'as'         => "Admin.EpisodeController.clone", 
+            'uses'       => 'Admin\EpisodeController@clone',
+            'middleware' => 'auth.writer'
+        ]);
+        $router->post('movie/search' , [
+            'as'         => "Admin.MovieController.search", 
+            'uses'       => 'Admin\MovieController@search'
+        ]);
         resource_admin($router, 'user', 'AdminController' , 'auth.master');
         resource_admin($router, 'group', 'AdminGroupController' , 'auth.master');
-
         resource_admin($router, 'config', 'ConfigController');
         resource_admin($router, 'banner', 'BannerController');
         resource_admin($router, 'category', 'CategoryController');
         resource_admin($router, 'genre', 'GenreController');
         resource_admin($router, 'country', 'CountryController');
         resource_admin($router, 'menu', 'MenuController');
-        resource_admin($router, 'movie/{mov_id}/episode', 'EpisodeController');
         resource_admin($router, 'movie', 'MovieController');
-        $router->post('movie/{mov_id}/episode/clone', 'Admin\EpisodeController@clone')->middleware('auth.writer');
-        $router->post('movie/search' , 'Admin\MovieController@search')->middleware('auth.writer');
+        resource_admin($router, 'video', 'VideoController');
+        
         
     });
 });
 function resource_admin(&$router, $uri, $controller , $middleware = null) {
 
     if(empty($middleware)){
-        $router->get($uri, 'Admin\\'.$controller . '@index')->name('Admin.'.$uri.'.index');
-        $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail')->name('Admin.'.$uri.'.detail');
-        $router->get($uri.'/add', 'Admin\\'.$controller . '@add')->name('Admin.'.$uri.'.add')->middleware('auth.writer');
-        $router->post($uri.'/add', 'Admin\\'.$controller . '@store')->middleware('auth.writer');
+        $router->get($uri, [
+            'as'   => "Admin.$controller.index", 
+            'uses' => "Admin\\$controller@index"
+        ]);
+        $router->any("$uri/detail/{id}", [
+            'as'   => "Admin.$controller.detail", 
+            'uses' => "Admin\\$controller@detail"
+        ]);
+        $router->any($uri.'/add', [
+            'as'         => "Admin.$controller.store", 
+            'uses'       => "Admin\\$controller@store",
+            'middleware' => 'auth.writer',
+        ]);
 
-        $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update')->middleware('auth.editer');
-
-        $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete')->middleware('auth.editer.delete');
+        $router->get($uri.'/del/{id}', [
+            'as'         => "Admin.$controller.delete", 
+            'uses'       => "Admin\\$controller@delete",
+            'middleware' => 'auth.editer.delete'
+        ]);
     } else {
         $router->group(['middleware' => $middleware] , function() use($router,$uri,$controller){
 
-            $router->get($uri, 'Admin\\'.$controller . '@index')->name('Admin.'.$uri.'.index');
-            $router->get($uri.'/detail/{id}', 'Admin\\'.$controller . '@detail')->name('Admin.'.$uri.'.detail');
-            $router->get($uri.'/add', 'Admin\\'.$controller . '@add')->name('Admin.'.$uri.'.add');
-            $router->post($uri.'/add', 'Admin\\'.$controller . '@store');
-            $router->post($uri.'/detail/{id}', 'Admin\\'.$controller . '@update');
-            $router->get($uri.'/del/{id}', 'Admin\\'.$controller . '@delete');
+            $router->get($uri, [
+                'as'   => "Admin.$controller.index", 
+                'uses' => "Admin\\$controller@index"
+            ]);
+            $router->any("$uri/detail/{id}", [
+                'as'   => "Admin.$controller.detail", 
+                'uses' => "Admin\\$controller@detail"
+            ]);
+            $router->any($uri.'/add', [
+                'as'   => "Admin.$controller.store", 
+                'uses' => "Admin\\$controller@store",
+            ]);
+            $router->get($uri.'/del/{id}', [
+                'as'   => "Admin.$controller.delete", 
+                'uses' => "Admin\\$controller@delete",
+            ]);
 
         });
     }  

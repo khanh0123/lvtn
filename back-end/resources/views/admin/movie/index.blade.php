@@ -14,49 +14,58 @@
                     <div class="toolbar">
                         <!--        Here you can write extra buttons/actions for the toolbar              -->
                     </div>
-                    @if(!empty($data))
-                    <div class="row">
-                        <div class="col-sm-6">
-                                <span>Hiển thị</span>
-                                <div class="dropdown custom-group" style="display: inline-block">
-                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $limit }}
-                                        <b class="caret"></b>
-                                        <div class="ripple-container"></div>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li class="dropdown-header"></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=20&sort=$sort") }}">20</a></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=40&sort=$sort") }}">40</a></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=60&sort=$sort") }}">60</a></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=80&sort=$sort") }}">80</a></li>
-                                        <li><a href="{{ base_url("admin/movie?limit=100&sort=$sort") }}">100</a></li>
-                                    </ul>
+                    @if(!empty($data['info']))
+                    <form class="form-inline" method="GET" action="">
+                        <!-- <div class="row"> -->
+                            <div class="col-sm-12">
+                                <div style="margin: 5px;width: 13%;display: inline-block">
+                                    <span>Hiển thị</span>
+                                    <select class="selectpicker col-4" data-style="btn btn-primary btn-round"  data-size="7" name="limit">
+                                        <option value="10" {{ @$data['filter']['limit'] == 10 ? 'selected' : ''}}>10</option>
+                                        <option value="20" {{ @$data['filter']['limit'] == 20 ? 'selected' : ''}}>20</option>
+                                        <option value="30" {{ @$data['filter']['limit'] == 30 ? 'selected' : ''}}>30</option>
+                                        <option value="40" {{ @$data['filter']['limit'] == 40 ? 'selected' : ''}}>40</option>
+                                        <option value="80" {{ @$data['filter']['limit'] == 80 ? 'selected' : ''}}>80</option>
+                                    </select>
+                                    <!-- <span>Kết quả</span> -->
                                 </div>
-                                <span>Kết quả</span>
+                                <div class="my-container" style="margin: 5px;width: 30%;display: inline-block">
+                                    <span>Sắp xếp</span>
+                                    <select class="selectpicker col-4" data-style="btn btn-primary btn-round"  data-size="7" style="width: 20% !important" name="sort">                                
+                                        <option value="desc" {{ @$data['filter']['sort'] == 'desc' ? 'selected' : ''}}>Giảm dần</option>
+                                        <option value="asc" {{ @$data['filter']['sort'] == 'asc' ? 'selected' : ''}}>Tăng dần</option>                     
+                                    </select>
+                                    <span>theo</span>
+                                        <select class="selectpicker col-4" data-style="btn btn-primary btn-round"  data-size="7" style="width: 20% !important" name="orderBy">                                
+                                        <option value="id" {{ @$data['filter']['orderBy'] == 'id' ? 'selected' : ''}}>ID</option>
+                                        <option value="name" {{ @$data['filter']['orderBy'] == 'name' ? 'selected' : ''}}>Tên Phim</option>
+                                        <option value="epi_num" {{ @$data['filter']['orderBy'] == 'epi_num' ? 'selected' : ''}}>Số tập</option>
+                                        <option value="release_date" {{ @$data['filter']['orderBy'] == 'release_date' ? 'selected' : ''}}>Ngày ra rạp</option>
+                                        <option value="is_hot" {{ @$data['filter']['orderBy'] == 'is_hot' ? 'selected' : ''}}>Phim hot</option>
+                                        <option value="is_new" {{ @$data['filter']['orderBy'] == 'is_new' ? 'selected' : ''}}>Phim mới</option>
+                                        <option value="created_at" {{ @$data['filter']['orderBy'] == 'created_at' ? 'selected' : ''}}>Thời gian tạo</option>
+                                        <option value="updated_at" {{ @$data['filter']['orderBy'] == 'updated_at' ? 'selected' : ''}}>Thời gian cập nhật</option>                     
+                                    </select>
+                                </div>
+                                <div style="margin: 5px;width: 30%;display: inline-block">
+                                    <span>Từ khóa tìm kiếm </span>
+                                    <div class="form-group" style="margin: 0;padding-left: 10px">
+                                        <input type="text" class="form-control" value="{{ @$data['filter']['name'] }}" name="name">
 
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-right">
-                                <span>Sắp xếp</span>
-                                <div class="dropdown custom-group" style="display: inline-block">
-                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $sort == 'asc' ? 'Tăng dần' : 'Giảm dần' }}
-                                        <b class="caret"></b>
-                                        <div class="ripple-container"></div>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li class="dropdown-header"></li>
-                                        <li><a href="{{ base_url("admin/movie?sort=asc&limit=$limit") }}">Tăng dần</a></li>
-                                        <li><a href="{{ base_url("admin/movie?sort=desc&limit=$limit") }}">Giảm dần</a></li>
-                                    </ul>
+                                    </div>
                                 </div>
+                                <button class="btn btn-success btn-round" type="submit">Lọc<div class="ripple-container"></div></button>
                             </div>
+
+                            
                         </div>
-                    </div>
+                    </form>
                     @endif
                     <div class="material-datatables">
                         <table id="datatables" class="table table-striped table-no-bordered table-hover" cellspacing="0" width="100%" style="width:100%">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Tên phim</th>
                                     <th>Danh mục</th>
                                     <th>Số tập</th>
@@ -70,6 +79,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Tên phim</th>
                                     <th>Danh mục</th>
                                     <th>Số tập</th>
@@ -82,8 +92,9 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($data as $value)
+                                @foreach ($data['info'] as $value)
                                 <tr>
+                                    <td>{{ $value->id }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->cat_name }}</td>
                                     <td>{{ $value->epi_num }}</td>
@@ -108,32 +119,32 @@
                                 
                             </tbody>
                         </table>
-                        @if( $data->hasPages() )
+                        @if( $data['info']->hasPages() )
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
-                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
+                                    Hiển thị {{ $data['info']->count() == 0 ? '0 kết quả' : ( 'từ '.  (($data['info']->currentPage()-1)*$data['info']->perPage() + 1 ).' tới '. (($data['info']->currentPage()-1)*$data['info']->perPage() + $data['info']->count()) .' trong tổng số '. ($data['info']->total() .' kết quả') ) }}
                                 </div>
                             </div>
                             
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
                                     <ul class="pagination" style="margin: 0">
-                                        <li class="paginate_button previous {{ $data->currentPage() <= 1 ? 'disabled' : ''}} " >
-                                            <a href="{{ $data->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
+                                        <li class="paginate_button previous {{ $data['info']->currentPage() <= 1 ? 'disabled' : ''}} " >
+                                            <a href="{{ $data['info']->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
                                         </li>
                                         <?php 
-                                            $begin = ($data->currentPage() - 5) < 1 ? 1 : $data->currentPage() - 5;
-                                            $end = ($data->currentPage() + 5) > $data->lastPage() ? $data->lastPage() : $data->currentPage() + 5;
+                                            $begin = ($data['info']->currentPage() - 5) < 1 ? 1 : $data['info']->currentPage() - 5;
+                                            $end = ($data['info']->currentPage() + 5) > $data['info']->lastPage() ? $data['info']->lastPage() : $data['info']->currentPage() + 5;
 
                                          ?>
                                         @for($i = $begin ; $i <= $end ; $i++)
-                                        <li class="paginate_button {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                            <a href="{{ $data->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
+                                        <li class="paginate_button {{ $data['info']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $data['info']->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
                                         </li>
                                         @endfor
-                                        <li class="paginate_button next {{ $data->currentPage() >= $data->lastPage() ? 'disabled' : ''}}">
-                                            <a href="{{ $data->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
+                                        <li class="paginate_button next {{ $data['info']->currentPage() >= $data['info']->lastPage() ? 'disabled' : ''}}">
+                                            <a href="{{ $data['info']->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -198,28 +209,6 @@
 
         });
 
-
-        // var table = $('#datatables').DataTable();
-
-        // // Edit record
-        // table.on('click', '.edit', function() {
-        //     $tr = $(this).closest('tr');
-
-        //     var data = table.row($tr).data();
-        //     alert('You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.');
-        // });
-
-        // // Delete a record
-        // table.on('click', '.remove', function(e) {
-        //     $tr = $(this).closest('tr');
-        //     table.row($tr).remove().draw();
-        //     e.preventDefault();
-        // });
-
-        // //Like record
-        // table.on('click', '.like', function() {
-        //     alert('You clicked on Like button');
-        // });
 
         $('.card .material-datatables label').addClass('form-group');
     });

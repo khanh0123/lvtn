@@ -122,7 +122,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn danh mục</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="cat_id" required data-name="Danh mục">
-                                                        @foreach($dataCat as $key => $value)
+                                                        @foreach($data['more']['category'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -134,7 +134,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn thể loại</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-danger" name="genre[]" required data-name="Thể loại">
-                                                        @foreach($dataGen as $key => $value)
+                                                        @foreach($data['more']['genre'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -146,7 +146,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn quốc gia</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-secondary" name="country[]" required data-name="Quốc gia">
-                                                        @foreach($dataCot as $key => $value)
+                                                        @foreach($data['more']['country'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -267,8 +267,8 @@
 
     });
     function validateMovie(){
-        var input = $('input[required]');
-        var select = $('select[required]');
+        var input = $('#wizardProfile input[required]');
+        var select = $('#wizardProfile select[required]');
         for(var k = 0; k < input.length; k++){
             if($(input[k]).val() == ''){
                 var name = $(input[k]).data('name');

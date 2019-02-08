@@ -14,6 +14,27 @@ class MenuController extends MainAdminController
 	protected $model;
 	protected $limit = 20;
 	protected $view_folder = 'admin/menu/';
+    protected $rules = [
+        'insert' => [
+            'name'     => 'required',
+            'slug'     => 'required',
+            'sub_menu' => 'required'
+        ],
+        'update' => [
+            'name'     => 'required',
+            'slug'     => 'required',
+            'sub_menu' => 'required'
+            
+        ],
+    ];
+    protected $columns_filter = [
+        // 'id'         =>    'menu.id',            
+        'name'       =>    'menu.name',            
+        'slug'       =>    'menu.slug',        
+        'created_at' =>    'menu.created_at',
+        'updated_at' =>    'menu.updated_at',
+    ];
+    protected $columns_search = ['name'];
 	
 
 	public function __construct(Request $request) {
@@ -24,105 +45,65 @@ class MenuController extends MainAdminController
     /*
      * Show view add new item.
      */
-    public function add(Request $request) {
-
-        $data = $this->getDataNeed();
-        
-        return view($this->view_folder."add")
-                    ->withData($data);
-    }
 
 
     public function setItem($type , $req , &$item){
-    	$rules = [
-    		'name' => 'required',
-    		'slug' => 'required',
-    		'sub_menu'
-    	];
-    	$validator = Validator::make($req->all(), $rules);
+
+    	$validator = Validator::make($req->all(), $this->rules[$type]);
         if ($validator->fails()) {
         	return [
         		'type' => 'error',
-        		'message' => 'Vui lòng kiểm tra lại các trường nhập'
+        		'msg' => 'Vui lòng kiểm tra lại các trường nhập'
         	];
         }
-        $item->name = $req->name;
-        $item->slug = $req->slug;
+        
+        $item->name = $req->get("name");
+        $item->slug = create_slug($req->slug ? $req->slug : $req->name);
         $item->sub_menu = implode(",", $req->sub_menu ? $req->sub_menu : []);
 
         
         return [
         	'type' => 'success',
-        	'message' => $type == 1 ? 'Thêm dữ liệu thành công' : 'Cập nhật thành công',
+        	'msg' => $type == 1 ? 'Thêm dữ liệu thành công' : 'Cập nhật thành công',
         ];
 
     }
 
-    public function store(Request $request) {
 
-        $item = $this->model;
-        $result = $this->setItem('insert',$request, $item);
-        $data = $this->getDataNeed();
-        if($result['type'] == 'success'){
-            if($item->save()){
-                $result['message'] = 'Thêm dữ liệu thành công';
-            } else {
-                $result['message'] = 'Thêm dữ liệu thất bại';
-            }
-            
-        }
-        return view($this->view_folder."add")
-                ->withMessage($result)
-                ->withData($data);
-    }
 
     /*
      * Show detail item that belongs to passed id.
      */
     public function detail(Request $request,$id)
     {
-        $item = $this->model::find($id);
+        $data['info'] = $this->model::find($id);
 
 
-        if(empty($item)){
+        if(empty($data['info'])){
             return abort(404);
         }
-        $item->sub_menu = explode(",", $item->sub_menu);
-        $data = $this->getDataNeed();
 
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withData2( $data);
+        if($request->isMethod("post")){
+            $result = $this->setItem('update',$request, $data['info']);
+            if($result['type'] == 'success'){
+                if($data['info']->save()){
+                    $result['msg'] = 'Cập nhật dữ liệu thành công';
+                } else {
+                    $result['msg'] = 'Cập nhật dữ liệu thất bại';
+                }
+            }
+        }
+        $data['info']->sub_menu = explode(",", $data['info']->sub_menu);
+        $data['more'] = $this->getDataNeed();
+
+        return $this->template($this->view_folder."detail",$data);
     }
 
     /*
      * Update item that belongs to passed id.
      */
-    public function update(Request $request,$id)
-    {
-        $item = $this->model::find($id);
-        if(empty($item)){
-            return abort(404);
-        }
-        $data = $this->getDataNeed();
-        $result = $this->setItem('update',$request, $item);
-        if($result['type'] == 'success'){
-            if($item->save()){
-                $item->sub_menu = explode(",", $item->sub_menu);
-                $result['message'] = 'Cập nhật dữ liệu thành công';
-            } else {
-                $result['message'] = 'Cập nhật dữ liệu thất bại';
-            }
-        }
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withData2($data)
-                ->withMessage($result);
 
-        
-    }
-
-    private function getDataNeed(){
+    protected function getDataNeed(){
         $data = array();
 
         $cat_model = new Category();

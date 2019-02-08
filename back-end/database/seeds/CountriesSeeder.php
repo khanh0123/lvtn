@@ -24,9 +24,9 @@ class CountriesSeeder extends Seeder
         			'id' => $id,
         			'name' => $value->name,
         			'slug' => create_slug($value->name),
-        			'country_code' => $value->alpha_2,
+        			'code' => $value->alpha_2,
         		];
-        		$id = auto_generate_id($id);
+        		$id = auto_increment_string_id($id);
         	}
         	// echo json_encode($array_data);
         	// die;

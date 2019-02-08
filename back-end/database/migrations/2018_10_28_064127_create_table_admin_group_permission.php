@@ -16,7 +16,7 @@ class CreateTableAdminGroupPermission extends Migration
         Schema::create('admin_group_permission', function (Blueprint $table) {
             $table->integer('gad_id')->unsigned()->index()->unique();
             $table->integer('per_id')->unsigned()->index();
-            $table->string('name',255);
+            // $table->string('name',255);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
 

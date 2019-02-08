@@ -9,42 +9,58 @@ use Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-// use Illuminate\Foundation\Validation\ValidatesRequests;
-// use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class MainAdminController extends BaseController
 {
-	protected $limit = 20;
+    protected $limit = 20;
+	protected $status = 1;
+    protected $columns_filter = [];
+    protected $columns_search = [];
+
     public function __construct(Request $request , $variable = null) {
-        if (!isset($this->model)) {
-            throw new Exception("ModelNotSet");
-        }
-        if (!isset($this->view_folder)) {
-            throw new Exception("ViewFolderNotSet");
-        }
+        // if (!isset($this->model)) {
+        //     throw new Exception("ModelNotSet");
+        // }
+        // if (!isset($this->view_folder)) {
+        //     throw new Exception("ViewFolderNotSet");
+        // }
     }
     /*
      * Show list item.
      */
     public function index(Request $request ) {        
-        $limit = $request->input('limit', $this->limit);
-        $sort = $request->input('sort') == 'asc' ? 'asc' : 'desc';
-        $result = $this->model->get($limit,$sort);
-        $result = $result->appends($request->all());
-        $message = session()->get( 'message' );
-        return view($this->view_folder."index" )
-                ->withData($result)
-                ->withSort($sort)
-        		->withLimit($limit)
-                ->withMessage($message);
+        
+        $filter = $this->getFilter($request);
+        $data['info']         = $this->model->get_page($filter , $request);
+        $data['filter']       = $filter;
+        return $this->template($this->view_folder."index",$data);
     }
+
+
     /*
-     * Show view add new item.
+     * Create new resource item.
      */
-    public function add(Request $request) {
-        $message = session()->get( 'message' );
-        return view($this->view_folder."add")
-            ->withMessage($message);
+
+    public function store(Request $request) {
+        if($request->isMethod('post')){ //insert
+            $item = $this->model;
+            $result = $this->setItem('insert',$request, $item);
+            if($result['type'] == 'success'){
+                $item->save();
+                $result['msg'] = 'Thêm dữ liệu thành công';
+                $data = [];
+            } else {
+                $data['info'] = $item;
+            }
+        } else { //show view add
+            $result = '';
+            $data = [];
+        }
+
+        //get more data
+        if(method_exists($this,"getDataNeed")) $data['more'] = $this->getDataNeed();
+        
+        return $this->template($this->view_folder."add",$data,$result);
     }
 
     /*
@@ -53,36 +69,27 @@ class MainAdminController extends BaseController
     public function detail(Request $request,$id)
     {
         $item = $this->model::find($id);
-
         if(empty($item)){
             return abort(404);
         }
-        $message = session()->get( 'message' );
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withMessage($message);
-    }
 
-    /*
-     * Update item that belongs to passed id.
-     */
-    public function update(Request $request,$id)
-    {
-        $item = $this->model::find($id);
-        if(empty($item)){
-            return abort(404);
-        }
+        if($request->isMethod('post')){ //update
         
-        $result = $this->setItem('update',$request, $item);
-        if($result['type'] == 'success'){
-            $item->save();   
-            $result['message'] = 'Cập nhật dữ liệu thành công';         
+            $result = $this->setItem('update',$request, $item);
+            if($result['type'] == 'success'){
+                $item->save();
+                $result['msg'] = 'Cập nhật dữ liệu thành công';         
+            }
+        } else { //show
+            $result = "";
         }
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withMessage($result);
+        $data['info'] = $item;
 
-        
+        //get more data
+        if(method_exists($this,"getDataNeed")) $data['more'] = $this->getDataNeed();
+
+        //return view
+        return $this->template($this->view_folder."detail",$data,$result); 
     }
     /*
      * Delete item that belongs to passed id.
@@ -93,30 +100,16 @@ class MainAdminController extends BaseController
         if(empty($item)){
             return abort('404');
         }
-        $item->delete();
+        $item->delete();      
 
         return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
-                ->withMessage(['type' => 'success','message' => 'Xóa dữ liệu thành công']);
+                ->withMessage(['type' => 'success','msg' => 'Xóa dữ liệu thành công']);
     }
+
+
     /*
-     * Create new resource item.
+     * check exists slug on 3 table.
      */
-
-    public function store(Request $request) {
-
-        $item = $this->model;
-        $result = $this->setItem('insert',$request, $item);
-        if($result['type'] == 'success'){
-            // if(DB::connection()->getDoctrineColumn($this->model->getTable(), 'id')->getType()->getName() == 'string')
-            //     $item->id = generate_id($this->model->getTable());
-            $item->save();
-            $result['message'] = 'Thêm dữ liệu thành công';
-        }
-        return view($this->view_folder."add")
-                ->withMessage($result); 
-    }
-
-
     protected function check_exist_slug($slug)
     {
         $data = DB::table('genre')->where(['slug' => $slug ])->get();
@@ -132,6 +125,80 @@ class MainAdminController extends BaseController
             return true;
         }
         return false;
+    }
+
+    
+
+    /*
+     * get filter (sort , orderby , limit )
+     */
+    protected function getFilter($request)
+    {
+        $filter['sort']       = $request->get("sort") == "asc" ? "asc" : "desc";
+        $filter['orderBy']    = $this->getOrderBy($request);
+        $limit                = (int)$request->get("limit");
+        $filter['limit']      = ($limit < 1 || $limit > 100)? $this->limit : $limit;
+        $filter['conditions'] = $this->getConditionByRequest($request,$this->columns_filter);
+        return $filter;
+    }
+
+    /*
+     * get orderBy from request(default orderBy id)
+     */
+
+    protected function getOrderBy($req) {
+        $order_by = $req->input('orderBy');
+        if(isset($this->columns_filter[$order_by]) && Schema::hasColumn($this->model->getTable(), $order_by)){
+            return $this->columns_filter[$order_by];
+        }
+        // if(Schema::hasColumn($this->model->getTable(), 'id') && isset($this->columns_filter['id'])){
+        //     return $this->columns_filter['id'];
+        // }
+        
+        //default orderby first field in table
+        $default = $this->model->getTable().".".DB::getSchemaBuilder()->getColumnListing($this->model->getTable())[0];
+        return $default;
+    }
+
+    /*
+     * get conditions to filter data from request.
+     */
+    protected function getConditionByRequest($req,$columns,$table = ''){
+        $conditions = [
+            'and' => [],
+            'or' => []
+        ];
+        foreach ($columns as $key => $value) {
+            if( $req->get($key) !== null ){
+                if($key === "name"){                    
+                    if(in_array($key, $this->columns_search)){
+                        $conditions['or'][] = [$value, 'like' ,"%".$req->input($key)."%"];
+                    }
+                    continue;
+                }
+
+                if(!in_array($key, $this->columns_search)){
+                    $conditions['and'][] = [$value, '=' ,$req->input($key)];
+                } else {
+                    $conditions['or'][] = [$value, 'like' ,"%".$req->input($key)."%"];
+                }
+                
+            }
+        }      
+        return $conditions;
+    }
+
+    /*
+     * return template view blade
+     */
+    protected function template($view , $data = [] , $message = '' ){
+
+        if(empty($message)){
+            $message = session()->get( 'message' );
+        }
+        return view($view)
+                ->withData($data)
+                ->withMessage($message);
     }
     
 }

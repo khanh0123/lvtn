@@ -18,7 +18,7 @@ class CreateTableCountry extends Migration
             $table->string('id',255)->primary();
             $table->string('name',100);
             $table->string('slug',100)->nullable();
-            $table->string('country_code',10)->nullable();
+            $table->string('code',10)->nullable();
             $table->string('seo_des',255)->nullable();
             $table->string('seo_title',255)->nullable();
             $table->timestamp('created_at')->useCurrent();

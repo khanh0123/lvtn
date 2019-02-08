@@ -9,12 +9,14 @@ class Admin extends Model
 {
     protected $table = 'admin';
 
-    public function get($limit = 2 , $sort = 'asc')
+    public function get_page($filter, $req)
     {
     	$data = DB::table($this->table)
-    				->select('id','email','first_name','last_name','status','created_at','updated_at')
-    				->orderBy('id', $sort)
-    				->paginate($limit);    				
+    				->select('id','email','gad_id','first_name','last_name','status','created_at','updated_at')
+    				->orderBy($filter['orderBy'], $filter['sort']);
+        $data = addConditionsToQuery($filter['conditions'],$data);        
+        $data = $data->paginate($filter['limit']);
+        $data->appends($req->all())->links();
     	return $data;
     }
 

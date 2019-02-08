@@ -3,7 +3,7 @@
 @section('main')
 <div class="container-fluid">
     <div class="alert alert-light" role="alert">
-        <strong class="">Thêm tập mới cho phim {{ $dataMovie->name }}</strong>
+        <strong class="">Thêm tập mới cho phim {{ $data['movie']->name }}</strong>
     </div>
     <form action="" method="post" enctype="multipart/form-data">
         {{ csrf_field() }}
@@ -62,8 +62,8 @@
                                                 <label class="col-sm-4 label-on-left">Chọn tập  <small style="color:red">*</small></label>
                                                 <div class="col-sm-8">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="episode" required data-name="Tập phim">
-                                                        @for($i = 1 ; $i <= $dataMovie->epi_num; $i++)
-                                                            @if(!in_array($i,$dataEpisodesCreated))
+                                                        @for($i = 1 ; $i <= $data['movie']->epi_num; $i++)
+                                                            @if(!in_array($i,$data['more']))
                                                                 <option data-tokens="{{$i}}" value="{{$i}}">Tập {{$i}}</option>
                                                             @endif
                                                         @endfor
@@ -108,29 +108,14 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">#</th>
+                                                        <th class="text-center">ID</th>
                                                         <th>Nguồn</th>
                                                         <th>Link</th>
                                                         <th>Chất lượng</th>
-                                                        <th>Phương thức</th>
                                                         <th class="text-right">Xóa</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-<!--                                                     <tr>
-                                                        <td class="text-center">#</td>
-                                                        <td>Andrew Mike</td>
-                                                        <td>Develop</td>
-                                                        <td>2013</td>
-                                                        <td class="text-right">€ 99,225</td>
-                                                        <td class="td-actions text-right">
-                                                            <button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="">
-                                                                <i class="material-icons">close</i>
-                                                            </button>
-                                                        </td>
-                                                    </tr> -->
-                                                    
-                                                </tbody>
+                                                <tbody></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -185,7 +170,7 @@
                                 <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thêm" onClick="return validateEpisode();"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
 
                                 <button type="reset" class="btn btn-danger using-tooltip"  data-toggle="tooltip" data-placement="top" title="Làm mới form này"><i class="material-icons">close</i>Làm mới<div class="ripple-container"></div></button>
-                                <a href="{{ base_url("admin/movie/$dataMovie->id/episode") }}" class="btn btn-success using-tooltip" data-toggle="tooltip" data-placement="top" title="Quản Lý Tập Phim"><i class="material-icons">playlist_add</i>Quản Lý Tập<div class="ripple-container"></div></a>
+                                <a href="{{ base_url("admin/movie/".$data['movie']->id."/episode") }}" class="btn btn-success using-tooltip" data-toggle="tooltip" data-placement="top" title="Quản Lý Tập Phim"><i class="material-icons">playlist_add</i>Quản Lý Tập<div class="ripple-container"></div></a>
                             </div>
                         </div>
                     </div>
@@ -238,16 +223,6 @@
 
                             </div>
                         </div>
-                        <div class="row">
-                            <label class="col-sm-3 label-on-left">Phương thức phát</label>
-                            <div class="col-sm-8">
-                                <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_method">
-                                    <option data-tokens="live" value="live" selected>Trực tiếp</option>
-                                    <option data-tokens="graph" value="graph">Sử dụng graph API facebook</option>
-                                </select>
-
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">                            
                         <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Hủy bỏ</button>
@@ -293,8 +268,8 @@
 
         });
         function validateEpisode(){
-            var input = $('input[required]');
-            var select = $('select[required]');
+            var input = $('#wizardProfile input[required]');
+            var select = $('#wizardProfile select[required]');
             for(var k = 0; k < input.length; k++){
                 if($(input[k]).val() == ''){
                     var name = $(input[k]).data('name');
@@ -315,10 +290,9 @@
             var link_source = $('input[name="link_source"]').val();
             var link_from = $('select[name="link_from"]').val();
             var link_quality = $('select[name="link_quality"]').val();
-            var link_method = $('select[name="link_method"]').val();
-            var reg_link = /http(s)?:\/\/([\w\W]+).([a-zA-Z0-9])$/;
+            var reg_link = /http(s)?:\/\/([\w\W]+)?.([a-zA-Z0-9])\/?$/;
             if(link_source == 'facebook'){
-                reg_link = /http(s)?:\/\/([\w\W]+)$)/;
+                // reg_link = /(?:https?:\/\/)?(?:www.|web.|m.)?facebook.com\/(?:video.php\?v=\d+|photo.php\?v=\d+|\?v=\d+)|\S+\/videos\/((\S+)\/(\d+)|(\d+))\/?$/;
             }
             if(!link_source || !reg_link.test(link_source)){
                 showNotification('warning' , `Link không hợp lệ` , 3000);
@@ -335,32 +309,50 @@
                 return false;
             }
 
-            if(!link_method || (link_method !== 'live' && link_method !== 'graph')){
-                showNotification('warning' , `Hãy chọn phương thức phát` , 3000);
-                return false;
-            }
 
-            var link_play = JSON.stringify({
-                source:link_source,
-                from:link_from,
-                qualify:parseInt(link_quality),
-                method:link_method
+            $.ajax({
+                url: base_url+"admin/video/add",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                    return_type: 'json',
+                    source_link: link_source,
+                    source_name: link_from,
+                    max_qualify: link_quality,
+                    // duration: 'json',
+                },
+            })
+            .done(function(res) {
+                if(res && res.info){
+                    var tr = '<tr>' + 
+                    `<input type="hidden" name="video_id[]" value='`+res.info.id+`' />` +
+                    '<td class="text-center">'+ res.info.id +'</td>' +
+                    '<td>'+ link_from +'</td>' +
+                    '<td>'+ link_source +'</td>' +
+                    '<td>'+ parseInt(link_quality) +'</td>' +
+                    '<td class="td-actions text-right">' +
+                    '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
+                    '<i class="material-icons">close</i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+                    $('#links table tbody').append(tr);
+                }
+            })
+            .fail(function(res) {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
             });
-            var tr = '<tr>' + 
-            `<input type="hidden" name="link_play[]" value='`+link_play+`' />` +
-            '<td class="text-center">#</td>' +
-            '<td>'+ link_from +'</td>' +
-            '<td>'+ link_source +'</td>' +
-            '<td>'+ parseInt(link_quality) +'</td>' +
-            '<td>'+ link_method +'</td>' +
-            '<td class="td-actions text-right">' +
-            '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
-            '<i class="material-icons">close</i>' +
-            '</button>' +
-            '</td>' +
-            '</tr>';
 
-            $('#links table tbody').append(tr);
+            $('#modalAddLink').modal('toggle');
+
+            
+            
+
+            
 
             return false;
 

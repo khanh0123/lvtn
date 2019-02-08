@@ -41,7 +41,7 @@
                                     <label class="col-sm-2 label-on-left">Chọn menu con</label>
                                     <div class="col-sm-5">
                                         <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-success" name="sub_menu[]">
-                                            @foreach($data as $key => $value)
+                                            @foreach($data['more'] as $key => $value)
                                             <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                             @endforeach
                                       </select>

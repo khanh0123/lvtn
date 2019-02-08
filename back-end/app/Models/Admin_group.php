@@ -8,6 +8,18 @@ class Admin_group extends Model
 {
     protected $table = 'admin_group';
     
+    public function get_page($filter = [], $req)
+    {
+        $data = DB::table($this->table)
+            ->select('admin_group.id','admin_group.name as name','permission.name as per_name','gad_id','per_id')
+            ->join('admin_group_permission' , 'admin_group_permission.gad_id' , '=' , 'admin_group.id')
+            ->join('permission' , 'admin_group_permission.per_id' , '=' , 'permission.id')
+            ->orderBy($filter['orderBy'], $filter['sort']);
+        $data = addConditionsToQuery($filter['conditions'],$data);
+        $data = $data->paginate($filter['limit']);
+        $data->appends($req->all())->links();
+        return $data;
+    }
 
     public function getall($sort = 'desc'){
         $data = DB::table($this->table)
@@ -17,23 +29,16 @@ class Admin_group extends Model
         return $data;
 
     }
-    public function get($limit = 2 , $sort = 'desc')
-    {
-    	$data = DB::table($this->table)
-    				->select('id','admin_group.name as name','admin_group_permission.name as gad_per_name','gad_id','per_id')
-                    ->join('admin_group_permission' , 'gad_id' , '=' , 'id')
-    				->orderBy('id', $sort)
-    				->paginate($limit);		
-    	return $data;
-    }
+    
 
-    public function findById($id)
+    public function findById($filter = [] , $req)
     {
         $data = DB::table($this->table)
-                    ->select('id','admin_group.name','gad_id','per_id','admin_group.created_at','admin_group.updated_at')
-                    ->join('admin_group_permission', 'admin_group.id', '=', 'admin_group_permission.gad_id')
-                    ->where('id' , $id)
-                    ->first();     
+                    ->select('admin_group.id','admin_group.name as name','permission.name as per_name','gad_id','per_id')
+                    ->join('admin_group_permission' , 'admin_group_permission.gad_id' , '=' , 'admin_group.id')
+                    ->join('permission' , 'admin_group_permission.per_id' , '=' , 'permission.id')
+                    ->orderBy($filter['orderBy'], $filter['sort'])
+                    ->first();
         return $data;
     }
 

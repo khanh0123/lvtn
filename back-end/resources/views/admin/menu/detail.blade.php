@@ -22,7 +22,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="name" value="{{$data['name']}}" required>
+                                            <input type="text" class="form-control" name="name" value="{{$data['info']->name}}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -32,7 +32,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="slug" value="{{$data['slug']}}" >
+                                            <input type="text" class="form-control" name="slug" value="{{$data['info']->slug}}" >
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -41,9 +41,9 @@
                                     <label class="col-sm-2 label-on-left">Chọn menu con</label>
                                     <div class="col-sm-10">
                                         <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-success" name="sub_menu[]" >
-                                            @foreach($data2 as $key => $value)
+                                            @foreach($data['more'] as $key => $value)
                                             <?php 
-                                                $seleted = in_array($value->id,$data->sub_menu) ? true : false;
+                                                $seleted = in_array($value->id,$data['info']->sub_menu) ? true : false;
                                              ?>
                                             <option data-tokens="{{$value->name}}" value="{{$value->id}}" {{$seleted ? 'selected' : ''}}>{{$value->name}}</option>
                                             @endforeach
@@ -75,7 +75,7 @@
 
                                 @if (session()->get('permission')->canDelete)
 
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/menu/del/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/menu/del/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
                                 @endif
                             </div>
                         </div>

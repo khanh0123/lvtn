@@ -14,12 +14,12 @@
                     <div class="toolbar">
                         <!--        Here you can write extra buttons/actions for the toolbar              -->
                     </div>
-                    @if(!empty($data))
+                    @if(!empty($data['info']))
                     <div class="row">
                         <div class="col-sm-6">
                                 <span>Hiển thị</span>
                                 <div class="dropdown custom-group" style="display: inline-block">
-                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data->perPage()}}
+                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data['info']->perPage()}}
                                         <b class="caret"></b>
                                         <div class="ripple-container"></div>
                                     </button>
@@ -53,7 +53,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($data as $value)
+                                @foreach ($data['info'] as $value)
                                 <tr>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->slug }}</td>
@@ -68,32 +68,32 @@
                                 
                             </tbody>
                         </table>
-                        @if( $data->hasPages() )
+                        @if( $data['info']->hasPages() )
                         <div class="row">
                             <div class="col-sm-5">
                                 <div class="dataTables_info" role="status" aria-live="polite">
-                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
+                                    Hiển thị {{ $data['info']->count() == 0 ? '0 kết quả' : ( 'từ '.  (($data['info']->currentPage()-1)*$data['info']->perPage() + 1 ).' tới '. (($data['info']->currentPage()-1)*$data['info']->perPage() + $data['info']->count()) .' trong tổng số '. ($data['info']->total() .' kết quả') ) }}
                                 </div>
                             </div>
                             
                             <div class="col-sm-7">
                                 <div class="dataTables_paginate" style="text-align: right">
                                     <ul class="pagination" style="margin: 0">
-                                        <li class="paginate_button previous {{ $data->currentPage() <= 1 ? 'disabled' : ''}} " >
-                                            <a href="{{ $data->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
+                                        <li class="paginate_button previous {{ $data['info']->currentPage() <= 1 ? 'disabled' : ''}} " >
+                                            <a href="{{ $data['info']->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
                                         </li>
                                         <?php 
-                                            $begin = ($data->currentPage() - 5) < 1 ? 1 : $data->currentPage() - 5;
-                                            $end = ($data->currentPage() + 5) > $data->lastPage() ? $data->lastPage() : $data->currentPage() + 5;
+                                            $begin = ($data['info']->currentPage() - 5) < 1 ? 1 : $data['info']->currentPage() - 5;
+                                            $end = ($data['info']->currentPage() + 5) > $data['info']->lastPage() ? $data['info']->lastPage() : $data['info']->currentPage() + 5;
 
                                          ?>
                                         @for($i = $begin ; $i <= $end ; $i++)
-                                        <li class="paginate_button {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                            <a href="{{ $data->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
+                                        <li class="paginate_button {{ $data['info']->currentPage() == $i ? 'active' : '' }}">
+                                            <a href="{{ $data['info']->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
                                         </li>
                                         @endfor
-                                        <li class="paginate_button next {{ $data->currentPage() >= $data->lastPage() ? 'disabled' : ''}}">
-                                            <a href="{{ $data->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
+                                        <li class="paginate_button next {{ $data['info']->currentPage() >= $data['info']->lastPage() ? 'disabled' : ''}}">
+                                            <a href="{{ $data['info']->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
                                         </li>
                                     </ul>
                                 </div>

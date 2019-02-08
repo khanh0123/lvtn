@@ -10,13 +10,15 @@ class Category extends Model
     protected $table = 'category';
     public $timestamps = false;
 
-    public function get($limit = 2 , $sort = 'asc')
+    public function get_page($filter = [] , $req)
     {
-    	$data = DB::table($this->table)
-    				// ->select('id','key','value','created_at','updated_at')
-    				->orderBy('id', $sort)
-    				->paginate($limit);    				
-    	return $data;
+        $data = DB::table($this->table)
+                    // ->select('id','key','value','created_at','updated_at')
+                    ->orderBy($filter['orderBy'], $filter['sort']);
+        $data = addConditionsToQuery($filter['conditions'],$data);
+        $data = $data->paginate($filter['limit']);
+        $data->appends($req->all())->links();
+        return $data;
     }
     public function getall($sort = 'desc'){
         $data = DB::table($this->table)

@@ -22,7 +22,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="name" value="{{ $data['name'] }}" required="required">
+                                            <input type="text" class="form-control" name="name" value="{{ $data['info']['name'] }}" required="required">
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -32,7 +32,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="slug" value="{{ $data['slug'] }}" required>
+                                            <input type="text" class="form-control" name="slug" value="{{ $data['info']['slug'] }}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -42,7 +42,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="seo_title" value="{{ $data['seo_title'] }}" >
+                                            <input type="text" class="form-control" name="seo_title" value="{{ $data['info']['seo_title'] }}" >
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -52,7 +52,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="seo_des" value="{{ $data['seo_des'] }}" >
+                                            <input type="text" class="form-control" name="seo_des" value="{{ $data['info']['seo_des'] }}" >
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                 <a class="btn using-tooltip" href="{{base_url('admin/country')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
 
                                 @if (session()->get('permission')->canDelete)
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/country/del/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/country/del/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
                                 @endif
                             </div>
                         </div>
