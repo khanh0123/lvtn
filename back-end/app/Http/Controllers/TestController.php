@@ -276,7 +276,7 @@ class TestController extends Controller
 		for ($i = 0; $i < count($arr) ; $i++) {
 			if($arr[$i] == 1){
     			// echo $i;
-				$lst_ID[] = auto_generate_id('gen'.($i-1));
+				$lst_ID[] = auto_increment_string_id('gen'.($i-1));
     			// echo auto_generate_id('gen006');
 			}
 		}

@@ -11,20 +11,21 @@
 |
 */
 
+// header("Access-Control-Allow-Origin:*");
 
+// $router->get('/' , 'TestController@index');
+// $router->get('/getlink' , 'Admin\VideoController@getLink');
 
-$router->get('/' , 'TestController@index');
-$router->get('/getlink' , 'Admin\VideoController@getLink');
+$router->group(['prefix' => 'api/v1','middleware' => 'cors' ], function() use($router) {
 
-
-
-$router->group(['prefix' => 'api/v1'], function() use($router) {
-
-    $router->get('/menu' , ['as' => "Api.MenuController.get", 'uses' => 'Api/MenuController@get']);
+    $router->get('/menu' , ['as' => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
+    $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Admin\MovieController@index']);
 
 }); 
 
-$router->get("getdata" , 'Admin\MovieController@getdata');
+
+
+// $router->get("getdata" , 'Admin\MovieController@getdata');
 
 $router->group(['prefix' => 'admin'], function() use($router) {
     $router->get('/login', ['as' => "Admin.AdminController.login", 'uses' => 'Admin\AdminController@login']);

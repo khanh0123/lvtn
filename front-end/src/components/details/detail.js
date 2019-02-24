@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Player from '../video/player';
 import VideoPlayer from '../video/videoplayer';
 import '../../assets/vendors/video-react/video-react.css';
-import parseFB from "../helpers/common";
+// import parseFB from "../helpers";
 import SliderScroll from "../sliders/SliderScroll";
 import FacebookProvider, { Comments } from 'react-facebook';
 
@@ -16,7 +16,7 @@ class Detail extends React.Component {
         }
     }
     componentDidMount() {
-        parseFB();
+        // parseFB();
 
     }
     componentWillMount() {

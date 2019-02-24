@@ -1,21 +1,13 @@
 import React from "react";
-import SlideItemSmall from "./SlideItemSmall";
 
 class SliderScroll extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            title: null,
-            items: [],
-        }
     }
-    componentDidMount() {
-        let { title = '', items = [] } = this.props;
-        this.setState({ title: title, items: items });
-    }
+
     render() {
-        let { title, listItem } = this.state;
+        let { title, data } = this.props;
         return (
 
             <div className="movie-item-playlist">
@@ -33,12 +25,26 @@ class SliderScroll extends React.Component {
                 }
                 <div className="movie-item-playlist-items scroll-up ">
                     <div className="item">
-                        <SlideItemSmall />
-                        <SlideItemSmall />
-                        <SlideItemSmall />
-                        <SlideItemSmall />
-                        <SlideItemSmall />
-                        <SlideItemSmall />
+                    {data.length > 0 && data.map((item,i) => {
+                                    
+                            return (
+                                <div className="plylist-single" key={i}>
+                                    <div className="plylist-img">
+                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster} alt={item.name} />
+                                    </div>
+                                    <div className="plylist-single-content">
+                                        <Link to={`/phim/${item.slug}/${item.id}`} >{item.name}</Link>
+                                        <div className="view-movi">
+                                            <a href="#">{item.cat_name}</a>
+                                        </div>
+                                        <ul>
+                                            <li className="novie-upload-time"><a href="">{item.release_date ? custom_date(item.release_date) : 'Đang cập nhật ..'}</a></li>
+                                            <li className="movie-time"><a href="#">{`${item.runtime} phút`}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>

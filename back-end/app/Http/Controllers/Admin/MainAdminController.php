@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 class MainAdminController extends BaseController
 {
     protected $limit = 20;
+    protected $req;
 	protected $status = 1;
     protected $columns_filter = [];
     protected $columns_search = [];
@@ -24,6 +25,7 @@ class MainAdminController extends BaseController
         // if (!isset($this->view_folder)) {
         //     throw new Exception("ViewFolderNotSet");
         // }
+        $this->req = $request;
     }
     /*
      * Show list item.
@@ -191,14 +193,19 @@ class MainAdminController extends BaseController
     /*
      * return template view blade
      */
-    protected function template($view , $data = [] , $message = '' ){
+    protected function template($view , $data = [] , $message = '' ){    
 
         if(empty($message)){
             $message = session()->get( 'message' );
         }
-        return view($view)
-                ->withData($data)
-                ->withMessage($message);
+        return 
+            (strtolower($this->req->header('Return-Type')) == 'json' || strpos($this->req->route()->uri, "api/v1/") > -1)
+
+            ? 
+                Response()->json($data)
+            :
+
+            view($view)->withData($data)->withMessage($message);
     }
     
 }

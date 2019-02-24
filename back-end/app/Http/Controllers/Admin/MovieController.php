@@ -55,8 +55,10 @@ class MovieController extends MainAdminController
         'created_at'   => 'movie.created_at',
         'updated_at'   => 'movie.updated_at',
         'cat_id'       => 'movie.cat_id',
+        'cat_slug'     => 'category.slug',
         'genre_id'     => 'genre.id',
         'cou_id'       => 'country.id',
+
         
     ];
     protected $columns_search = ['name'];
@@ -168,14 +170,18 @@ class MovieController extends MainAdminController
 
     public function index(Request $request )
     {
-        $filter = $this->getFilter($request);
-        $data['info']         = $this->model->get_page($filter , $request);
-        $data['info'] = formatResult($data['info'],[
-            'genre' => ['gen_id','gen_name','gen_slug'] ,
-            'country' => ['cou_id' , 'cou_name' , 'cou_slug']
-        ],'get');
+        $filter         = $this->getFilter($request);
+        $data['info']   = $this->model->get_page($filter , $request);
+        $data['info']   = formatResult($data['info'],[
+            'genre'         => ['gen_id','gen_name','gen_slug'] ,
+            'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
+            ],'get');
+
+        foreach ($data['info'] as $key => $value) {
+            $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+        }
         
-        $data['filter']       = count($request->all()) > 0 ? $request->all() : $filter;        
+        $data['filter'] = count($request->all()) > 0 ? $request->all() : $filter;        
         
         return $this->template($this->view_folder."index",$data);
     }

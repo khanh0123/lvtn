@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import { applyMiddleware, createStore } from 'redux';
 import promise from 'redux-promise';
-import { Provider } from 'react-redux'
-import reducers from './reducers'
+import { Provider } from 'react-redux';
+import reducers from './reducers';
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 

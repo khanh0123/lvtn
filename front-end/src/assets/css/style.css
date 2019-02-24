@@ -9,6 +9,21 @@
 /****Gobla css*****/
 *{padding: 0;margin: 0;}
 
+.plylist-single-content {
+}
+
+.rightControl > i, .rightControl > span {
+    right: 36% !important;
+    margin-right: -10px;
+    position: absolute;
+    color: #fff;
+    top: 50%;
+    z-index: 5;
+    display: inline-block;
+    margin-top: -10px;
+    font-size: 25px;
+}
+
 .styles_modal__gNwvD.modal-popup {
     width: -webkit-fill-available;
     height: 36em;
@@ -740,9 +755,14 @@ nav.navbar.bootsnav {
 nav.navbar.bootsnav ul.nav > li > a {
     padding: 25px 15px;
     font-size: 18px;
-    color: #fff;
+    color: #fff !important;
     font-weight: bold;
     text-transform: capitalize;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+    color: #555;
+    background-color: #e7e7e700;
 }
 
 nav.navbar.bootsnav ul.nav > li > a:hover {
@@ -1083,7 +1103,9 @@ a.button-detals {
 }
 
 .plylist-single {
-    margin-bottom: 27px;
+    margin-bottom: 30px;
+    max-height: 10em;
+    height: 30%;
 }
 
 .plylist-single:last-child {
@@ -1093,6 +1115,8 @@ a.button-detals {
 .plylist-img {
     float: left;
     margin-right: 15px;
+    width: 40%;
+    height: 7em;
 }
 
 .plylist-single-content > a {
@@ -3924,6 +3948,7 @@ h3.sortcode-title {
 
 .slider-section a.carousel-control span:hover {
     color: #13be13;
+    /* right: 45%; */
 }
 
 .Top-rating-items .owl-item.active.center {
@@ -4687,7 +4712,8 @@ button.newsletter-btn:hover {
     background-color: rgba(0, 0, 0, 0.9);
 }
 .slide-big img {
-    max-height: 486px;
+    height: 100%;
+    /* max-height: 486px; */
 }
 .dec-review-meta b.btn {
     margin-right: 0.5em;

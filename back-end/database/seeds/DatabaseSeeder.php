@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ConfigSeeder::class,
             MovieSeeder::class,
         	JsonTableSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }
