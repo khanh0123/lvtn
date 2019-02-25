@@ -38,11 +38,11 @@ class SlideItem extends React.Component {
                             </div>
                         </div>
                         <div className="movie-item-content-center">
-                            <Link to={`/phim/${item.slug}/${item.id}`} className="flat-icons" title="Xem ngay"><span className="flaticon-play-button" /></Link>
+                            <Link to={`/phim/${item.id}/${item.slug}`} className="flat-icons" title="Xem ngay"><span className="flaticon-play-button" /></Link>
                         </div>
                         <div className="movie-item-content-buttom">
                             <div className="movie-item-title">
-                               <Link to={`/phim/${item.slug}/${item.id}`} >{item.name}</Link>
+                               <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
                             </div>
                             <div className="item-cat">
                                 <ul>
@@ -57,7 +57,7 @@ class SlideItem extends React.Component {
                             </div>
                             <div className="movie-item-beta">
                                 <div className="movie-details">
-                                    <Link to={`/phim/${item.slug}/${item.id}`}  className="btn btn-button button-detals blck-bg">Chi tiết</Link>
+                                    <Link to={`/phim/${item.id}/${item.slug}`}  className="btn btn-button button-detals blck-bg">Chi tiết</Link>
                                 </div>
                                 {/* <div className="view-movie">
                                     <a href=""  className="blck-bg" >15k lượt xem</a>

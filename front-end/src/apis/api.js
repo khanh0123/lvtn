@@ -22,6 +22,19 @@ class Api {
         // });
 
     }
+    static get_banner_movies() {
+        const url = `${config.api.movie}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {
+                is_banner: 1,
+                limit:5
+            }
+        })
+    }
     static get_hot_movies() {
         const url = `${config.api.movie}`;
 
@@ -65,6 +78,22 @@ class Api {
         })
 
     }
+    static get_detail_movie(id,slug) {
+        const url = `${config.api.movie_detail}/${id}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {
+                slug: slug,
+            }
+        })
+    }
+
+    
+
+    
 
 
 }

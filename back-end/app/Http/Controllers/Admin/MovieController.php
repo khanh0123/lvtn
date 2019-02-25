@@ -102,7 +102,7 @@ class MovieController extends MainAdminController
         $item->is_new       = (int)$req->input('is_new', 0);
         $item->runtime      = (int)$req->input('runtime', 0);
         $item->epi_num      = (int)$req->input('epi_num', 1);
-        $item->short_des    = substr($req->input('short_des', ''), 0 , 120);
+        $item->short_des    = $req->input('short_des', '');
         $item->long_des     = $req->input('long_des', '');
         $item->release_date = strtotime($req->input('release_date',date("Y-m-d")));
         $item->ad_id        = $req->authUser->id;
@@ -182,7 +182,7 @@ class MovieController extends MainAdminController
         }
         
         $data['filter'] = count($request->all()) > 0 ? $request->all() : $filter;        
-        
+        $data['more'] = $this->getDataNeed();
         return $this->template($this->view_folder."index",$data);
     }
 
@@ -348,6 +348,7 @@ class MovieController extends MainAdminController
         
         $data['info'] = $item;
         $data['more'] = $this->getDataNeed();
+        
         
         return $this->template($this->view_folder."detail",$data,$result);
 

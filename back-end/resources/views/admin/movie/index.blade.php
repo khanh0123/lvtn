@@ -43,6 +43,7 @@
                                         <option value="release_date" {{ @$data['filter']['orderBy'] == 'release_date' ? 'selected' : ''}}>Ngày ra rạp</option>
                                         <option value="is_hot" {{ @$data['filter']['orderBy'] == 'is_hot' ? 'selected' : ''}}>Phim hot</option>
                                         <option value="is_new" {{ @$data['filter']['orderBy'] == 'is_new' ? 'selected' : ''}}>Phim mới</option>
+                                        <option value="is_banner" {{ @$data['filter']['orderBy'] == 'is_banner' ? 'selected' : ''}}>Banner</option>
                                         <option value="created_at" {{ @$data['filter']['orderBy'] == 'created_at' ? 'selected' : ''}}>Thời gian tạo</option>
                                         <option value="updated_at" {{ @$data['filter']['orderBy'] == 'updated_at' ? 'selected' : ''}}>Thời gian cập nhật</option>                     
                                     </select>
@@ -72,6 +73,7 @@
                                     <th>Ngày ra rạp</th>
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
+                                    <th>Banner</th>
                                     <th>Lần cập nhật cuối</th>
                                     <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
@@ -86,6 +88,7 @@
                                     <th>Ngày ra rạp</th>
                                     <th>Phim hot</th>
                                     <th>Phim mới</th>
+                                    <th>Banner</th>
                                     <th>Lần cập nhật cuối</th>
                                     <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
@@ -101,6 +104,7 @@
                                     <td>{{ customDate($value->release_date) }}</td>
                                     <td >{!! "<i class='material-icons'>" . ($value->is_hot ? 'done' : 'clear'). "</i>" !!}</td>
                                     <td>{!! "<i class='material-icons'>" . ($value->is_new ? 'done' : 'clear'). "</i>" !!}</td>
+                                    <td>{!! "<i class='material-icons'>" . ($value->is_banner ? 'done' : 'clear'). "</i>" !!}</td>
                                     <td>{{ customDate($value->updated_at , 'daytime') }}</td>
                                     <td class="text-center">
                                         <form method="post" action="{{base_url('admin/banner/add')}}" class="d-block">

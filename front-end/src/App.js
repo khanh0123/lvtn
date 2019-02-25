@@ -1,13 +1,11 @@
-import React, { useState, Component, lazy, Suspense } from 'react';
-// import React from "react";
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from "react-dom";
-// import App from "./App";
 import { applyMiddleware, createStore } from 'redux';
 import promise from 'redux-promise';
 import { Provider } from 'react-redux';
 import reducers from './reducers';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
-// import routes from './setup/routes';
+import routes from './setup/routes';
 import Layout from "./components/layout";
 import Loading from "./components/others/Loading";
 import NotFound from './components/notfound/notfound';
@@ -15,21 +13,26 @@ import NotFound from './components/notfound/notfound';
 // const routeComponents = routes.map(({ path, component }, key) =>
 //     <Route exact={true} path={path} component={component} key={key} />);
 
-const Home = lazy(() => import('./components/home'));
-const Detail = lazy(() => import('./components/details/detail'));
-const Info = lazy(() => import('./components/details/info'));
+// const Home = lazy(() => import('./components/home'));
+// const Detail = lazy(() => import('./components/details/detail'));
+// const Info = lazy(() => import('./components/details/info'));
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
         <Router >
             <Layout>
-                <Suspense fallback={<Loading />}>
+                <Suspense fallback={<div/>}>
                     <Switch>
-                        <Route exact path="/" component={Home} />
+                        {routes.map((route,i) => {
+                            return <Route key={i} exact path={route.path} component={route.component} />
+                        })
+
+                        }
+                        {/* <Route exact path="/" component={Home} />
                         <Route exact path="/phim/:slug/:id" component={Info} />
                         <Route exact path="/phim/:slug/:id/xem-phim" component={Detail} />
-                        <Route path="**" component={NotFound} />
+                        <Route path="**" component={NotFound} /> */}
                     </Switch>
                 </Suspense>
             </Layout>

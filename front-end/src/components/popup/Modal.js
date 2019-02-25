@@ -34,11 +34,11 @@ class ModalPopup extends React.Component {
             <React.Fragment>
                 <Modal 
                     open={this.props.isOpen} 
-                    onClose={this.props.onClose} 
+                    onClose={this.props.onClose}
                     classNames={classList}
                     children={this.props.children || null}
                     closeOnOverlayClick={true}
-                    center={true}
+                    center
                     
                 >
                 </Modal>

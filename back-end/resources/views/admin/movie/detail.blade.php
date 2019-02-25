@@ -119,6 +119,13 @@
                                                             </label>
                                                         </div>
                                                     </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="togglebutton">
+                                                            <label>
+                                                                <input type="checkbox" name="is_banner" value="{{ $data['info']->is_banner ? 1 : 0 }}" {{ $data['info']->is_banner ? 'checked' : '' }}> Chọn làm banner
+                                                            </label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- end row -->
@@ -223,13 +230,13 @@
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả ngắn</label>
-                                            <input type="text" class="form-control" value="<?= $data['info']->short_des ?>">
+                                            <input name="short_des" type="text" class="form-control" value="{!! $data['info']->short_des !!}">
                                         </div>
                                     </div>
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả đầy đủ</label>
-                                            <input type="text" class="form-control" value="<?= $data['info']->short_des ?>">
+                                            <input name="long_des"  type="text" class="form-control" value="{!! $data['info']->long_des !!}">
                                         </div>
                                     </div>
 

@@ -11,9 +11,15 @@ use Phpml\Classification\NaiveBayes;
 use Phpml\Dataset\ArrayDataset;
 class TestController extends Controller
 {
+
 	private $num_train = 1200;
 	public function index()
 	{
+		$path = storage_path() . "/jsons/phimbo1.json"; // ie: /var/www/laravel/app/storage/json/filename.json
+
+            $items = json_decode(file_get_contents($path));
+            echo json_encode($items);
+            die;
     	$this->filterMovie();
     	$this->filterGenre();
 		$path = storage_path() . "/jsons/demo/data_traning_1000_v4.json";
