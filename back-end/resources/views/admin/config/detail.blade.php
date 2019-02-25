@@ -22,7 +22,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="key" value="{{ $data['key'] }}" required="required">
+                                            <input type="text" class="form-control" name="key" value="{{ $data['info']['key'] }}" required="required">
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -32,7 +32,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="value" value="{{ $data['value'] }}" required>
+                                            <input type="text" class="form-control" name="value" value="{{ $data['info']['value'] }}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -58,7 +58,7 @@
                                 <a class="btn using-tooltip" href="{{base_url('admin/config')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
                                 
                                 @if (session()->get('permission')->canDelete)
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/config/del/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/config/del/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
                                 @endif
                             </div>
                         </div>

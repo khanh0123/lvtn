@@ -12,19 +12,17 @@ if (!function_exists('apiCurl')) {
      *
      * @return mixed
      */
-    function apiCurl($url, $method = "GET", array $params = array(), $type = 'array')
+    function apiCurl($url, $method = "GET", $params = array(), $type = 'array')
     {
-
-        $full_url = env('API_DOMAIN') . $url;
-
-//        dd($full_url);
+        $full_url = $url;
         $data_string = '';
+        
         if (!empty($params) && $type === 'json') {
             if ($method == "GET") {
                 $data_string = '';
 
-                foreach ($params as $key => $value) {
-                    $data_string .= '&' . $key . '=' . $value;
+                foreach ($params as $fieldey => $item) {
+                    $data_string .= '&' . $fieldey . '=' . $item;
                 }
                 $data_string = substr($data_string, 1);
                 $full_url = $full_url . "?" . $data_string;
@@ -32,14 +30,10 @@ if (!function_exists('apiCurl')) {
                 $data_string = json_encode($params);
             }
         } else {
-            $data_string = '';
-
-            foreach ($params as $key => $value) {
-                $data_string .= '&' . $key . '=' . $value;
-            }
-            $data_string = substr($data_string, 1);
-        }
-
+            $data_string = http_build_query($params);
+            $data_string = substr($data_string, 0);
+            
+        }     
 
         $ch = curl_init();
 
@@ -64,36 +58,36 @@ if (!function_exists('apiCurl')) {
                 )
             );
         }
-
+        
         //execute post
         $result = curl_exec($ch);
+        
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
         if ($errno = curl_errno($ch)) {
             $dataResult['http_code'] = 500;
             $dataResult['message'] = $errno;
             return array('http_code' => 500, 'message' => '');
         }
-
+        
         if ($httpcode !== 200) {
             $result = json_decode($result, true);
             $dataResult['http_code'] = $httpcode;
             $dataResult['message'] = !empty($result['message']) ? $result['message'] : '';
             return $dataResult;
         }
-
+        
         //close connection
         curl_close($ch);
-        return json_decode($result, true);
+        return json_decode($result);
     }
 
 }
 
 if (!function_exists('get_server_var')) {
 
-    function get_server_var($key)
+    function get_server_var($fieldey)
     {
-        return !empty($_SERVER[$key]) ? $_SERVER[$key] : null;
+        return !empty($_SERVER[$fieldey]) ? $_SERVER[$fieldey] : null;
     }
 
 }
@@ -169,6 +163,7 @@ if (!function_exists('customDate')) {
                 $format = "d/m/y - h:i";
                 break;
             default:
+                $format = "d/m/y";
                 break;
         }
         if(is_numeric($time))
@@ -186,7 +181,11 @@ if (!function_exists('create_slug')) {
      * 
      * @return string
      */
-    function create_slug($str) {
+    function create_slug($str,$replace = "-") {        
+
+        // if($replace)){
+        //     $replace = "-";
+        // }
         $str = trim(mb_strtolower($str));
         $str = preg_replace('/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/', 'a', $str);
         $str = preg_replace('/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/', 'e', $str);
@@ -196,8 +195,8 @@ if (!function_exists('create_slug')) {
         $str = preg_replace('/(ỳ|ý|ỵ|ỷ|ỹ)/', 'y', $str);
         $str = preg_replace('/(đ)/', 'd', $str);
         $str = preg_replace('/[^a-z0-9-\s]/', '', $str);
-        $str = preg_replace('/([\s]+)/', '-', $str);
-        $str = trim($str,'-');
+        $str = preg_replace('/([\s]+)/', $replace, $str);
+        $str = trim($str,$replace);
         return $str;
     }
 }
@@ -227,14 +226,26 @@ if (!function_exists('get_table_name')) {
         $matches = [];
         $check = preg_match($reg, $id , $matches);
         if($check){
-            foreach ($array_table as $value) {
-                if(substr($value, 0, 3) == $matches[1]){
-                    return $value;
+            foreach ($array_table as $item) {
+                if(substr($item, 0, 3) == $matches[1]){
+                    return $item;
                 }
             }
         }
         return null;
         
+    }
+}
+
+
+if (!function_exists('encode_password')) {
+    /**
+     * Global helpers auto create id
+     * 
+     * @return string
+     */
+    function encode_password($password){
+        return hash("sha256", md5($password));
     }
 }
 
@@ -255,23 +266,13 @@ if (!function_exists('generateRandomString')) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 }
-if (!function_exists('encode_password')) {
-    /**
-     * Global helpers auto create id
-     * 
-     * @return string
-     */
-    function encode_password($password){
-        return hash("sha256", md5($password));
-    }
-}
-if (!function_exists('auto_generate_id')) {
+if (!function_exists('auto_increment_string_id')) {
     /**
      * Global helpers create id auto increment from string
      * 
      * @return string
      */
-    function auto_generate_id($string = 'cat000001',$max_size = 6){
+    function auto_increment_string_id($string = '',$max_size = 3){
         $reg_find = '/(^[a-zA-Z]+)([0]+)?([0-9]+)/';
         $reg_replace = '/([0-9]+)/';
         $matches = array();
@@ -291,5 +292,147 @@ if (!function_exists('auto_generate_id')) {
     }
 }
 
+if (!function_exists('getIdFromLinkFb')) {
+    /**
+     * Global helpers create id auto increment from string
+     * 
+     * @return string
+     */
+    function getIdFromLinkFb($link = ''){
+        $reg_find = '/(?:https?:\/\/)?(?:www.|web.|m.)?facebook.com\/(?:video.php\?v=\d+|photo.php\?v=\d+|\?v=\d+)|\S+\/videos\/((\S+)\/(\d+)|(\d+))\/?/';
+        $matches = array();
+        $check = preg_match($reg_find,$link,$matches);
+        if($check){            
+            return (count($matches) > 2) ? $matches[4] : $matches[1];
+        }
+        return false;
+    }
+}
 
+if (!function_exists('addConditionsToQuery')) {
+    function addConditionsToQuery($conditions , $result){
+        if( count($conditions['and']) > 0 ){
+            $result = $result->where($conditions['and']);
+        }
+        if( count($conditions['or']) > 0 ){
+
+            $result = $result->where(function($query) use($conditions) {
+
+                for ($i = 0; $i < count($conditions['or']); $i++) {
+                    $i == 0 ? $query->where([$conditions['or'][0]]) : $query->orWhere([$conditions['or'][$i]]);
+                }
+            });
+        }
+        return $result;
+    }
+}
+
+if (!function_exists('formatResult')) {
+    function formatResult($results , $rules = [] , $type = ''){  
+        
+
+        if(count($results) > 0 && $results[0]->id !== null ){
+            
+            $new_data = [];
+            $arr_index = [];
+            for ($i = 0; $i < count($results); $i++) {
+                $item = $results[$i];
+
+                        //save the key with id 
+                if(!isset($arr_index[$item->id])){
+                    $arr_index[$item->id] = count($new_data);
+                    $new_data[] = $results[$i];
+                }
+                foreach ($item as $field => $v) {
+
+                    foreach ($rules as $new_name => $f) {
+                        if( is_array($f) && in_array($field, $f) ){
+
+                            if(!is_array($new_data[$arr_index[$item->id]]->$field)){
+                                $new_data[$arr_index[$item->id]]->$field = [];
+                            }
+
+                                //check if value not empty and not exists in array before adding 
+                                 // 
+                            if($v !== null ){
+                                $new_data[$arr_index[$item->id]]->$field[] = $v;
+                            }
+                            break;
+
+                        }
+                        else if($f == $field) {
+
+                            if(!is_array($new_data[$arr_index[$item->id]]->$field)){
+                                $new_data[$arr_index[$item->id]]->$field = [];
+                            }
+
+                                //check if value not empty and not exists in array before adding 
+                                 // 
+                            if($v !== null && !in_array($v, $new_data[$arr_index[$item->id]]->$field) ){
+                                $new_data[$arr_index[$item->id]]->$field[] = $v;
+                            }
+                            break;
+                        }
+                    }
+
+                }
+
+            } //end for
+
+
+            //remove all item of $result 
+            $arr_keys = $results->keys();
+            for ($i = 0; $i < count($arr_keys); $i++) {
+                $results->forget($arr_keys[$i]);     
+            }
+
+
+
+            foreach ($new_data as $key => $value) {
+                
+                foreach ($rules as $new_name => $f) {
+                    $dt = [];
+                    if(!isset($new_data[$key]->$new_name) || is_array($new_data[$key]->$new_name) ){
+                        $new_data[$key]->$new_name = [];
+                    }
+                    for ($i = 0; $i < count($f); $i++) {
+                        $ff = $f[$i];
+                        
+                        
+                        foreach ($value->$ff as $kk => $vv) {
+                            
+                            $dt[$kk][$f[$i]] = $vv;
+                            
+                            
+                        }
+                        
+                    }
+                   
+                    $new_data[$key]->$new_name = $dt;
+                }
+
+                foreach ($rules as $new_name => $f) {
+                    for ($i = 0; $i < count($f); $i++) {
+                        $ff = $f[$i];
+                        unset($new_data[$key]->$ff);
+                    }
+                }
+
+                //set item to result
+                $results->offsetSet($key,$new_data[$key]);     
+                
+                
+            }
+
+            if($type == 'get'){
+                return $results;
+            }
+
+            
+
+            return $new_data;
+        }
+        return $results;
+    }
+}
 

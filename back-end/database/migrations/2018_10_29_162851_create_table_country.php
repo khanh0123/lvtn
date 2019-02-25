@@ -14,12 +14,11 @@ class CreateTableCountry extends Migration
     public function up()
     {
         Schema::create('country', function (Blueprint $table) {
-            // $table->collation = 'utf8_unicode_ci';
-            // $table->charset = 'utf8'; 
 
             $table->string('id',255)->primary();
             $table->string('name',100);
-            $table->string('slug',100);
+            $table->string('slug',100)->nullable();
+            $table->string('code',10)->nullable();
             $table->string('seo_des',255)->nullable();
             $table->string('seo_title',255)->nullable();
             $table->timestamp('created_at')->useCurrent();

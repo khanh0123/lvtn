@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import FacebookProvider, { Share } from 'react-facebook';
 import Trailer from "../video/trailer";
 import SliderScroll from "../sliders/SliderScroll";
-import parseFB from "../helpers/common";
+// import parseFB from "../helpers/common";
 class Info extends React.Component {
 
     constructor(props) {
@@ -14,7 +14,7 @@ class Info extends React.Component {
     }
 
     componentDidMount() {
-        parseFB();
+        // parseFB();
     }
     action_Trailer() {
         this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {

@@ -9,12 +9,14 @@ class Menu extends Model
 {
     protected $table = 'menu';
 
-    public function get($limit = 20 , $sort = 'asc')
+    public function get_page($filter = [] , $req)
     {
     	$data = DB::table($this->table)
     				->select('id','name','slug','created_at','updated_at')
-    				->orderBy('id', $sort)
-    				->paginate($limit);    				
+    				->orderBy($filter['orderBy'], $filter['sort']);
+        $data = addConditionsToQuery($filter['conditions'],$data);
+        $data = $data->paginate($filter['limit']);
+        $data->appends($req->all())->links();
     	return $data;
     }
 

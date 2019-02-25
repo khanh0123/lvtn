@@ -20,22 +20,19 @@ class CreateTableMovie extends Migration
             $table->increments('id');
             $table->tinyInteger('is_hot');
             $table->tinyInteger('is_new');
-            $table->tinyInteger('type');
-
             $table->integer('ad_id')->unsigned()->index();
-
             $table->string('name');
-            $table->string('title');
             $table->string('slug');
             $table->text('images');
-            $table->string('short_des');
-            $table->string('long_des');
+            $table->text('short_des');
+            $table->text('long_des');
             $table->integer('runtime');
             $table->double('release_date');
             $table->integer('total_rate');
             $table->double('avg_rate');            
             $table->integer('epi_num');
             $table->string('cat_id',255);
+            $table->string('trailer',255)->nullable();
             
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

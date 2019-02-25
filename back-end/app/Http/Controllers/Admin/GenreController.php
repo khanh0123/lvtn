@@ -12,10 +12,18 @@ class GenreController extends MainAdminController
 	protected $model;
 	protected $view_folder = 'admin/genre/';
     protected $rules = [
-        'name' => 'required',
-        'slug' => '',
-        'seo_des' => '',
-        'seo_title' => '',
+        'insert' => [
+            'name' => 'required',
+        ],
+        'update' => [
+            'name' => 'required',
+        ]
+    ];
+    protected $columns_filter = [
+        'name'       =>    'genre.name',            
+        'slug'       =>    'genre.slug',            
+        'created_at' =>    'genre.created_at',
+        'updated_at' =>    'genre.updated_at',
     ];
 	
 
@@ -27,49 +35,55 @@ class GenreController extends MainAdminController
 
     public function setItem($type , $req , &$item){
     	
-    	$validator = Validator::make($req->all(), $this->rules);
+    	$validator = Validator::make($req->all(), $this->rules[$type]);
         if ($validator->fails()) {
         	return [
         		'type' => 'error',
-        		'message' => 'Vui lòng kiểm tra lại các trường nhập'
+        		'msg' => 'Vui lòng kiểm tra lại các trường nhập'
         	];
         }
         
         $item->name = ucwords($req->name);
-        
-    	if($type == 'insert'){
-            $item->slug = create_slug($req->slug ? $req->slug : $req->name);
-            if ($this->check_exist_slug($item->slug)) {
-                return [
-                    'type' => 'error',
-                    'message' => 'slug is unique field'
-                ];
-            }
+        $item->slug = create_slug($req->slug ? $req->slug : $req->name);
+        switch ($type) {
+            case 'insert':
+                
+                if ($this->check_exist_slug($item->slug)) {
+                    return [
+                        'type' => 'error',
+                        'msg' => 'slug is unique field'
+                    ];
+                }
 
-            $result = Max_id::where(['table_name' => 'genre'])->first();
-            if(empty($result)){
-                Max_id::insert(['table_name' => 'genre','max_id' => 'gen000000']);
-                $max_id = 'gen000000';
-            } else {                
-                $max_id = $result->max_id;
-            }
+                $result = Max_id::where(['table_name' => 'genre'])->first();
+                if(empty($result)){
+                    Max_id::insert(['table_name' => 'genre','max_id' => 'gen000']);
+                    $max_id = 'gen000';
+                } else {                
+                    $max_id = $result->max_id;
+                }
 
-            // var_dump($max_id);die;
-            // $item->id = generate_id($this->model->getTable());
-            $id_auto = auto_generate_id($max_id,6);
-            $item->id =  $id_auto;
-            Max_id::where(['table_name' => 'genre'])->update(['max_id' => $id_auto]);
+                $id_auto = auto_increment_string_id($max_id,6);
+                $item->id =  $id_auto;
+                Max_id::where(['table_name' => 'genre'])->update(['max_id' => $id_auto]);
+                break;
+            case 'update':
+                if($item->slug !== create_slug($req->slug ? $req->slug : $req->name)){
+                    if ($this->check_exist_slug($item->slug)) {
+                        return [
+                            'type' => 'error',
+                            'msg' => 'slug is unique field'
+                        ];
+                    }
+                    
+                }
+            break;
             
-        } else if($type == 'update' && $item->slug !== create_slug($req->slug ? $req->slug : $req->name)) {
-            if ($this->check_exist_slug($item->slug)) {
-                return [
-                    'type' => 'error',
-                    'message' => 'slug is unique field'
-                ];
-            }
-            
-
+            default:
+                // code...
+                break;
         }
+
         return [
         	'type' => 'success'
         ];

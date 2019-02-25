@@ -21,7 +21,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="first_name" value="{{ $data['first_name'] }}" required>
+                                            <input type="text" class="form-control" name="first_name" value="{{ $data['info']['first_name'] }}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -31,7 +31,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="last_name" value="{{ $data['last_name'] }}" required>
+                                            <input type="text" class="form-control" name="last_name" value="{{ $data['info']['last_name'] }}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -41,7 +41,7 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="email" class="form-control" name="email" required value="{{ $data['email'] }}" >
+                                            <input type="email" class="form-control" name="email" required value="{{ $data['info']['email'] }}" >
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Trạng thái </label>
                                     <div class="col-sm-10">
-                                        <label class="text-success label-on-left" style="color: {{$data['status'] === 1 ? '#4caf50' : 'red'}} ">{{$data['status'] !== 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}}</label>
+                                        <label class="text-success label-on-left" style="color: {{$data['info']['status'] === 1 ? '#4caf50' : 'red'}} ">{{$data['info']['status'] !== 1 ? 'Vô hiệu hóa' : 'Kích hoạt'}}</label>
                                             
                                     </div>
                                 </div>
@@ -67,8 +67,8 @@
                                     <label class="col-sm-2 label-on-left">Chọn nhóm *</label>
                                     <div class="col-sm-5">
                                         <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="gad_id" required>
-                                            @foreach($dataGroup as $key => $value)
-                                            <option data-tokens="{{$value->name}}" value="{{$value->id}}" {{$value->id == $data->gad_id ? 'selected' : ''}}>{{$value->name}}</option>
+                                            @foreach($data['more'] as $key => $value)
+                                            <option data-tokens="{{$value->name}}" value="{{$value->id}}" {{$value->id == $data['info']->gad_id ? 'selected' : ''}}>{{$value->name}}</option>
                                             @endforeach
                                       </select>
 
@@ -93,10 +93,10 @@
 
                                 <a class="btn using-tooltip" href="{{base_url('admin/user')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
                                 
-                                @if ($data['status'] === 1)
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/user/lock/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Khóa user này?"><i class="material-icons">lock</i>Khóa<div class="ripple-container"></div></a>
+                                @if ($data['info']['status'] === 1)
+                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/user/lock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Khóa user này?"><i class="material-icons">lock</i>Khóa<div class="ripple-container"></div></a>
                                 @else
-                                <a class="btn btn-success using-tooltip" href="{{base_url('admin/user/unlock/'.$data['id'])}}" data-toggle="tooltip" data-placement="top" title="Mở khóa user này?"><i class="material-icons">lock_open</i>Mở Khóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-success using-tooltip" href="{{base_url('admin/user/unlock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Mở khóa user này?"><i class="material-icons">lock_open</i>Mở Khóa<div class="ripple-container"></div></a>
                                 @endif
                             </div>
                         </div>

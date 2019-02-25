@@ -61,7 +61,7 @@
                                     <label class="col-sm-2 label-on-left">Chọn nhóm *</label>
                                     <div class="col-sm-5">
                                         <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="gad_id" required>
-                                            @foreach($data as $key => $value)
+                                            @foreach($data['more'] as $key => $value)
                                             <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                             @endforeach
                                       </select>

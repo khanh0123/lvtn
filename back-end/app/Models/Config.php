@@ -9,13 +9,14 @@ class Config extends Model
 {
     protected $table = 'config';
 
-    public function get($limit = 2 , $sort = 'asc')
+    public function get_page($filter = [] , $req)
     {
     	$data = DB::table($this->table)
     				// ->select('id','key','value','created_at','updated_at')
-    				->orderBy('id', $sort)
-    				->whereNotIn('key' , ['banner'])
-    				->paginate($limit);
+    				->orderBy($filter['orderBy'], $filter['sort']);
+        $data = addConditionsToQuery($filter['conditions'],$data);
+        $data = $data->paginate($filter['limit']);
+        $data->appends($req->all())->links();
     	return $data;
     }
     public function getById($id)
@@ -23,7 +24,6 @@ class Config extends Model
     	$data = DB::table($this->table)
     				// ->select('id','key','value','created_at','updated_at')
     				->where('id' , $id)
-    				->whereNotIn('key' , ['banner'])
     				->first();
     	return $data;
     }

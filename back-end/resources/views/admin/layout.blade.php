@@ -22,6 +22,11 @@
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"> -->
     <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" /> -->
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/font-roboto-material-icon.css')}}" />
+    <style>
+        .btn-group{
+            margin: 0 !important;
+        }
+    </style>
     @yield('css')
 </head>
 
@@ -581,7 +586,7 @@
 <!-- <script src="/assets/js/nouislider.min.js"></script> -->
 
 <!-- Select Plugin -->
-<!-- <script src="/assets/js/jquery.select-bootstrap.js"></script> -->
+<script src="/assets/js/jquery.select-bootstrap.js"></script>
 
 <!-- Sweet Alert 2 plugin -->
 <!-- <script src="/assets/js/sweetalert2.js"></script> -->
@@ -599,6 +604,7 @@
 <script src="/assets/js/main.js"></script>
 @yield('js')
 <script>
+    var base_url = "{{ base_url("/")}}/";
     $(document).ready(function() {
         $('li.disabled>a,li.active>a').click(function(event) {
             event.preventDefault();
@@ -607,11 +613,14 @@
             $('.btn-group.bootstrap-select.open').removeClass('open');
             $('.dropdown-menu.open').removeClass('open');
         });
+        $('.my-container').scroll(function() {
+            $(window).trigger('scroll');
+        });
 
         @if(!empty($message))
-            var type = '{{$message['type'] == 'success' ? 'success' : 'danger'}}';
-            var message = '{{ $message['message'] }}';
-            showNotification( type , message , 4000);
+            var type = '{{ $message['type'] == 'success' ? 'success' : 'danger' }}';
+            var msg = '{{ $message['msg'] }}';
+            showNotification( type , msg , 4000);
         @endif
 
     });

@@ -14,8 +14,8 @@ class ConfigSeeder extends Seeder
         $result = DB::table('config')->where('key','banner')->get();
     	if(count($result) == 0){
     		DB::table('config')->insert([
-    			'key' => 'banner',
-    			'value' => [],
+    			'key' => 'facebook_access_token',
+    			'value' => '',
     		]);
     	}
     }

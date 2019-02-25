@@ -17,7 +17,31 @@ class AdminController extends MainAdminController
 	protected $model;
 	protected $view_folder = 'admin/user/';
 	protected $rules = [
+        'insert' => [
+            'email'      => 'required|email',
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'gad_id'     => 'required|exists:admin_group,id',
+            'password'   => 'required|min:6'
+        ],
+        'update' => [
+            'email'      => 'required|email',
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'gad_id'     => 'required|exists:admin_group,id',
+        ],
 	];
+    protected $columns_filter = [
+        'id'         =>    'admin.id',            
+        'gad_id'     =>    'admin.gad_id',            
+        'first_name' =>    'admin.first_name',
+        'last_name'  =>    'admin.last_name',
+        'email'      =>    'admin.email',
+        'status'     =>    'admin.status',
+        'created_at' =>    'admin.created_at',
+        'updated_at' =>    'admin.updated_at',
+    ];
+    protected $columns_search = [];
 
 	public function __construct(Request $request) {
 		$this->model = new Admin;
@@ -25,152 +49,102 @@ class AdminController extends MainAdminController
 	}
 
 	public function setItem($type , $req , &$item){
-
-    	$rules = [
-    		'email' => 'required|email',
-            'first_name' => 'required',
-    		'last_name' => 'required',
-    		'gad_id' => 'required',
-    	];
-        $validator = Validator::make($req->all(), $rules);
+        $validator = Validator::make($req->all(), $this->rules[$type]);
         if ($validator->fails()) {
-            
+
             return [
                 'type' => 'error',
-                'message' => 'Vui lòng kiểm tra lại các trường nhập'
+                'msg'  => 'Vui lòng kiểm tra lại các trường nhập'
             ];
         }
-    	if($type == 'insert'){    	
-
-            $rules = ['password' => 'required|min:6'];
-            $validator = Validator::make($req->all(), $rules);
-            if ($validator->fails()) {
-                return [
-                    'type' => 'error',
-                    'message' => 'Mật khẩu phải chứa ít nhất 6 kí tự'
-                ];
-            }
-	
-
-    		$user = $this->model::where(['email' => $req->email])->first();
-    		if($user){
-    			return [
-    				'type' => 'error',
-    				'message' => 'Email đã tồn tại. Vui lòng sử dụng email khác'
-    			];
-    		}
-            $item->password = encode_password($req->password);
-
-    	} else if($type == 'update'){            
-
+        switch ($type) {
+            case 'insert':
+                //check if email is exists
+                $user = $this->model::where(['email' => $req->email])->first();
+                if($user){
+                    return [
+                        'type' => 'error',
+                        'msg'  => 'Email đã tồn tại. Vui lòng sử dụng email khác'
+                    ];
+                }
+                //encode password
+                $item->password = encode_password($req->password);
+                break;
+            case 'update':
+                //check if email is exists
+                if($req->email !== $item->email){
+                    $user = $this->model::where(['email' => $req->email])->first();
+                    if($user){
+                        return [
+                            'type' => 'error',
+                            'msg'  => 'Email đã tồn tại'
+                        ];
+                    }
+                }                
             
-    		if($req->email !== $item->email){
-    			$user = $this->model::where(['email' => $req->email])->first();
-    			if($user){
-    				return [
-    					'type' => 'error',
-    					'message' => 'Email đã tồn tại'
-    				];
-    			}
-    		}
-    	}
-    	
-    	$group = Admin_group::find((int)$req->gad_id);
-    	if(empty($group)){
-    		return [
-    			'type' => 'error',
-    			'message' => 'Nhóm không tồn tại'
-    		];
-    	}
-
-        $item->email = $req->email;
-        
+            default:
+                break;
+        }
+        $item->email      = $req->email;
         $item->first_name = $req->first_name;
-        $item->last_name = $req->last_name;
-        $item->gad_id = (int)$req->gad_id;
-        $item->settings = '';
-        $item->status = 1;
+        $item->last_name  = $req->last_name;
+        $item->gad_id     = (int)$req->gad_id;        
+        $item->status     = (int)$req->get('status',$this->status); 
+        $item->settings   = '';
 
-        return [
-        	'type' => 'success'
-        ];
+        return ['type' => 'success'];
 
-    }
-
-	public function add(Request $request) {
-
-        $data = $this->getDataNeed();
-        
-        return view($this->view_folder."add")
-                    ->withData($data);
     }
 
     /*
      * Create new resource item.
      */
 
-    public function store(Request $request) {
+    // public function store(Request $request) {
 
-        $item = $this->model;
-        $result = $this->setItem('insert',$request, $item);
-        if($result['type'] == 'success'){
-            if($item->save()){
-            	$result['message'] = 'Thêm dữ liệu thành công';
-            } else {
-            	$result['message'] = 'Thêm dữ liệu thất bại';
-            }
-            
-        }
+    //     if($request->isMethod('post')){
+    //         $item = $this->model;
+    //         $message = $this->setItem('insert',$request, $item);
+    //         if($message['type'] == 'success'){
+    //             if($item->save()){
+    //                 $message['msg'] = 'Thêm dữ liệu thành công';
+    //             } else {
+    //                 $message['msg'] = 'Thêm dữ liệu thất bại';
+    //             }
 
-        $data = $this->getDataNeed();
-        return view($this->view_folder."add")
-        		->withData($data)
-                ->withMessage($result);
-    }
+    //         }
+    //     } else {
+    //         $message = '';
+    //     }
+    //     $data['more'] = $this->getDataNeed();
+    //     return $this->template($this->view_folder."add",$data,$message);
+    // }
 
-     /*
-     * Update item that belongs to passed id.
-     */
-    public function update(Request $request,$id)
-    {
-        $item = $this->model::find($id);
-        if(empty($item)){
-            return abort(404);
-        }
-        
-        $result = $this->setItem('update',$request, $item);
-        if($result['type'] == 'success'){
-            $item->save();   
-            $result['message'] = 'Cập nhật dữ liệu thành công';         
-        }
 
-        $data = $this->getDataNeed();
-
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withDataGroup($data)
-                ->withMessage($result);
-
-        
-    }
     /*
      * Show detail item that belongs to passed id.
      */
-    public function detail(Request $request,$id)
-    {
-        $item = $this->model::find($id);
+    // public function detail(Request $request,$id)
+    // {
+    //     //check if item exists
+    //     $item = $this->model::find($id);
+    //     if(empty($item)){
+    //         return abort(404);
+    //     }
+    //     if($request->isMethod('post')){
+    //         $result = $this->setItem('update',$request, $item);
+    //         if($result['type'] == 'success'){
+    //             $item->save();   
+    //             $result['msg'] = 'Cập nhật dữ liệu thành công';         
+    //         }
+    //     } else {
+    //         $result = "";
+    //     }
+    //     $data['info'] = $item;    
+    //     $data['more'] = $this->getDataNeed();
 
-        if(empty($item)){
-            return abort(404);
-        }
-
-        $data = $this->getDataNeed();
-        $message = session()->get( 'message' );
-        return view($this->view_folder."detail")
-                ->withData($item)
-                ->withDataGroup($data)
-                ->withMessage($message);
-    }
+    //     return $this->template($this->view_folder."detail",$data,$result);
+    // }
 
 
     public function login(Request $request)
@@ -178,7 +152,7 @@ class AdminController extends MainAdminController
         if($request->session()->has('user')){
             return redirect('/admin');
         }
-    	return view($this->view_folder.'login');
+    	return $this->template($this->view_folder."login");
     }
 
     public function doLogin(Request $request)
@@ -190,7 +164,7 @@ class AdminController extends MainAdminController
     	$password = $request->password;
     	if(empty($email) || empty($password)){
     		return view($this->view_folder.'login')
-    			->withMessage(['type' => 'error' , 'message' => 'Email và mật khẩu không được để trống']);
+    			->withMessage(['type' => 'error' , 'msg' => 'Email và mật khẩu không được để trống']);
     	} else {
     		$result = Admin::where([                
                 'email' => $email , 
@@ -199,10 +173,10 @@ class AdminController extends MainAdminController
 
     		if(empty($result)){
     			return view($this->view_folder.'login')
-    			->withMessage(['type' => 'error' , 'message' => 'Email hoặc mật khẩu chưa chính xác']);
+    			->withMessage(['type' => 'error' , 'msg' => 'Email hoặc mật khẩu chưa chính xác']);
     		} else if($result->status !== 1){
                 return view($this->view_folder.'login')
-                ->withMessage(['type' => 'error' , 'message' => 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ với quản trị viên.']);
+                ->withMessage(['type' => 'error' , 'msg' => 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ với quản trị viên.']);
             } else {
 
                 $admin_model = new Admin();
@@ -224,7 +198,7 @@ class AdminController extends MainAdminController
                         $session->save();
                     }
                 }
-    			return redirect('/admin');
+    			return redirect()->back();
     		}
     	}
     }
@@ -237,19 +211,19 @@ class AdminController extends MainAdminController
         if(empty($password_current) || empty($password_new) ) {
             $message = [
                 'type' => 'error' , 
-                'message' => 'Mật khẩu hiện tại và mật khẩu mới không được để trống'
+                'msg' => 'Mật khẩu hiện tại và mật khẩu mới không được để trống'
             ];
               
         } else if(strlen($password_new) < 6){
             $message = [
                 'type' => 'error' , 
-                'message' => 'Mật khẩu phải trên 6 kí tự'
+                'msg' => 'Mật khẩu phải trên 6 kí tự'
             ];
 
         } else if($user->password !== encode_password($password_current)) {
             $message = [
                 'type' => 'error' , 
-                'message' => 'Mật khẩu hiện tại chưa chính xác'
+                'msg' => 'Mật khẩu hiện tại chưa chính xác'
             ];
         } else {
             $user->password = encode_password($password_current);
@@ -257,12 +231,12 @@ class AdminController extends MainAdminController
             if($user->save()){
                 $message = [
                     'type' => 'success' , 
-                    'message' => 'Cập nhật mật khẩu thành công'
+                    'msg' => 'Cập nhật mật khẩu thành công'
                 ];
             } else {
                 $message = [
                     'type' => 'error' , 
-                    'message' => 'Có lỗi! Cập nhật mật khẩu không thành công'
+                    'msg' => 'Có lỗi! Cập nhật mật khẩu không thành công'
                 ];
             }
             
@@ -273,7 +247,7 @@ class AdminController extends MainAdminController
 
     public function forgot(Request $request)
     {
-        return view($this->view_folder.'forgot');
+        return $this->template($this->view_folder.'forgot');
     }
 
     public function doForgot(Request $request)
@@ -283,17 +257,16 @@ class AdminController extends MainAdminController
             
             $message = [
                 'type' => 'error',
-                'message' => 'Email không hợp lệ'
+                'msg'  => 'Email không hợp lệ'
             ];
-            return view($this->view_folder."forgot")
-                ->withMessage($message);
+            return $this->template($this->view_folder.'forgot','',$message);
         } else {
             $user = $this->model->getByEmail($request->email);
             
             if(empty($user)){
                 $message = [
                     'type' => 'error',
-                    'message' => 'Email không tồn tại. Vui lòng kiểm tra và thử lại.'
+                    'msg'  => 'Email không tồn tại. Vui lòng kiểm tra và thử lại.'
                 ];
                 return view($this->view_folder."forgot")
                     ->withMessage($message);
@@ -301,11 +274,10 @@ class AdminController extends MainAdminController
             } else {
                 $message = [
                     'type' => 'success',
-                    'message' => 'Một đường link lấy lại mật khẩu đã được gửi tới email của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn'
+                    'msg'  => 'Một đường link lấy lại mật khẩu đã được gửi tới email của bạn. Vui lòng kiểm tra email và làm theo hướng dẫn'
                 ];
-                return view($this->view_folder."forgot")
-                    ->withMessage($message)
-                    ->withRequestCode(true);
+                $data = ['requestCode' => true];
+                return $this->template($this->view_folder.'forgot',$data,$message);
             }
 
             
@@ -321,14 +293,14 @@ class AdminController extends MainAdminController
         }
         if((int)$request->authUser->id === (int)$id){
             return Redirect("/admin/user/detail/$id")
-                ->withMessage(['type' => 'error','message' => 'Không thể khóa tài khoản này']);
+                ->withMessage(['type' => 'error','msg' => 'Không thể khóa tài khoản này']);
         }
         
         $user->status = 0;
         $user->save();
         Sessions::where('user_id',$id)->delete();
         return Redirect("/admin/user/detail/$id")
-                ->withMessage(['type' => 'success','message' => 'Khóa tài khoản thành công']);
+                ->withMessage(['type' => 'success','msg' => 'Khóa tài khoản thành công']);
 
     }
     public function unlockuser(Request $request,$id)
@@ -340,7 +312,7 @@ class AdminController extends MainAdminController
         $user->status = 1;
         $user->save();
         return redirect("/admin/user/detail/$id")
-                ->withMessage(['type' => 'success','message' => 'Mở khóa tài khoản thành công']);
+                ->withMessage(['type' => 'success','msg' => 'Mở khóa tài khoản thành công']);
     }
     public function logout(Request $request)
     {
@@ -354,7 +326,7 @@ class AdminController extends MainAdminController
         return abort('404');
     }
 
-    private function getDataNeed(){
+    protected function getDataNeed(){
         $ad_group_model = new Admin_group();
         $data = $ad_group_model->getall();
         return $data;

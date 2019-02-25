@@ -10,7 +10,7 @@ let is_minimize = false;
 
 module.exports = {
   entry: [
-    path.join(__dirname, '../src', 'index.js')
+    path.join(__dirname, '../src', 'App.js')
   ],
   output: {
     path: path.join(__dirname, '../build'),

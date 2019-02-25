@@ -14,9 +14,23 @@ class AdminGroupController extends MainAdminController
 	protected $model;
 	protected $view_folder = 'admin/group/';
 	protected $rules = [
-		'name' => 'required',
-		'per_id' => 'required'
+        'insert' => [
+            'name'   => 'required',
+            'per_id' => 'required|exists:permission,id'
+        ],
+        'update' => [
+            'name'   => 'required',
+            'per_id' => 'required|exists:permission,id'
+        ]
 	];
+    protected $columns_filter = [
+        'id'         =>    'admin_group.id',
+        'name'       =>    'admin_group.name',            
+        'created_at' =>    'admin_group.created_at',
+        'updated_at' =>    'admin_group.updated_at',
+    ];
+    protected $columns_search = ['name'];
+
 
 	public function __construct(Request $request) {
 		$this->model = new Admin_group;
@@ -26,22 +40,14 @@ class AdminGroupController extends MainAdminController
 
 	public function setItem($type , $req , &$item){
 
-    	$validator = Validator::make($req->all(), $this->rules);
+    	$validator = Validator::make($req->all(), $this->rules[$type]);
     	if ($validator->fails()) {
     		return [
     			'type' => 'error',
-    			'message' => 'Vui lòng kiểm tra lại các trường nhập'
+    			'msg' => 'Vui lòng kiểm tra lại các trường nhập'
     		];
     	}
 
-
-    	$permission = Permission::find((int)$req->per_id);
-    	if(empty($permission)){
-    		return [
-    			'type' => 'error',
-    			'message' => 'Vui lòng set quyền cho nhóm'
-    		];
-    	}
 
     	$item->name = $req->name;
 
@@ -50,104 +56,79 @@ class AdminGroupController extends MainAdminController
     	];
 
     }
-    /*
-     * Show detail item that belongs to passed id.
-     */
-    public function detail(Request $request,$id)
-    {
-    	$item = $this->model->findById($id);
 
-    	if(empty($item)){
-    		return abort(404);
-    	}
-    	$data = $this->getDataNeed();
-    	return view($this->view_folder."detail")
-    	->withDataPermission($data)
-    	->withData($item);
-    }
-
-    /*
-     * Show view add new item.
-     */
-    public function add(Request $request) {
-
-    	$data = $this->getDataNeed();
-    	return view($this->view_folder."add")
-    		->withData($data);
-    }
     /*
      * Create new resource item.
      */
 
     public function store(Request $request) {
 
-        $item = $this->model;
-        $result = $this->setItem('insert',$request, $item);
-        if($result['type'] == 'success'){
-            // if(DB::connection()->getDoctrineColumn($this->model->getTable(), 'id')->getType()->getName() == 'string')
-            //     $item->id = generate_id($this->model->getTable());
-            if($item->save()){
-    			$admin_gr_per = Admin_group_permission::where(array('gad_id' => $item->id))->first();
-    			if(empty($admin_gr_per)){
-    				$admin_gr_per = new Admin_group_permission();
-    			}
-    			$admin_gr_per->per_id = (int)$request->per_id;
-    			$admin_gr_per->gad_id = $item->id;
-    			$admin_gr_per->save();
+        if($request->isMethod('post')){
+            $data['info'] = $this->model;
+            $result = $this->setItem('insert',$request, $data['info']);
+            if($result['type'] == 'success'){
 
-    			
-    			$result['message'] = 'Thêm dữ liệu thành công';
-    		} else {
-    			$result['message'] = 'Thêm dữ liệu thất bại';
-    		}
-            
+                if($data['info']->save()){
+                    Admin_group_permission::where(['gad_id' => $data['info']->id])->delete();
+                    $admin_gr_per = new Admin_group_permission();
+                    $admin_gr_per->per_id = $request->per_id;
+                    $admin_gr_per->gad_id = $data['info']->id;
+                    $admin_gr_per->save();
+
+
+                    $result['msg'] = 'Thêm dữ liệu thành công';
+                } else {
+                    $result['msg'] = 'Thêm dữ liệu thất bại';
+                }
+
+            }
+        } else {
+            $result = '';
         }
+        
 
-        $data = $this->getDataNeed();
-        return view($this->view_folder."add")
-        		->withData($data)
-                ->withMessage($result); 
+        $data['more'] = $this->getDataNeed();
+        return $this->template($this->view_folder."add",$data,$result);
     }
-
-    
     /*
-     * Update item that belongs to passed id.
+     * Show detail item that belongs to passed id.
      */
-    public function update(Request $request,$id)
+    public function detail(Request $request,$id)
     {
+        
     	$item = $this->model::find($id);
     	if(empty($item)){
     		return abort(404);
     	}
 
-    	$result = $this->setItem('update',$request, $item);
-    	if($result['type'] == 'success'){
-    		if($item->save()){
-    			$admin_gr_per = Admin_group_permission::where(array('gad_id' => $item->id))->first();
-    			if(empty($admin_gr_per)){
-    				$admin_gr_per = new Admin_group_permission();
-    			}
-    			$admin_gr_per->per_id = (int)$request->per_id;
-    			$admin_gr_per->gad_id = $item->id;
-    			$admin_gr_per->save();
-
-    			
-    			$result['message'] = 'Cập nhật dữ liệu thành công';  
-    		} else {
-    			$result['message'] = 'Cập nhật dữ liệu thất bại';  
-    		}
-    		       
-    	}
-
-    	$item = $this->model->findById($id);
-    	$data = $this->getDataNeed();
-    	return view($this->view_folder."detail")
-		    	->withData($item)
-		    	->withDataPermission($data)
-		    	->withMessage($result);
+        if($request->isMethod('post')){
+            $result = $this->setItem('update',$request, $item);
+            if($result['type'] == 'success'){
+                if($item->save()){
+                    $admin_gr_per         = Admin_group_permission::where(array('gad_id' => $item->id))->delete();
+                    $admin_gr_per         = new Admin_group_permission();
+                    $admin_gr_per->per_id = (int)$request->per_id;
+                    $admin_gr_per->gad_id = $item->id;
+                    $admin_gr_per->save();
 
 
+                    $result['msg'] = 'Cập nhật dữ liệu thành công';  
+                } else {
+                    $result['msg'] = 'Cập nhật dữ liệu thất bại';  
+                }
+
+            }
+
+        } else {
+            $result = '';
+        }
+        // $filter = $this->getFilter($request);
+        $data['info'] = $item;
+    	$data['more'] = $this->getDataNeed();
+    	return $this->template($this->view_folder."detail",$data,$result);
     }
+
+    
 
     /*
      * Delete item that belongs to passed id.
@@ -171,7 +152,7 @@ class AdminGroupController extends MainAdminController
         return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
                 ->withMessage(['type' => 'success','message' => 'Xóa dữ liệu thành công']);
     }
-    private function getDataNeed(){
+    protected function getDataNeed(){
     	$ad_group_model = new Permission();
     	$data = $ad_group_model->getall();        
     	return $data;

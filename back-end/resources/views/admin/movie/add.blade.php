@@ -56,27 +56,7 @@
                                                         <span class="material-input"></span>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <label class="col-sm-4 label-on-left">Loại phim <small style="color:red">*</small></label>
-                                                <div class="form-group label-floating is-empty">
-                                                    <div class="col-sm-4">
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio" name="type" checked="true" value="0" ><span class="circle"></span><span class="check"></span> Phim Lẻ
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-4">
-                                                        <div class="radio">
-                                                            <label>
-                                                                <input type="radio" name="type" value="1"><span class="circle"></span><span class="check"></span> Phim Bộ
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            </div>                                            
 
                                         </div>
                                         <!-- end col 6 -->
@@ -142,7 +122,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn danh mục</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="cat_id" required data-name="Danh mục">
-                                                        @foreach($dataCat as $key => $value)
+                                                        @foreach($data['more']['category'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -154,7 +134,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn thể loại</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-danger" name="genre[]" required data-name="Thể loại">
-                                                        @foreach($dataGen as $key => $value)
+                                                        @foreach($data['more']['genre'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -166,7 +146,7 @@
                                                 <label class="col-sm-3 label-on-left">Chọn quốc gia</label>
                                                 <div class="col-sm-5">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" multiple data-style="btn-secondary" name="country[]" required data-name="Quốc gia">
-                                                        @foreach($dataCot as $key => $value)
+                                                        @foreach($data['more']['country'] as $key => $value)
                                                         <option data-tokens="{{$value->name}}" value="{{$value->id}}">{{$value->name}}</option>
                                                         @endforeach
                                                     </select>
@@ -184,7 +164,7 @@
                                                     <span class="btn btn-rose btn-round btn-file">
                                                         <span class="fileinput-new">Chọn ảnh</span>
                                                         <span class="fileinput-exists">Thay đổi</span>
-                                                        <input type="file" name="images[]" multiple required data-name="Ảnh">
+                                                        <input type="file" name="image" required data-name="Ảnh">
                                                         <div class="ripple-container"></div>
                                                     </span>
                                                     <a href="extended.html#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
@@ -199,12 +179,6 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <h4 class="info-text"> Nhập thông tin SEO cho phim </h4>
-                                    </div>
-                                    <div class="col-sm-11 col-sm-offset-1">
-                                        <div class="form-group label-floating">
-                                            <label class="control-label">Tiêu đề</label>
-                                            <input type="text" class="form-control">
-                                        </div>
                                     </div>
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
@@ -293,8 +267,8 @@
 
     });
     function validateMovie(){
-        var input = $('input[required]');
-        var select = $('select[required]');
+        var input = $('#wizardProfile input[required]');
+        var select = $('#wizardProfile select[required]');
         for(var k = 0; k < input.length; k++){
             if($(input[k]).val() == ''){
                 var name = $(input[k]).data('name');

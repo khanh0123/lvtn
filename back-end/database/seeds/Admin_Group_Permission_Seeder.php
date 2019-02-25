@@ -17,27 +17,27 @@ class Admin_Group_Permission_Seeder extends Seeder
     			[
     			'gad_id' => DB::table('admin_group')->where('name','Demo')->get()[0]->id,
     			'per_id' => DB::table('permission')->where('name','Đọc')->get()[0]->id,
-    			'name' => 'Xem',
+    			// 'name' => 'Xem',
     			],
     			[
     			'gad_id' => DB::table('admin_group')->where('name','Writer')->get()[0]->id,
     			'per_id' => DB::table('permission')->where('name','Ghi')->get()[0]->id,
-    			'name' => 'Thêm',
+    			// 'name' => 'Thêm',
     			],
     			[
     			'gad_id' => DB::table('admin_group')->where('name','Editer')->get()[0]->id,
     			'per_id' => DB::table('permission')->where('name','Sửa')->get()[0]->id,
-    			'name' => 'Sửa',
+    			// 'name' => 'Sửa',
     			],
     			[
     			'gad_id' => DB::table('admin_group')->where('name','Editer With Delete')->get()[0]->id,
     			'per_id' => DB::table('permission')->where('name','Xóa')->get()[0]->id,
-    			'name' => 'Xóa',
+    			// 'name' => 'Xóa',
     			],
     			[
     			'gad_id' => DB::table('admin_group')->where('name','Super Admin')->get()[0]->id,
     			'per_id' => DB::table('permission')->where('name','Quản Trị')->get()[0]->id,
-    			'name' => 'Quản Trị',
+    			// 'name' => 'Quản Trị',
     			],
     		]);
     	}

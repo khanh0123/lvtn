@@ -17,7 +17,12 @@ class DatabaseSeeder extends Seeder
         	Admin_Group_Permission_Seeder::class,
             AdminSeeder::class,
             CategorySeeder::class,
-        	ConfigSeeder::class,
+            CountriesSeeder::class,
+            GenresSeeder::class,
+            ConfigSeeder::class,
+            MovieSeeder::class,
+        	JsonTableSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }
