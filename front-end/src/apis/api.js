@@ -90,6 +90,16 @@ class Api {
             }
         })
     }
+    static get_linkplay_movie(mov_id,episode) {
+        const url = `${config.api.movie_detail}/${mov_id}/link/${episode}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {}
+        })
+    }
 
     
 

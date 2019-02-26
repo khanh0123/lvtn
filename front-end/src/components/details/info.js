@@ -36,63 +36,32 @@ class Info extends React.Component {
         } else {
             let data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
             this.setState({data:data.info});
-            console.log("unset");
-            let dt = await this.props.set_loading(false);
-            console.log(dt);
-            
-            
-            
+            await this.props.set_loading(false);
         }
         
         this._get_hot_series_movies(this.props);
         this._get_hot_retail_movies(this.props);
     }
-    componentWillReceiveProps(nextProps){
-        // this.props.set_loading(false);
+    async componentWillReceiveProps(nextProps){
+        let {id,slug} = nextProps.match.params;
+        if(id !== this.state.id && nextProps !== this.props){
+            await this.setState({id:id,slug:slug});
+            if(!nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE] || (nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE] && !nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE][id])){
+                let data = await nextProps.get_detail_movie(id,slug);
+                this.setState({data:data.payload.data.info});
+                await this.props.set_loading(false);
+            } else {
+                let data = nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
+                this.setState({data:data.info});
+                await nextProps.set_loading(false);
+            }
+        }
+        
         
         
     }
     
-    _action_trailer() {
-        this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {
-            console.log(this.state.is_open_trailer);
-            
-        });
-    }
-    _get_hot_series_movies = async(props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-            await props.get_hot_series_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_series_movies: r.info.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].info.data;
-            this.setState({ hot_series_movies: data });
-        }
-    }
-    _get_hot_retail_movies = async(props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-            await props.get_hot_retail_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.info.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].info.data;
-            this.setState({ hot_retail_movies: data });
-        }
-    }
-    _render_star(avg){
-        let result = [];
-        for (let i = 1; i <= 5; i++) {
-            if(i < avg){
-                result.push(<span className="fa fa-star star" key={i}/>)
-            } else {
-                result.push(<span className="fa fa-star" key={i}/>)
-            }
-            
-        }
-        return result;
-    }
+    
     render() {
         let {data, hot_series_movies,hot_retail_movies} = this.state;
         
@@ -169,7 +138,7 @@ class Info extends React.Component {
                                                                 <div className="social-links">
                                                                     <strong>Chia sẻ :</strong>
                                                                     <FacebookProvider appId="361492804618262">
-                                                                        <Share href={window.location.href}>
+                                                                        <Share href={`${window.location.host}/${data.id}/${data.slug}`}>
                                                                             <a className="socila-tw"><i className="fa fa-facebook" /></a>
                                                                         </Share>
                                                                     </FacebookProvider>
@@ -193,13 +162,14 @@ class Info extends React.Component {
                                             </div>
                                             <div className="comment-area">
                                                 <h2 className="title">Bình Luận</h2>
-                                                <div className="fb-comments" data-href={window.location.href} data-numposts="5" data-colorscheme="dark" data-width="100%"></div>
+                                                <div className="fb-comments" data-href={`${window.location.host}/${data.id}/${data.slug}`} data-numposts="5" data-colorscheme="dark" data-width="100%"></div>
                                             </div>
 
                                         </div>
                                         <div className="col-lg-3 col-md-3 hidden-xs">
-                                            <SliderScroll title="Phim Bộ Hot" data={hot_series_movies}/>
                                             <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies}/>
+                                            <SliderScroll title="Phim Bộ Hot" data={hot_series_movies}/>
+                                            
 
                                         </div>
 
@@ -213,6 +183,46 @@ class Info extends React.Component {
                 </React.Fragment>
 
         ) || <div/>
+    }
+    _action_trailer() {
+        this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {
+            console.log(this.state.is_open_trailer);
+            
+        });
+    }
+    _get_hot_series_movies = async(props) => {
+        if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
+            await props.get_hot_series_movies().then((res) => {
+                let r = res.payload.data;
+                this.setState({ hot_series_movies: r.info.data });
+            });
+        } else {
+            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].info.data;
+            this.setState({ hot_series_movies: data });
+        }
+    }
+    _get_hot_retail_movies = async(props) => {
+        if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
+            await props.get_hot_retail_movies().then((res) => {
+                let r = res.payload.data;
+                this.setState({ hot_retail_movies: r.info.data });
+            });
+        } else {
+            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].info.data;
+            this.setState({ hot_retail_movies: data });
+        }
+    }
+    _render_star = (avg) => {
+        let result = [];
+        for (let i = 1; i <= 5; i++) {
+            if(i < avg){
+                result.push(<span className="fa fa-star star" key={i}/>)
+            } else {
+                result.push(<span className="fa fa-star" key={i}/>)
+            }
+            
+        }
+        return result;
     }
 }
 function mapStateToProps({ movie_results,loading_results }) {

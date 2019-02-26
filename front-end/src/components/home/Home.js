@@ -134,7 +134,7 @@ class Home extends React.Component {
                     </div>
                 </section> */}
 
-                <section className="category-movie pt-75">
+                {/* <section className="category-movie pt-75">
                     <div className="haddings">
                         <div className="container">
                             <div className="hadding-area">
@@ -172,7 +172,7 @@ class Home extends React.Component {
 
                         </div>
                     </div>
-                </section>
+                </section> */}
 
 
 

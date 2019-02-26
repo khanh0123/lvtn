@@ -779,7 +779,7 @@ nav.navbar.bootsnav ul.nav > li > a {
 }
 
 nav.navbar.bootsnav ul.nav > li > a:hover {
-    color: #13be13
+    color: #13be13 !important;
 }
 
 nav.navbar.bootsnav li.dropdown ul.dropdown-menu > li > a {

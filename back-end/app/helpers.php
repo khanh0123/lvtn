@@ -302,8 +302,10 @@ if (!function_exists('getIdFromLinkFb')) {
         $reg_find = '/(?:https?:\/\/)?(?:www.|web.|m.)?facebook.com\/(?:video.php\?v=\d+|photo.php\?v=\d+|\?v=\d+)|\S+\/videos\/((\S+)\/(\d+)|(\d+))\/?/';
         $matches = array();
         $check = preg_match($reg_find,$link,$matches);
+        
         if($check){            
-            return (count($matches) > 2) ? $matches[4] : $matches[1];
+            $id = (count($matches) > 3) ? $matches[count($matches)-1] : $matches[1];
+            return $id;
         }
         return false;
     }

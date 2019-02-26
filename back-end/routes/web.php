@@ -21,6 +21,7 @@ $router->group(['prefix' => 'api/v1','middleware' => 'cors' ], function() use($r
     $router->get('/menu' , ['as' => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
     $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Api\MovieController@index']);
     $router->get('movie/{id}' , ['as' => "Api.MovieController.detail", 'uses' => 'Api\MovieController@detail']);
+    $router->get('movie/{mov_id}/link/{episode}' , ['as' => "Api.VideoController.detail", 'uses' => 'Api\VideoController@detail']);
 
 }); 
 
@@ -93,6 +94,10 @@ $router->group(['prefix' => 'admin'], function() use($router) {
         $router->post('movie/search' , [
             'as'         => "Admin.MovieController.search", 
             'uses'       => 'Admin\MovieController@search'
+        ]);
+        $router->post('movie/switch' , [
+            'as'         => "Admin.MovieController.switch", 
+            'uses'       => 'Admin\MovieController@switch'
         ]);
         resource_admin($router, 'user', 'AdminController' , 'auth.master');
         resource_admin($router, 'group', 'AdminGroupController' , 'auth.master');

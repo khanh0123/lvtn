@@ -97,14 +97,33 @@
                             <tbody>
                                 @foreach ($data['info'] as $value)
                                 <tr>
-                                    <td>{{ $value->id }}</td>
+                                    <td class="id_mov">{{ $value->id }}</td>
                                     <td>{{ $value->name }}</td>
                                     <td>{{ $value->cat_name }}</td>
                                     <td>{{ $value->epi_num }}</td>
                                     <td>{{ customDate($value->release_date) }}</td>
-                                    <td >{!! "<i class='material-icons'>" . ($value->is_hot ? 'done' : 'clear'). "</i>" !!}</td>
-                                    <td>{!! "<i class='material-icons'>" . ($value->is_new ? 'done' : 'clear'). "</i>" !!}</td>
-                                    <td>{!! "<i class='material-icons'>" . ($value->is_banner ? 'done' : 'clear'). "</i>" !!}</td>
+                                    <td >
+
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="is_hot" value="{{$value->is_hot ? 1 : 0}}" {{$value->is_hot ? 'checked' : ''}}>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="is_new" value="{{$value->is_new ? 1 : 0}}" {{$value->is_new ? 'checked' : ''}}>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" name="is_banner" value="{{$value->is_banner ? 1 : 0}}" {{$value->is_banner ? 'checked' : ''}}>
+                                            </label>
+                                        </div>
+                                    </td>
                                     <td>{{ customDate($value->updated_at , 'daytime') }}</td>
                                     <td class="text-center">
                                         <form method="post" action="{{base_url('admin/banner/add')}}" class="d-block">
@@ -212,9 +231,52 @@
             }
 
         });
-
-
         $('.card .material-datatables label').addClass('form-group');
+        var url = '{{url("admin/movie/switch")}}';
+        $('body .togglebutton input').on('change',function(event) {
+            if($(this).is(':checked')){
+                $(this).val(1);
+            } else {
+                $(this).val(0);
+            }
+            var name = $(this).attr('name');
+            var value = $(this).val();
+            var id = $(this).parents("td").prevAll(".id_mov").html();
+            var data;
+            switch (name) {
+                case 'is_hot':
+                    data = {is_hot:value};
+                    break;
+                case 'is_new':
+                    data = {is_new:value};
+                    break;
+                case 'is_banner':
+                    data = {is_banner:value};
+                    break;
+                default:
+                    return false;
+            }
+
+            if(name && parseInt(id) > 0){
+                data.id = id;
+                data._token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: `${url}`,
+                    type: 'POST',
+                    dataType: 'JSON',
+                    data: data,
+                })
+                .done(function(res) {
+                    console.log(res);
+                })
+                .fail(function(err) {
+                    console.log(err);
+                })
+                
+            }
+            
+        });
+        
     });
 </script>
 @stop

@@ -122,7 +122,7 @@
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">
                                                             <label>
-                                                                <input type="checkbox" name="is_banner" value="{{ $data['info']->is_banner ? 1 : 0 }}" {{ $data['info']->is_banner ? 'checked' : '' }}> Chọn làm banner
+                                                                <input type="checkbox" name="is_banner" value="{{ $data['info']->is_banner ? 1 : 0 }}" {{ $data['info']->is_banner ? 'checked' : '' }}> Banner
                                                             </label>
                                                         </div>
                                                     </div>
@@ -317,7 +317,7 @@
                 $(this).parents('.div-image-old').remove();
             });
 
-            $('input[name="is_hot"],input[name="is_new"]').on('change', function(event) {
+            $('input[name="is_hot"],input[name="is_new"],input[name="is_banner"]').on('change', function(event) {
                 event.preventDefault();
                 if($(this).is(':checked')){
                     $(this).val(1);

@@ -99,7 +99,7 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="row">
-                                                <label class="col-sm-4 label-on-left">Chọn mục</label>
+                                                <label class="col-sm-3 label-on-left">Chọn mục</label>
                                                 <div class="form-group label-floating is-empty">
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">
@@ -118,7 +118,7 @@
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">
                                                             <label>
-                                                                <input type="checkbox" name="is_banner" value="0"> Chọn làm banner
+                                                                <input type="checkbox" name="is_banner" value="0"> Banner
                                                             </label>
                                                         </div>
                                                     </div>
@@ -261,7 +261,7 @@
             $('input[name="slug"]').val(create_slug($(this).val()));
         });
 
-        $('input[name="is_hot"],input[name="is_new"]').on('change', function(event) {
+        $('input[name="is_hot"],input[name="is_new"],input[name="is_banner"]').on('change', function(event) {
             event.preventDefault();
             if($(this).is(':checked')){
                 $(this).val(1);

@@ -370,7 +370,33 @@ class MovieController extends MainAdminController
         }
         return Response()->json($res,200);
     }
+    public function switch(Request $request)
+    {
+        $id = $request->id;
+        $this->model = $this->model::findOrFail($id);
+        
+        
+        $is_banner = $request->is_banner;
+        if(is_numeric($request->is_hot)){
+            $is_hot = (int)$request->is_hot;
+            $this->model->is_hot = $is_hot;
+        }
+        if(is_numeric($request->is_new)){
+            $is_new = (int)$request->is_new;
+            $this->model->is_new = $is_new;
+        }
+        if(is_numeric($request->is_banner)){
+            $is_banner = (int)$request->is_banner;
+            $this->model->is_banner = $is_banner;
+        }
+        
+        if($this->model->update()){
+            return Response()->json(['success' => true,'data' => $this->model]);
+        }
+        return Response()->json(['error' => true]);
 
+
+    }
     private function getDataNeed(){
         $cat_model = new Category();
         $gen_model = new Genre();

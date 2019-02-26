@@ -82,7 +82,7 @@ class VideoController extends MainAdminController
 
     }
 
-    public function store(Request $request)
+    public function store(Request $request , $mov_id = '')
     {
         $return_type = $request->return_type;
         if($request->isMethod("post")){ //insert
@@ -117,16 +117,20 @@ class VideoController extends MainAdminController
         
         $token = Config::where("key" , 'facebook_access_token')->first();
         $token = $token->value;
+        if(!$token) return;
+                        
 
         switch ($name) {
             case 'facebook':
                 $url = $this->domain_graph_FB.getIdFromLinkFb($source);
+                
                 $params = [
                     'access_token' => $token,
                     'fields' => 'id,source,length,picture'
                 ];
                 $data = apiCurl($url,'GET',$params , 'json');
-                if($data->id){
+                
+                if(!empty($data) && $data->id){
                     return [
                         'src' => $data->source,
                         'thumbnail' => $data->picture,
