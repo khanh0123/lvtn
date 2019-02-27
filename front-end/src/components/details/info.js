@@ -138,7 +138,7 @@ class Info extends React.Component {
                                                                 <div className="social-links">
                                                                     <strong>Chia sẻ :</strong>
                                                                     <FacebookProvider appId="361492804618262">
-                                                                        <Share href={`${window.location.host}/${data.id}/${data.slug}`}>
+                                                                        <Share href={`${config.domain.fe}/${data.id}/${data.slug}`}>
                                                                             <a className="socila-tw"><i className="fa fa-facebook" /></a>
                                                                         </Share>
                                                                     </FacebookProvider>
@@ -162,7 +162,7 @@ class Info extends React.Component {
                                             </div>
                                             <div className="comment-area">
                                                 <h2 className="title">Bình Luận</h2>
-                                                <div className="fb-comments" data-href={`${window.location.host}/${data.id}/${data.slug}`} data-numposts="5" data-colorscheme="dark" data-width="100%"></div>
+                                                <div className="fb-comments" data-href={`${config.domain.fe}/${data.id}/${data.slug}`} data-numposts="5" data-colorscheme="dark" data-width="100%"></div>
                                             </div>
 
                                         </div>

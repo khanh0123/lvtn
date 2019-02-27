@@ -147,6 +147,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        // App\Providers\GoogleDriveServiceProvider::class,
         // Phpml\Classification\NaiveBayes::class,
 
         /*
@@ -162,6 +163,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SessionServiceProvider::class,
+        App\Providers\GoogleDriveServiceProvider::class,
 
     ],
 

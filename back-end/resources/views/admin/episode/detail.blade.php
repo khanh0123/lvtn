@@ -346,10 +346,9 @@
             var link_source = $('input[name="link_source"]').val();
             var link_from = $('select[name="link_from"]').val();
             var link_quality = $('select[name="link_quality"]').val();
-            var link_method = $('select[name="link_method"]').val();
-            var reg_link = /http(s)?:\/\/([\w\W]+).([a-zA-Z0-9])$/;
+            var reg_link = /http(s)?:\/\/([\w\W]+)?.([a-zA-Z0-9])\/?$/;
             if(link_source == 'facebook'){
-                reg_link = /http(s)?:\/\/([\w\W]+)$)/;
+                // reg_link = /(?:https?:\/\/)?(?:www.|web.|m.)?facebook.com\/(?:video.php\?v=\d+|photo.php\?v=\d+|\?v=\d+)|\S+\/videos\/((\S+)\/(\d+)|(\d+))\/?$/;
             }
             if(!link_source || !reg_link.test(link_source)){
                 showNotification('warning' , `Link không hợp lệ` , 3000);
@@ -366,32 +365,50 @@
                 return false;
             }
 
-            if(!link_method || (link_method !== 'live' && link_method !== 'graph')){
-                showNotification('warning' , `Hãy chọn phương thức phát` , 3000);
-                return false;
-            }
 
-            var link_play = JSON.stringify({
-                source:link_source,
-                from:link_from,
-                qualify:parseInt(link_quality),
-                method:link_method
+            $.ajax({
+                url: base_url+"admin/video/add",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                    return_type: 'json',
+                    source_link: link_source,
+                    source_name: link_from,
+                    max_qualify: link_quality,
+                    // duration: 'json',
+                },
+            })
+            .done(function(res) {
+                if(res && res.info){
+                    var tr = '<tr>' + 
+                    `<input type="hidden" name="video_id[]" value='`+res.info.id+`' />` +
+                    '<td class="text-center">'+ res.info.id +'</td>' +
+                    '<td>'+ link_from +'</td>' +
+                    '<td>'+ link_source +'</td>' +
+                    '<td>'+ parseInt(link_quality) +'</td>' +
+                    '<td class="td-actions text-right">' +
+                    '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
+                    '<i class="material-icons">close</i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+                    $('#links table tbody').append(tr);
+                }
+            })
+            .fail(function(res) {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
             });
-            var tr = '<tr>' + 
-            `<input type="hidden" name="link_play[]" value='`+link_play+`' />` +
-            '<td class="text-center">#</td>' +
-            '<td>'+ link_from +'</td>' +
-            '<td>'+ link_source +'</td>' +
-            '<td>'+ parseInt(link_quality) +'</td>' +
-            '<td>'+ link_method +'</td>' +
-            '<td class="td-actions text-right">' +
-            '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
-            '<i class="material-icons">close</i>' +
-            '</button>' +
-            '</td>' +
-            '</tr>';
 
-            $('#links table tbody').append(tr);
+            $('#modalAddLink').modal('toggle');
+
+            
+            
+
+            
 
             return false;
 

@@ -3,7 +3,7 @@ let domain_api = "http://dev.lvtn/api/v1/";
 let config = {
     domain: {
             
-            fe: 'http://localhost:3000',
+            fe: 'http://luanvantotnghiep.design',
             direct_message: 'https://dev-services-direct-message.vietube.vn/'
         },
     options: {

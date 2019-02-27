@@ -35,13 +35,42 @@ class VideoController extends Controller
             $link_play = json_decode($value->link_play);
             switch ($value->source_name) {
                 case 'facebook':
-                    $data['sources']['fb'] = [
-                        'src' => $link_play->src,
-                        'thumbnail' => $link_play->thumbnail
-                    ];
+                    if(!isset($data['sources']['fb'])){
+                        $data['sources']['fb'] = [];
+                    }
+                    foreach ($link_play as $v) {
+                        $data['sources']['fb'][] = [
+                            'src'       => $v->src,
+                            'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
+                            'duration'  => $v->duration,
+                            'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                        ];
+                    }
+                    
+                    break;
+                case 'google':
+                    if(!isset($data['sources']['gd'])){
+                        $data['sources']['gd'] = [];
+                    }
+                    foreach ($link_play as $v) {
+                        $data['sources']['gd'][] = [
+                            'src'       => $v->src,
+                            'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
+                            'duration'  => $v->duration,
+                            'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                        ];
+                    }
                     break;
                                         
                 default:
+                    foreach ($link_play as $v) {
+                        $data['sources']['others'][] = [
+                            'src'       => $v->src,
+                            'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
+                            'duration'  => $v->duration,
+                            'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                        ];
+                    }
                     break;
             }
                 
@@ -49,39 +78,5 @@ class VideoController extends Controller
         return Response()->json(['info' => $data]);
         
     }
-    private function getLink($source , $name)
-    {
-        
-        $token = Config::where("key" , 'facebook_access_token')->first();
-        $token = $token->value;
-        if(!$token) return;
-                        
-
-        switch ($name) {
-            case 'facebook':
-                $url = $this->domain_graph_FB.getIdFromLinkFb($source);
-                
-                $params = [
-                    'access_token' => $token,
-                    'fields' => 'id,source,length,picture'
-                ];
-                $data = apiCurl($url,'GET',$params , 'json');
-                
-                if(!empty($data) && $data->id){
-                    return [
-                        'src' => $data->source,
-                        'thumbnail' => $data->picture,
-                        'duration' => $data->length,                        
-                    ];
-
-
-                }
-                break;
-            
-            default:
-                break;
-        }
-        return [];
-        
-    }
+    
 }

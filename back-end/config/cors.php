@@ -23,7 +23,7 @@ return [
     'supportsCredentials' => true,
     'allowedOrigins' => ['*'],// ex: ['abc.com', 'api.abc.com']
     'allowedHeaders' => ['*'],
-    'allowedMethods' => ['*'],// ex: ['GET', 'POST', 'PUT', 'DELETE']
+    'allowedMethods' => ['GET', 'POST', 'PUT', 'DELETE'],// ex: ['GET', 'POST', 'PUT', 'DELETE']
     'exposedHeaders' => [],
     'maxAge' => 87000,
 

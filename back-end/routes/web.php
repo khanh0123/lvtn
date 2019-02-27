@@ -99,8 +99,13 @@ $router->group(['prefix' => 'admin'], function() use($router) {
             'as'         => "Admin.MovieController.switch", 
             'uses'       => 'Admin\MovieController@switch'
         ]);
+        $router->get('video/refresh' , [
+            'as'         => "Admin.VideoController.refresh", 
+            'uses'       => 'Admin\VideoController@refresh'
+        ]);
         resource_admin($router, 'user', 'AdminController' , 'auth.master');
         resource_admin($router, 'group', 'AdminGroupController' , 'auth.master');
+
         resource_admin($router, 'config', 'ConfigController');
         resource_admin($router, 'banner', 'BannerController');
         resource_admin($router, 'category', 'CategoryController');

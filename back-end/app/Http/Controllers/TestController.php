@@ -9,91 +9,165 @@ use App\Models\Movie;
 use App\Models\Genre;
 use Phpml\Classification\NaiveBayes;
 use Phpml\Dataset\ArrayDataset;
+use Storage;
 class TestController extends Controller
 {
 
 	private $num_train = 1200;
+	private function show($path){
+		$files1 = scandir($path);
+		foreach ($files1 as $value) {
+			echo " - $value";
+			if(strpos($value, '.') === false){
+				echo "   ";
+				$p = $path."\\$value";	
+				
+				$this->show($p);
+			}
+			echo "<br>";
+		}
+	}
 	public function index()
 	{
-		$path = storage_path() . "/jsons/phimbo1.json"; // ie: /var/www/laravel/app/storage/json/filename.json
-
-            $items = json_decode(file_get_contents($path));
-            echo json_encode($items);
-            die;
-    	$this->filterMovie();
-    	$this->filterGenre();
-		$path = storage_path() . "/jsons/demo/data_traning_1000_v4.json";
-		$path2 = storage_path() . "/jsons/demo/data_genre_1000_v4.json";
-		$data_training = json_decode(file_get_contents($path),true);        
-		$labels1 = json_decode(file_get_contents($path2),true);
-		echo "num train: ".count($data_training)."<br>";
-		echo "num label: ".count($labels1)."<br>";
-
-        // $this->checkCorrectData($data_training,$labels1,1000);
-        // 
-
-		$classifier = new NaiveBayes();
-		$classifier->train($data_training, $labels1);
-
-    	//data test
-		$sum_data = 200;
-		$data_movie = Movie::skip(0)->take($sum_data)->orderBy("id","desc")->get();
-		$new_data = [];
-		foreach ($data_movie as $value) {
-			$new_data[] = [
-				$value->id,
-				// create_slug($value->name," "),
-				// create_slug($value->short_des," "),
-				$value->name,
-				$value->short_des,
-			];	
-		}
-		$predict = $classifier->predict($new_data);
-
-		$per_sum = 0;
-		for ($i = 0; $i < count($predict); $i++) {
-			$data_genres_predict = $this->getGenres($predict[$i]);
-			$data_genres_correct = Movie_genre::where("mov_id",$data_movie[$i]->id)
-			->select("movie_genre.gen_id","name")
-			->join("genre" , "genre.id" , "=" , "movie_genre.gen_id")
-			->groupBy("movie_genre.gen_id","name")
-			->get();
-
-			$data_genres_predict = $data_genres_predict->toArray();
-			$data_genres_correct = $data_genres_correct->toArray();
-			$data_genres_predict = array_column($data_genres_predict, "name");
-			$data_genres_correct = array_column($data_genres_correct, "name");
-
-			$number_correct = 0;
-			$ketqua = "Dự đoán phim ".$data_movie[$i]->name." thuộc thể loại: ";
-			$chinhxac = "Chính xác thuộc thể loại: ";
-			if(count($data_genres_correct) == 0){
-				$number_correct = 1;
-			} else {
-				for ($j = 0; $j < count($data_genres_predict); $j++) {
-					$ketqua.= $data_genres_predict[$j]." - ";
-					if(in_array($data_genres_predict[$j], $data_genres_correct)){
-						$number_correct++;
-					}
-				}
-
-				for ($k = 0; $k < count($data_genres_correct); $k++) {
-					$chinhxac.= $data_genres_correct[$k]." - ";
-				}
-
-			}
-			echo "Bộ phim thứ ".($i+1)." <br>";
-			echo $ketqua."<br>";
-			echo $chinhxac."<br>";
-			$per = ($number_correct/(count($data_genres_correct) > 0 ? count($data_genres_correct) : 1))*100;
-			$per_sum+=$per;
-			echo "Độ chính xác : ".($per)."%<br>";
-
-			echo "-------------------------------------------->>>><br>";
-
-		}
-		echo "Tổng xác xuất chính xác ".($per_sum/$sum_data)."%<br>";
 		die;
+		// Get file listing...
+		$dir = public_path();
+		
+
+		$this->show($dir);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		die;
+
+		$googleDisk = Storage::disk('google');
+
+		
+		
+
+        // Get file listing...
+		$dir = '/';
+        $recursive = false; // Get subdirectories also?
+        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
+        
+        // Get file details...
+        $file = $contents
+        ->where('type', '=', 'file')        
+        ->first(); // there can be duplicate file names!
+        //return $file; // array with file info
+        // Store the file locally...
+        //$readStream = Storage::cloud()->getDriver()->readStream($file['path']);
+        //$targetFile = storage_path("downloaded-{$filename}");
+        //file_put_contents($targetFile, stream_get_contents($readStream), FILE_APPEND);
+        // Stream the file to the browser...
+        // return Response()->json($file);
+        // echo "<pre>";
+        // var_dump($file);
+        // echo "</pre>";
+        // die();
+        
+        $readStream = Storage::cloud()->getDriver()->readStream($file['path']);
+        // echo "<pre>";
+        // var_dump($readStream);
+        // echo "</pre>";
+        // die();
+        
+        return response()->streamDownload(function () use ($readStream) {
+        	// stream_get_contents($readStream,5);
+        	fpassthru($readStream);
+        }, 200, [
+        	'Content-Type' => $file['mimetype'],
+        	"Content-Length" =>  $file['size'],
+        //'Content-disposition' => 'attachment; filename="'.$filename.'"', // force download?
+        ]);
+
+
+
+  //   	$this->filterMovie();
+  //   	$this->filterGenre();
+		// $path = storage_path() . "/jsons/demo/data_traning_1000_v4.json";
+		// $path2 = storage_path() . "/jsons/demo/data_genre_1000_v4.json";
+		// $data_training = json_decode(file_get_contents($path),true);        
+		// $labels1 = json_decode(file_get_contents($path2),true);
+		// echo "num train: ".count($data_training)."<br>";
+		// echo "num label: ".count($labels1)."<br>";
+
+  //       // $this->checkCorrectData($data_training,$labels1,1000);
+  //       // 
+
+		// $classifier = new NaiveBayes();
+		// $classifier->train($data_training, $labels1);
+
+  //   	//data test
+		// $sum_data = 200;
+		// $data_movie = Movie::skip(0)->take($sum_data)->orderBy("id","desc")->get();
+		// $new_data = [];
+		// foreach ($data_movie as $value) {
+		// 	$new_data[] = [
+		// 		$value->id,
+		// 		// create_slug($value->name," "),
+		// 		// create_slug($value->short_des," "),
+		// 		$value->name,
+		// 		$value->short_des,
+		// 	];	
+		// }
+		// $predict = $classifier->predict($new_data);
+
+		// $per_sum = 0;
+		// for ($i = 0; $i < count($predict); $i++) {
+		// 	$data_genres_predict = $this->getGenres($predict[$i]);
+		// 	$data_genres_correct = Movie_genre::where("mov_id",$data_movie[$i]->id)
+		// 	->select("movie_genre.gen_id","name")
+		// 	->join("genre" , "genre.id" , "=" , "movie_genre.gen_id")
+		// 	->groupBy("movie_genre.gen_id","name")
+		// 	->get();
+
+		// 	$data_genres_predict = $data_genres_predict->toArray();
+		// 	$data_genres_correct = $data_genres_correct->toArray();
+		// 	$data_genres_predict = array_column($data_genres_predict, "name");
+		// 	$data_genres_correct = array_column($data_genres_correct, "name");
+
+		// 	$number_correct = 0;
+		// 	$ketqua = "Dự đoán phim ".$data_movie[$i]->name." thuộc thể loại: ";
+		// 	$chinhxac = "Chính xác thuộc thể loại: ";
+		// 	if(count($data_genres_correct) == 0){
+		// 		$number_correct = 1;
+		// 	} else {
+		// 		for ($j = 0; $j < count($data_genres_predict); $j++) {
+		// 			$ketqua.= $data_genres_predict[$j]." - ";
+		// 			if(in_array($data_genres_predict[$j], $data_genres_correct)){
+		// 				$number_correct++;
+		// 			}
+		// 		}
+
+		// 		for ($k = 0; $k < count($data_genres_correct); $k++) {
+		// 			$chinhxac.= $data_genres_correct[$k]." - ";
+		// 		}
+
+		// 	}
+		// 	echo "Bộ phim thứ ".($i+1)." <br>";
+		// 	echo $ketqua."<br>";
+		// 	echo $chinhxac."<br>";
+		// 	$per = ($number_correct/(count($data_genres_correct) > 0 ? count($data_genres_correct) : 1))*100;
+		// 	$per_sum+=$per;
+		// 	echo "Độ chính xác : ".($per)."%<br>";
+
+		// 	echo "-------------------------------------------->>>><br>";
+
+		// }
+		// echo "Tổng xác xuất chính xác ".($per_sum/$sum_data)."%<br>";
+		// die;
     	// $this->filterGenre();die;
 
 
