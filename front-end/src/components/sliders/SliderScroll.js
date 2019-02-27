@@ -1,4 +1,6 @@
 import React from "react";
+import {Link} from "react-router-dom";
+import {custom_date} from "../helpers";
 
 class SliderScroll extends React.Component {
 
@@ -25,20 +27,20 @@ class SliderScroll extends React.Component {
                 }
                 <div className="movie-item-playlist-items scroll-up ">
                     <div className="item">
-                    {data.length > 0 && data.map((item,i) => {
+                    {data && data.length > 0 && data.map((item,i) => {
                                     
                             return (
                                 <div className="plylist-single" key={i}>
                                     <div className="plylist-img">
-                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster} alt={item.name} />
+                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} />
                                     </div>
                                     <div className="plylist-single-content">
-                                        <Link to={`/phim/${item.slug}/${item.id}`} >{item.name}</Link>
+                                        <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
                                         <div className="view-movi">
                                             <a href="#">{item.cat_name}</a>
                                         </div>
                                         <ul>
-                                            <li className="novie-upload-time"><a href="">{item.release_date ? custom_date(item.release_date) : 'Đang cập nhật ..'}</a></li>
+                                            <li className="novie-upload-time"><a href="#">{item.release_date ? custom_date(item.release_date) : 'Đang cập nhật ..'}</a></li>
                                             <li className="movie-time"><a href="#">{`${item.runtime} phút`}</a></li>
                                         </ul>
                                     </div>

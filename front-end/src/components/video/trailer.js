@@ -8,16 +8,16 @@ class Trailer extends React.Component {
         super();
     }
     render() {
+        let {source,image} = this.props;
 
         return (
             <ModalPopup isOpen={this.props.isOpen} onClose={this.props.onClose}>
                 <ReactPlayer
-                        className='react-player'
-                        url = { 'https://www.youtube.com/watch?v=f6Cswdm601A' }
+                        url = { source }
                         width='100%'
                         height='100%'
                         controls={true}
-                        style={{backgroundImage: "url(https://stanleymovietheater.com/wp-content/uploads/2018/02/Black-Panther-Poster-UnBumf.jpeg)"}}
+                        style={{backgroundImage: `url(${image})`}}
                         width='100%'
                         height='100%'
                     />

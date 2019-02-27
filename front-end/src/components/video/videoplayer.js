@@ -12,22 +12,46 @@ class VideoPlayer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            source: sources['fb'],
+            sources: []
         };
     }
+    async componentDidMount(){
+        let {data} = this.props;
+        if(data.length > 0) {
+            await this.setState({sources:data});
+        }
+
+    }
+    async componentWillReceiveProps(nextProps){
+        let {data} = nextProps;
+        if(data !== this.state.sources) {
+            await this.setState({sources:data});
+        }
+    }
+    
     render() {
+        let {sources} = this.state;
+        let link = this._get_link_from_sources(sources);
+        console.log(sources);
+        
         return (
             <div className='player-wrapper'>
                 <ReactPlayer
                     className='react-player'
-                    url = { this.state.source }
+                    url = { link.src }
                     width='100%'
                     height='100%'
                     controls={true}
-                    style={{backgroundImage: "url(https://stanleymovietheater.com/wp-content/uploads/2018/02/Black-Panther-Poster-UnBumf.jpeg)"}}
+                    style={{backgroundImage: `url(${link.thumbnail})`}}
                 />
             </div>
         );
+    }
+    _get_link_from_sources = (s) =>{
+        if(s.fb && s.fb.src){
+            return s.fb;
+        }
+        return {src:'',thumbnail:''};
     }
 }
 

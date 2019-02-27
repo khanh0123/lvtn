@@ -6,7 +6,7 @@ class Loading extends React.Component {
         this.state = {
             display:'',
             opacity:1,
-            title:'Chào mừng bạn đến với Movie Star. Vui lòng đợi trong giây lát'
+            title:'Chào mừng bạn đến với Movie Star. Vui lòng đợi trong giây lát ..'
         }
     }
     render() {

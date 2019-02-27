@@ -108,11 +108,11 @@ class CountriesSeeder extends Seeder
         ];
         $array_data = array_reverse($array_data);
         DB::table('country')->insert($array_data);
-        DB::table('max_id')->insert(
+        DB::table('max_id')->insert([
             [
                 'table_name' => 'country',
                 'max_id' => 'cou011'
             ],
-        );
+        ]);
     }
 }

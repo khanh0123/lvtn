@@ -39,32 +39,48 @@ class MovieSeeder extends Seeder
             foreach ($data as $key => $value) {
 
                 $images = [];
-                foreach ($value->images as $k => $v) {
-                    if($v != ''){
-                        $images = [
-                            'poster' => [
-                                'id' => generate_id(),
-                                'url' => $v
-                            ]
-                        ];
-                    }                                
-                }
+                $id = generate_id();
+                $images = [
+                    'poster' => [
+                        'id' => $id,
+                        'url' => $value->images->vod_thumb_big
+                    ],
+                    'thumbnail' => [
+                        'id' => $id,
+                        'url' => $value->images->poster
+                    ],
+                ];
+                // foreach ($value->images as $k => $v) {
+                //     if($v != ''){
+                //         $images = [
+                //             'poster' => [
+                //                 'id' => $id,
+                //                 'url' => $v
+                //             ],
+                //             'thumbnail' => [
+                //                 'id' => $id,
+                //                 'url' => $value->thumbnail
+                //             ],
+                //         ];
+                //     }                                
+                // }
 
                 $array_data[] = [
-                    'name' => $value->title,
-                    'slug' => create_slug($value->title),
-                    'total_rate' => 0,
-                    'avg_rate' => 0,
-                    'is_hot' => rand(0,1),
-                    'is_new' => rand(0,1),
-                    'runtime' => $value->runtime,
-                    'epi_num' => $value->episode,                    
-                    'short_des' => $value->short_description,
-                    'long_des' => $value->long_description,
+                    'name'         => $value->title,
+                    'slug'         => create_slug($value->title),
+                    'total_rate'   => 0,
+                    'avg_rate'     => 0,
+                    'is_hot'       => rand(0,1),
+                    'is_new'       => rand(0,1),
+                    'is_banner'    => rand(0,1),
+                    'runtime'      => $value->runtime,
+                    'epi_num'      => $value->episode,                    
+                    'short_des'    => $value->short_description,
+                    'long_des'     => $value->long_description,
                     'release_date' => strtotime($value->release_date),
-                    'ad_id' => 1,
-                    'cat_id' => "cat001",
-                    'images' => json_encode($images)
+                    'ad_id'        => 1,
+                    'cat_id'       => "cat001",
+                    'images'       => json_encode($images)
                 ];
             }
             $array_data = array_reverse($array_data);
@@ -87,31 +103,32 @@ class MovieSeeder extends Seeder
                 $id = generate_id();
                 $images = [
                     'thumbnail' => [
-                        'id' => $id,
+                        'id'  => $id,
                         'url' => $value->thumbnail
                     ],
                     'poster' => [
-                        'id' => $id,
+                        'id'  => $id,
                         'url' => $value->poster
                     ]
 
                 ];
                 $array_data[] = [
-                    'name' => $value->name,
-                    'slug' => create_slug($value->name),
-                    'total_rate' => 0,
-                    'avg_rate' => 0,
-                    'is_hot' => rand(0,1),
-                    'is_new' => rand(0,1),
-                    'runtime' => (int)$value->time,
-                    'epi_num' => 1,
-                    'short_des' => strip_tags($value->description),
-                    'long_des' => strip_tags($value->description),
+                    'name'         => $value->name,
+                    'slug'         => create_slug($value->name),
+                    'total_rate'   => 0,
+                    'avg_rate'     => 0,
+                    'is_hot'       => rand(0,1),
+                    'is_new'       => rand(0,1),
+                    'is_banner'    => rand(0,1),
+                    'runtime'      => (int)$value->time,
+                    'epi_num'      => 1,
+                    'short_des'    => strip_tags($value->description),
+                    'long_des'     => strip_tags($value->description),
                     'release_date' => time(),
-                    'ad_id' => 1,
-                    'cat_id' => "cat002",
-                    'trailer' => $value->trailer,
-                    'images' => json_encode($images)
+                    'ad_id'        => 1,
+                    'cat_id'       => "cat002",
+                    'trailer'      => $value->trailer,
+                    'images'       => json_encode($images)
                 ];
                 if($row_count_inserted < 300)
                     $row_count_inserted ++;

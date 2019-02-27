@@ -1,5 +1,6 @@
 "use strict";
 jQuery(document).ready(function ($) {
+    
     // $('[data-toggle="tooltip"]').tooltip();
     //------------- wow js ---------------//
     // $('#bootstrap-touch-slider').bsTouchSlider();
@@ -363,3 +364,9 @@ function unSetLoading() {
 //     }, 3000);
 
 // })
+document.addEventListener("DOMContentLoaded",function(){
+    setTimeout(() => {
+        window.scrollTo(0, 0);
+    }, 500);
+    
+})

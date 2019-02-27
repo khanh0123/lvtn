@@ -85,7 +85,7 @@
                                                 <label class="col-sm-4 label-on-left">Ngày phát hành <small></small></label>
                                                 <div class="col-sm-8">
                                                     <div class="form-group">
-                                                        <input type="date" class="form-control" value="<?php echo date("Y-m-d");?>" name="release_date">
+                                                        <input type="date" class="form-control" value="{{date('Y-m-d')}}" name="release_date">
                                                     </div>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="row">
-                                                <label class="col-sm-4 label-on-left">Chọn mục</label>
+                                                <label class="col-sm-3 label-on-left">Chọn mục</label>
                                                 <div class="form-group label-floating is-empty">
                                                     <div class="col-sm-3">
                                                         <div class="togglebutton">
@@ -112,6 +112,13 @@
                                                         <div class="togglebutton">
                                                             <label>
                                                                 <input type="checkbox" name="is_new" value="0"> Phim Mới
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="togglebutton">
+                                                            <label>
+                                                                <input type="checkbox" name="is_banner" value="0"> Banner
                                                             </label>
                                                         </div>
                                                     </div>
@@ -183,13 +190,13 @@
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả ngắn</label>
-                                            <input type="text" class="form-control">
+                                            <input name="short_des" type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả đầy đủ</label>
-                                            <input type="text" class="form-control">
+                                            <input name="long_des" type="text" class="form-control">
                                         </div>
                                     </div>
 
@@ -254,7 +261,7 @@
             $('input[name="slug"]').val(create_slug($(this).val()));
         });
 
-        $('input[name="is_hot"],input[name="is_new"]').on('change', function(event) {
+        $('input[name="is_hot"],input[name="is_new"],input[name="is_banner"]').on('change', function(event) {
             event.preventDefault();
             if($(this).is(':checked')){
                 $(this).val(1);

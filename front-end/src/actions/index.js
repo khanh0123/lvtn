@@ -1,6 +1,8 @@
 import MenuAction from './menu';
 import MovieAction from './movie';
+import LoadingAction from './loading';
 module.exports = {
     MenuAction: MenuAction,    
-    MovieAction: MovieAction,    
+    MovieAction: MovieAction,
+    LoadingAction:LoadingAction, 
 };

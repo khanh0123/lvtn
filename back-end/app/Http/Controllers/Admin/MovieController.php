@@ -102,7 +102,7 @@ class MovieController extends MainAdminController
         $item->is_new       = (int)$req->input('is_new', 0);
         $item->runtime      = (int)$req->input('runtime', 0);
         $item->epi_num      = (int)$req->input('epi_num', 1);
-        $item->short_des    = substr($req->input('short_des', ''), 0 , 120);
+        $item->short_des    = $req->input('short_des', '');
         $item->long_des     = $req->input('long_des', '');
         $item->release_date = strtotime($req->input('release_date',date("Y-m-d")));
         $item->ad_id        = $req->authUser->id;
@@ -182,7 +182,7 @@ class MovieController extends MainAdminController
         }
         
         $data['filter'] = count($request->all()) > 0 ? $request->all() : $filter;        
-        
+        $data['more'] = $this->getDataNeed();
         return $this->template($this->view_folder."index",$data);
     }
 
@@ -349,6 +349,7 @@ class MovieController extends MainAdminController
         $data['info'] = $item;
         $data['more'] = $this->getDataNeed();
         
+        
         return $this->template($this->view_folder."detail",$data,$result);
 
     }
@@ -369,7 +370,33 @@ class MovieController extends MainAdminController
         }
         return Response()->json($res,200);
     }
+    public function switch(Request $request)
+    {
+        $id = $request->id;
+        $this->model = $this->model::findOrFail($id);
+        
+        
+        $is_banner = $request->is_banner;
+        if(is_numeric($request->is_hot)){
+            $is_hot = (int)$request->is_hot;
+            $this->model->is_hot = $is_hot;
+        }
+        if(is_numeric($request->is_new)){
+            $is_new = (int)$request->is_new;
+            $this->model->is_new = $is_new;
+        }
+        if(is_numeric($request->is_banner)){
+            $is_banner = (int)$request->is_banner;
+            $this->model->is_banner = $is_banner;
+        }
+        
+        if($this->model->update()){
+            return Response()->json(['success' => true,'data' => $this->model]);
+        }
+        return Response()->json(['error' => true]);
 
+
+    }
     private function getDataNeed(){
         $cat_model = new Category();
         $gen_model = new Genre();

@@ -198,14 +198,13 @@ class MainAdminController extends BaseController
         if(empty($message)){
             $message = session()->get( 'message' );
         }
-        return 
-            (strtolower($this->req->header('Return-Type')) == 'json' || strpos($this->req->route()->uri, "api/v1/") > -1)
-
-            ? 
-                Response()->json($data)
-            :
-
-            view($view)->withData($data)->withMessage($message);
+        
+        // if((strtolower($this->req->header('Return-Type')) == 'json' || strpos($this->req->route()->uri, "api/v1/") > -1)){
+        //     return Response()->json($data);
+        // }
+        
+        // if(method_exists($this,"getDataNeed")) $data['more'] = $this->getDataNeed();
+        return view($view)->withData($data)->withMessage($message);
     }
     
 }

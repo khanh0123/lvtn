@@ -1,25 +1,47 @@
 import React from 'react';
-import { withRouter } from "react-router";
 import Header from './header/Header';
 import Footer from './footer/Footer';
-// import Loading from "./others/Loading";
+import Loading from "./others/Loading";
+import { LoadingAction } from "../actions"
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from "react-router";
+
 
 class Layout extends React.Component {
-    componentDidUpdate(prevProps) {
-        if (this.props.location.pathname !== prevProps.location.pathname) {
-            
-            window.scrollTo(0, 0);
-        //     window.setLoading();
-        //     setTimeout(() => {
-        //         window.unSetLoading();
-        //     }, 500);
+    constructor(props){
+        super(props);
+        this.state = {
+            is_loading : false
         }
     }
+    
     componentDidMount(){   
-        window.scrollTo(0, 0);     
+        if(!this.props[LoadingAction.ACTION_SET_LOADING]){
+            this.props.set_loading(true);
+            this.setState({is_loading:true});
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        if (this.props.location.pathname !== nextProps.location.pathname) {  
+            this.props.set_loading(true);
+            this.setState({is_loading:true});   
+            window.scrollTo(0, 0);
+        }
+        
+        if(nextProps[LoadingAction.ACTION_SET_LOADING] == false){
+            this.setState({is_loading:false});
+        } else if(!this.state.is_loading){
+            this.setState({is_loading:true});
+        }
+    }
+    componentDidUpdate(prevProps) {
+        
     }
 
     render() {
+        let { is_loading } = this.state;
+        
         return (
 			<div className="App">
 				
@@ -29,33 +51,21 @@ class Layout extends React.Component {
 				<div className="to-top" id="back-top">
 					<i className="fa fa-angle-up"></i>
 				</div>
-				{/* <Loading/> */}
+                {is_loading && <Loading/>}
+				
 			</div>
 		);
     }
 }
+ 
+function mapStateToProps({ loading_results }) {
+    return Object.assign({}, loading_results || {});
+}
 
-// function Layout(props){
-
-//     useEffect(() => {
-//         // console.log(props);
-        
-//         // if(props.location.pathname !== prevProps.location.pathname)
-//         window.scrollTo(0, 0);
-//     });
-
-//     return (
-//         <div className="App">
-            
-//             <Header />
-//             {props.children}
-//             <Footer />
-//             <div className="to-top" id="back-top">
-//                 <i className="fa fa-angle-up"></i>
-//             </div>
-//             {/* <Loading/> */}
-//         </div>
-//     );
-// }
-  
-export default withRouter(Layout);
+function mapDispatchToProps(dispatch) {
+    let actions = bindActionCreators({
+        set_loading: LoadingAction.set_loading,        
+    }, dispatch);
+    return { ...actions, dispatch };
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Layout));

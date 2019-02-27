@@ -33,7 +33,8 @@ let config = {
     app_config: domain_api + "cas/public/getconfig",
     api: {
         menu: domain_api + "menu",
-        movie: domain_api + "movies"
+        movie: domain_api + "movies",
+        movie_detail: domain_api + "movie",
         
     },
     title: {
@@ -76,9 +77,9 @@ let config = {
         report_sent: "ViePlay đã nhận được báo cáo của bạn. Xin cám ơn",
         content_not_found: "Nội dung không tìm thấy hoặc lỗi. Xin thử lại sau.",
     },
-    image: {
-        empty_thumbnail: "/assets/images/empty.png",
-        empty_poster: "/assets/images/empty.png",
+    images: {
+        empty_thumbnail: "/assets/images/movie-thumbnail.jpg",
+        empty_poster: "/assets/images/movie-poster.png",
         empty_avatar: "/assets/images/empty_avatar.jpg"
     },
     menu_web_id: 'a38fc182-61f6-463c-b815-5be44a8b0e0c',

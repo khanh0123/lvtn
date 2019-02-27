@@ -20,6 +20,7 @@ class CreateTableMovie extends Migration
             $table->increments('id');
             $table->tinyInteger('is_hot');
             $table->tinyInteger('is_new');
+            $table->tinyInteger('is_banner');
             $table->integer('ad_id')->unsigned()->index();
             $table->string('name');
             $table->string('slug');

@@ -82,7 +82,7 @@ class SliderBig extends React.Component {
                                                 <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} />
                                             </div>
                                             <div className="plylist-single-content">
-                                                <Link to={`/phim/${item.slug}/${item.id}`} >{item.name}</Link>
+                                                <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
                                                 <div className="view-movi">
                                                     <a href="#">{item.cat_name}</a>
                                                 </div>
