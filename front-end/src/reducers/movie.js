@@ -6,6 +6,7 @@ export default function (state = {}, action) {
         case MovieAction.ACTION_GET_HOT_MOVIES:
         case MovieAction.ACTION_GET_HOT_SERIES_MOVIES:
         case MovieAction.ACTION_GET_HOT_RETAIL_MOVIES:
+        case MovieAction.ACTION_GET_MOVIE_FILTER:
         case MovieAction.ACTION_GET_BANNER_MOVIES:
             result[action.type] = action.payload.data;
             break;

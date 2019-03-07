@@ -81,7 +81,55 @@ class MovieController extends Controller
                 
         return $this->template_api($data);
     }
+    
+
+    public function getByTags(Request $request)
+    {
+        if($request->tags){
+            $tags = $request->tags;
+            $tags = explode(",", $tags);
+
+            $filter['sort']       = $request->get("sort") == "asc" ? "asc" : "desc";
+            $filter['orderBy']    = $this->getOrderBy($request);
+            $limit                = (int)$request->get("limit");
+            $filter['limit']      = ($limit < 1 || $limit > 100)? $this->limit : $limit;
+            $conditions = [
+                'and' => [],
+                'or' => []
+            ];
+
+            //get tags
+            $info_tags = [];
+            for ($i = 0; $i < count($tags); $i++) {
+                $slug = create_slug($tags[$i]);
+                $tag_info = $this->check_exist_slug($slug);
+                if(!empty($tag_info)){
+                    $table_name = $tag_info->getTable();
+                    $info_tags[] = $tag_info;
+                    $conditions['and'][] = ["$table_name.slug",'=',$slug];
+                }
+                
+            }
+            $filter['conditions'] = $conditions;
+
+            $data['info']   = $this->model->get_page($filter , $request);
+            $data['info']   = formatResult($data['info'],[
+                'genre'         => ['gen_id','gen_name','gen_slug'] ,
+                'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
+            ],'get');
+            $data['meta']['tags'] = $info_tags;
+
+            foreach ($data['info'] as $key => $value) {
+                $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+            }
+
+        } else {
+            $data= ['error' => true , 'msg' => 'tags is required'];
+        }
+        return $this->template_api($data);
         
+
+    }
 
 
     

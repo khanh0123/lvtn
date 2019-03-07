@@ -6,6 +6,7 @@ const ACTION_GET_HOT_SERIES_MOVIES = 'ACTION_GET_HOT_SERIES_MOVIES';
 const ACTION_GET_HOT_RETAIL_MOVIES = 'ACTION_GET_HOT_RETAIL_MOVIES';
 const ACTION_GET_DETAIL_MOVIE = 'ACTION_GET_DETAIL_MOVIE';
 const ACTION_GET_LINKPLAY_MOVIE = 'ACTION_GET_LINKPLAY_MOVIE';
+const ACTION_GET_MOVIE_FILTER = 'ACTION_GET_MOVIE_FILTER';
 
 async function get_hot_movies() {
     return {
@@ -53,6 +54,12 @@ async function get_linkplay_movie(mov_id,episode) {
         payload: await Api.get_linkplay_movie(mov_id,episode)
     };
 }
+async function get_movie_filter(tags,limit,page) {
+    return {
+        type: ACTION_GET_MOVIE_FILTER,
+        payload: await Api.get_movie_filter(tags,limit,page)
+    };
+}
 
 module.exports =  {
     ACTION_GET_HOT_MOVIES,
@@ -61,10 +68,12 @@ module.exports =  {
     ACTION_GET_DETAIL_MOVIE,
     ACTION_GET_BANNER_MOVIES,
     ACTION_GET_LINKPLAY_MOVIE,
+    ACTION_GET_MOVIE_FILTER,
     get_hot_movies,
     get_hot_series_movies,
     get_hot_retail_movies,
     get_detail_movie,
     get_banner_movies,
-    get_linkplay_movie
+    get_linkplay_movie,
+    get_movie_filter
 };

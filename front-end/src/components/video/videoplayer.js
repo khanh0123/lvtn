@@ -14,7 +14,9 @@ class VideoPlayer extends Component {
         super(props);
         this.state = {
             sources: [],
-            current_play:-1
+            index_play:-1,
+            link_play:''
+            
         };
 
         this.onAdPlay = this.onAdPlay.bind(this);
@@ -26,14 +28,17 @@ class VideoPlayer extends Component {
     async componentDidMount() {
         let { data } = this.props;
         if (data.length > 0) {
-            await this.setState({ sources: data });
+            let obj = await this._get_link_from_sources(data,0);
+            this.setState({ sources: data,link_play:obj.link_play,index_play:obj.index_play });
+            
         }
 
     }
     async componentWillReceiveProps(nextProps) {
         let { data } = nextProps;
         if (data !== this.state.sources) {
-            await this.setState({ sources: data });
+            let obj = await this._get_link_from_sources(data,0);
+            await this.setState({ sources: data,link_play:obj.link_play,index_play:obj.index_play });
         }
     }
     onReady(event) {
@@ -55,17 +60,26 @@ class VideoPlayer extends Component {
         
     }
     onSetupError(event){
-        if(this.state.current_play !== ''){
-            this.setState({current_play:this.state.current_play++});
+        let {index_play , sources , link_play} = this.state;
+            
+        if(index_play !== '' && link_play != ''){
+            // index_play++;
+            let obj = this._get_link_from_sources(sources , index_play);
+            this.setState({link_play:obj.link_play,index_play:obj.link_play});
         }
         
     }
 
     render() {
-        let { sources , current_play } = this.state;
+        let { link_play } = this.state;
         let { thumbnail } = this.props;
-        let link = this._get_link_from_sources(sources , current_play);
-        let src = link.src;
+        // let link = this._get_link_from_sources(sources , index_play);
+        // console.log(`
+        // link_play : ${link_play} vt : ${this.state.index_play}
+        
+        // `);
+        console.log(link_play);
+        
         
         
         return (
@@ -80,7 +94,7 @@ class VideoPlayer extends Component {
                 /> */}
                 {/* file={link.src} */}
                 <ReactJWPlayer
-                    file={src}
+                    file={link_play}
                     image={thumbnail != '' ? thumbnail : link.thumbnail}
                     onAdPlay={this.onAdPlay}
                     onReady={this.onReady}
@@ -93,24 +107,35 @@ class VideoPlayer extends Component {
             </div>
         );
     }
-    _get_link_from_sources = async (s , current) => {
-        let index = -1;
+    _get_link_from_sources = (s , current) => {
+        let index = 0;
         
         if(s.gd) {
             for (let i = 0; i < s.gd.length; i++) {
                 index++;
-                if(index > current) return s.gd[i];                
+                if(index > current) {
+                    return {
+                        link_play:s.gd[i].src,
+                        index_play:index,
+                    }  
+                }
+                             
             }
             
         }
         if (s.fb ) {
             for (let i = 0; i < s.fb.length; i++) {
                 index++;
-                if(index > current) return s.gd[i];                
+                return {
+                    link_play:s.fb[i].src,
+                    index_play:index,
+                } 
             }
         }
-        await this.setState({current_play:''});
-        return { src: '', thumbnail: '' };
+        return {
+            link_play:'',
+            index_play:'',
+        }
     }
 }
 

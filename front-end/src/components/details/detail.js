@@ -89,9 +89,7 @@ class Detail extends React.Component {
                                 <div className="comment-area">
                                     <h2 className="title">Bình Luận</h2>
                                     <FacebookProvider appId="361492804618262">
-                                        <Comments href={`${config.domain.fe}/${data.id}/${data.slug}`}>
-                                            {/* <a className="socila-tw"><i className="fa fa-facebook" /></a> */}
-                                        </Comments>
+                                        <Comments href={`${config.domain.fe}/${data.id}/${data.slug}`}></Comments>
                                     </FacebookProvider>
 
                                     {/* <div className="fb-comments" data-href={`${config.domain.fe}/${data.id}/${data.slug}`} data-numposts="5" data-colorscheme="dark" data-width="100%"></div> */}

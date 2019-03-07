@@ -102,7 +102,7 @@ class MainAdminController extends BaseController
         if(empty($item)){
             return abort('404');
         }
-        $item->delete();      
+        $item->delete();
 
         return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
                 ->withMessage(['type' => 'success','msg' => 'Xóa dữ liệu thành công']);

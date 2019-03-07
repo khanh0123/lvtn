@@ -20,8 +20,15 @@ $router->group(['prefix' => 'api/v1','middleware' => 'cors' ], function() use($r
 
     $router->get('/menu' , ['as' => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
     $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Api\MovieController@index']);
-    $router->get('movie/{id}' , ['as' => "Api.MovieController.detail", 'uses' => 'Api\MovieController@detail']);
+
+    
     $router->get('movie/{mov_id}/link/{episode}' , ['as' => "Api.VideoController.detail", 'uses' => 'Api\VideoController@detail']);
+    $router->get('movie/filter/tags' , ['as' => "Api.MovieController.getByTags", 'uses' => 'Api\MovieController@getByTags']);
+    $router->get('movie/{id}' , ['as' => "Api.MovieController.detail", 'uses' => 'Api\MovieController@detail']);
+
+    $router->group(['prefix' => 'user'], function() use($router) {
+        $router->post('login' , ['as' => "Api.UserController.login", 'uses' => 'Api\UserController@login']);
+    });
 
 }); 
 

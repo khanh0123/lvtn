@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
             CountriesSeeder::class,
             GenresSeeder::class,
             ConfigSeeder::class,
+            VideoSeeder::class,
             MovieSeeder::class,
+            EpisodeSeeder::class,
+            EpisodeVideoSeeder::class,
         	JsonTableSeeder::class,
             MenuSeeder::class,
         ]);

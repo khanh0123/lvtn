@@ -12,7 +12,7 @@ class VideoController extends MainAdminController
 {	
 
 	private $domain_graph_FB = "https://graph.facebook.com/v2.6/";
-    private $domain_google_drive = 'https://mail.google.com/e/get_video_info';
+    private $domain_google_drive = 'https://docs.google.com/e/get_video_info';
 	protected $rules = [
         'insert' => [
             'source_link' => 'required',
@@ -71,7 +71,12 @@ class VideoController extends MainAdminController
 
         //get link play video
         $link_play = $this->getLink($item->source_link,$item->source_name);
-        $link_play = !empty($link_play) ? json_encode($link_play) : [];
+        $link_play = !empty($link_play) ? json_encode($link_play) : json_encode([]);
+        // echo "<pre>";
+        // var_dump($link_play);
+        // echo "</pre>";
+        // die();
+        
         $item->link_play = $link_play;
         
 
@@ -115,9 +120,9 @@ class VideoController extends MainAdminController
     }
     public function refresh(Request $request)
     {
-        $all_videos = Video::orderBy('id','desc')
-                       // ->orWhere('source_name' , 'facebook')
+        $all_videos = Video::orderBy('id','desc')                       
                        ->where('source_name' , 'google')
+                       ->orWhere('source_name' , 'facebook')
                        ->get();
         if(count($all_videos) > 0){
             foreach ($all_videos as $value) {
@@ -127,22 +132,21 @@ class VideoController extends MainAdminController
                 Video::where('id',$value->id)->update(['link_play' => $link_play ]);
                 // sleep(5);
             }
+            echo "success";
+            exit;
         }
 
-        echo "success";
+        echo "empty source";
         
     }
     private function getLink($source_link , $name)
     {
         
-        $token = Config::where("key" , 'facebook_access_token')->first();
-        $token = $token->value;
-        if(!$token) return;
-                        
-
         switch ($name) {
             case 'facebook':
-                return [];
+                $token = Config::where("key" , 'facebook_access_token')->first();
+                $token = $token->value;
+                if(!$token) break;
                 $url = $this->domain_graph_FB.getIdFromLinkFb($source_link);                
                 $params = [
                     'access_token' => $token,
@@ -150,7 +154,7 @@ class VideoController extends MainAdminController
                 ];
                 $data = apiCurl($url,'GET',$params , 'json');
                 
-                if(!empty($data) && $data->id){
+                if(!empty($data) && isset($data->id)){
                     return [[
                         'src' => $data->source,
                         'thumbnail' => $data->picture,
@@ -183,6 +187,8 @@ class VideoController extends MainAdminController
                 }
                 $params = [
                     'docid' => $docid,
+                    'access_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+                    'authuser' => '',
                 ];
                 if($ip) {
                   if($ip == 'v4') {
@@ -194,6 +200,7 @@ class VideoController extends MainAdminController
                     // $result = file_get_contents($this->domain_google_drive.$docid, false, stream_context_create(['socket' => ['bindto' => '0:0']])); // force IPv4
                   }
                 }
+                
                 
                 
                 if(isset($result['http_code']) || empty($result)){
@@ -212,6 +219,8 @@ class VideoController extends MainAdminController
                   '18' => ['label' => '0360p', 'type' => 'video/mp4']
                 ];
                 $links = explode(',', $result);
+
+
                 
                 
                 $output = [];
@@ -222,13 +231,17 @@ class VideoController extends MainAdminController
                     if($key == 0 || count($matches) == 0) continue;
 
 
-                        $matches = preg_replace('/&docid=.*/', '', $matches); // remove docid
-                        $matches = preg_replace('/&driveid=.*/', '', $matches); // remove driveid
+                        // $matches = preg_replace('/&docid=.*/', '', $matches); // remove docid
+                        // $matches = preg_replace('/&driveid=.*/', '', $matches); // remove driveid
 
                         preg_match('/(.*)(\|)/', $direct_link, $itag);
                         preg_match('/&dur=([0-9.]+).*&/', $direct_link, $dur);
                         $duration = count($dur) > 1 ? $dur[1] : '';
-
+                        // echo "<pre>";
+                        // var_dump($matches);
+                        // echo "</pre>";
+                        // die();
+                        
                         if(count($itag) > 1){
                             if(!is_null($itag[1]) || !is_null($matches[0])) {
                             if(!is_null($quality[$itag[1]])) {
@@ -246,6 +259,8 @@ class VideoController extends MainAdminController
                 }
 
                 rsort($output);
+                
+                
                 $output = json_encode($output);
                 $output = preg_replace('/(0)(720|480|360)(p)/', '$2$3', $output); // sort fix
                 $output = json_decode($output);

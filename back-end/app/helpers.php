@@ -81,8 +81,7 @@ if (!function_exists('apiCurl')) {
             return array('http_code' => 500, 'message' => '');
         }
         
-        if ($httpcode !== 200) {            
-            
+        if ($httpcode !== 200) {
             $result = json_decode($result, true);
             $dataResult['http_code'] = $httpcode;
             $dataResult['message'] = !empty($result['message']) ? $result['message'] : '';
@@ -91,9 +90,30 @@ if (!function_exists('apiCurl')) {
         
         //close connection
         curl_close($ch);
-        return is_array($result) ? json_decode($result) : $result;
+        
+
+        // echo "<pre>";
+        // var_dump(urldecode($result));
+        // echo "</pre>";
+        // die();
+        
+        
+        
+        try {
+            $res = json_decode($result);
+            return $res !== null ? $res : $result;
+        } catch (Exception $e) {
+            return $result;
+        }
+        
     }
 
+}
+if (!function_exists('createMD5Key')) {
+
+    function createMD5Key($needed = []) {
+        return md5(base64_encode(json_encode($needed, JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS)));
+    }
 }
 
 if (!function_exists('get_server_var')) {

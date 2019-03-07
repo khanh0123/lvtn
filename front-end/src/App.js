@@ -7,8 +7,8 @@ import reducers from './reducers';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import routes from './setup/routes';
 import Layout from "./components/layout";
-import Loading from "./components/others/Loading";
-import NotFound from './components/notfound/notfound';
+// import Loading from "./components/others/Loading";
+// import NotFound from './components/notfound/notfound';
 // import './config/custom_request';
 // const routeComponents = routes.map(({ path, component }, key) =>
 //     <Route exact={true} path={path} component={component} key={key} />);
@@ -26,9 +26,9 @@ ReactDOM.render(
                     <Switch>
                         {routes.map((route,i) => {
                             return <Route key={i} exact path={route.path} component={route.component} />
-                        })
+                        })}
 
-                        }
+                        
                         {/* <Route exact path="/" component={Home} />
                         <Route exact path="/phim/:slug/:id" component={Info} />
                         <Route exact path="/phim/:slug/:id/xem-phim" component={Detail} />

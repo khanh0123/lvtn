@@ -24,3 +24,11 @@ Seeder:
 	Chạy seeder
 		composer dump-autoload
 		php artisan db:seed
+
+JWT(json web token) config:
+	Tạo secret key cho JWT
+		php artisan jwt:generate
+
+Time_expiration login: thời gian hết hạn login (tính theo giây)
+	chỉnh sửa file .env biến MAX_TIME_LOGIN
+		

@@ -204,8 +204,6 @@ class EpisodeController extends MainAdminController
             return abort(404);
         }
 
-        
-        
         if($request->isMethod("post")){
             $item->images = json_decode($item->images);
             $result = $this->setItem('update',$request, $item);
@@ -229,7 +227,7 @@ class EpisodeController extends MainAdminController
                         Episode_video::insert($arr_video);
                     }
                 }
-                $item->images = json_decode($item->images);
+                // $item->images = json_decode($item->images);
                 $result['msg'] = 'Cập nhật dữ liệu thành công';         
             }
         } else {
@@ -248,9 +246,10 @@ class EpisodeController extends MainAdminController
             'videos' => ['video_id','source_link','source_name','max_qualify','video_created_at','video_updated_at'] ,
         ]);
         $item = $items[0];
-        $item->images = json_decode($item->images);
+        $item->images = !empty($item->images) ? json_decode($item->images) : [];
         
         $data['info']  = $item;
+        
         $data['more']  = $this->getDataNeed($request);
         $data['movie'] = $request->movie;
         return $this->template($this->view_folder."detail",$data,$result);

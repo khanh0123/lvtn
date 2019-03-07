@@ -101,6 +101,29 @@ class Api {
         })
     }
 
+    static get_movie_filter(tags,limit,page) {
+        
+        if(Array.isArray(tags)){
+            let tags_str = '';
+            for (let i = 0; i < tags.length; i++) {
+                tags_str+= (i < tags.length-1) ? `${tags[i]},` : tags[i];
+            }
+            tags = tags_str
+        }
+        const url = `${config.api.movie_filter_tags}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {
+                tags:tags,
+                limit:limit,
+                page:page
+            }
+        })
+    }
+
     
 
     

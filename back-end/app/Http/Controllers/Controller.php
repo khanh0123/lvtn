@@ -2,42 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use DB;
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    
 
     protected function template_api($data = []){    
 
-
-        return Response()->json($data);
+        return !isset($data['error']) ? Response()->json($data , 200) : Response()->json($data , 400);
     }
     protected function template_err($msg = ''){    
 
 
-        return Response()->json(['error' => true,'msg' => $msg]);
+        return Response()->json(['error' => true,'msg' => $msg],400);
+    }
+    protected function generate_access_token($data){
+        $this->jwt_secret_key = !empty(env('JWT_SECRET')) ? env('JWT_SECRET') : 'gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6';
+        $token = \Firebase\JWT\JWT::encode($data, $this->jwt_secret_key , 'HS256');
+        return $token;
     }
 
     /*
      * check exists slug on 3 table.
      */
     protected function check_exist_slug($slug)
-    {
-        $data = DB::table('genre')->where(['slug' => $slug ])->get();
-        if(count($data )> 0){
-            return true;
+    {        
+        
+        $data = \App\Models\Genre::where(['slug' => $slug ])->first();
+        // DB::table('genre')->where(['slug' => $slug ])->first();
+        if(!empty($data)){
+            return $data;
         }
-        $data = DB::table('category')->where(['slug' => $slug ])->get();
-        if(count($data )> 0){
-            return true;
+        $data = \App\Models\Category::where(['slug' => $slug ])->first();
+        // $data = DB::table('category')->where(['slug' => $slug ])->first();
+        if(!empty($data)){
+            return $data;
         }
-        $data = DB::table('country')->where(['slug' => $slug ])->get();
-        if(count($data )> 0){
-            return true;
+        $data = \App\Models\Country::where(['slug' => $slug ])->first();
+        // $data = DB::table('country')->where(['slug' => $slug ])->first();
+        if(!empty($data)){
+            return $data;
         }
         return false;
     }
