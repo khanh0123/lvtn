@@ -124,6 +124,20 @@ class Api {
         })
     }
 
+
+    static user_login(access_token) {
+        const url = `${config.api.user_login}`;
+
+        return axios({
+            method: 'post',
+            url: url,
+            data: {
+                access_token:access_token
+            },
+            params: {}
+        })
+    }
+
     
 
     

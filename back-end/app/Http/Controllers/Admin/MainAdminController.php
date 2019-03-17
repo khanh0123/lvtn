@@ -17,6 +17,7 @@ class MainAdminController extends BaseController
 	protected $status = 1;
     protected $columns_filter = [];
     protected $columns_search = [];
+    protected $columns_search_multi = [];
 
     public function __construct(Request $request , $variable = null) {
         // if (!isset($this->model)) {
@@ -153,9 +154,6 @@ class MainAdminController extends BaseController
         if(isset($this->columns_filter[$order_by]) && Schema::hasColumn($this->model->getTable(), $order_by)){
             return $this->columns_filter[$order_by];
         }
-        // if(Schema::hasColumn($this->model->getTable(), 'id') && isset($this->columns_filter['id'])){
-        //     return $this->columns_filter['id'];
-        // }
         
         //default orderby first field in table
         $default = $this->model->getTable().".".DB::getSchemaBuilder()->getColumnListing($this->model->getTable())[0];
@@ -167,8 +165,9 @@ class MainAdminController extends BaseController
      */
     protected function getConditionByRequest($req,$columns,$table = ''){
         $conditions = [
-            'and' => [],
-            'or' => []
+            'and'   => [],
+            'or'    => [],
+            'multi' => [],
         ];
         foreach ($columns as $key => $value) {
             if( $req->get($key) !== null ){
@@ -180,7 +179,19 @@ class MainAdminController extends BaseController
                 }
 
                 if(!in_array($key, $this->columns_search)){
-                    $conditions['and'][] = [$value, '=' ,$req->input($key)];
+                    
+                    //multiple value filter
+                    if(in_array($key, $this->columns_search_multi)){
+                        $arr_val = explode(",", $req->input($key));
+                        
+                        if(count($arr_val) > 0) {
+                            $conditions['multi'][$key] = $arr_val;
+                        }
+                        
+
+                    } else {
+                        $conditions['and'][] = [$value, '=' ,$req->input($key)];
+                    }
                 } else {
                     $conditions['or'][] = [$value, 'like' ,"%".$req->input($key)."%"];
                 }

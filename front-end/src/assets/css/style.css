@@ -37,10 +37,11 @@
 @media only screen and (min-width: 768px) {
   /* For desktop: */
   .styles_modal__gNwvD.modal-popup {
-     width: -webkit-fill-available;
-     height: 36em; 
-     padding: 0; 
-     transform: translate(0%, 0%); 
+     width: 50em;
+     height: 36em;
+     padding: 0;
+     border-radius: 2em;
+     transform: translate(0%, 0%);
 }
 }
 
@@ -711,7 +712,7 @@ button:hover,
     margin: 15px 0px;
 }
 
-.Top-rating-items .movie-item-contents {
+.Top-rating-items .movie-item-contents,.filter-page .movie-item-contents {
     border-radius: 25px;
 }
 
@@ -900,7 +901,12 @@ a.btn.btn-button {
   .movie-item-contents.gradient>img {
       min-height: 487px;
   }
+
+.filter-page .movie-item-contents>img {
+    min-height: 29em;
+    min-width: 18em;
 }
+
 
 
 .time-bg {
@@ -3592,7 +3598,7 @@ ol.comment-list-reply {
     padding-top: 0;
     border-radius: 15px;
     border: 1px solid #182028;
-    margin: 50px 0;
+    height: 100%;
 }
 
 .login-form h2 {

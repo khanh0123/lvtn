@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 // import config from "../../config";
 import SlideItem from "../sliders/SlideItem";
 import Pagination from "react-js-pagination";
+import queryString from 'query-string';
 
 
 class Filters extends React.Component {
@@ -31,10 +32,14 @@ class Filters extends React.Component {
         this._getDataPage = this._getDataPage.bind(this);
     }
 
+
+
     async componentDidMount() {
-        let tags = this._getTagsFromRoute(this.props);        
-        await this.setState({ tags: tags });
-        await this._getDataPage();
+        let tags = this._getTagsFromRoute(this.props);  
+        let {page} = queryString.parse(this.props.location.search);
+        if(!page) page = 1;
+        await this.setState({ tags: tags , page:page });
+        await this._getDataPage(page);
         await this.props.set_loading(false);
         
     }
@@ -60,6 +65,10 @@ class Filters extends React.Component {
 
     render() {
         let { data } = this.state;
+        let {page} = queryString.parse(this.props.location.search);
+        page = !page ?  1 : parseInt(page);
+        
+        
 
         return data.length > 0 && (
             <React.Fragment>
@@ -84,7 +93,7 @@ class Filters extends React.Component {
                         </div>
                         <div className="text-center">
                             <Pagination
-                                activePage={this.state.page}
+                                activePage={page}
                                 itemsCountPerPage={10}
                                 totalItemsCount={this.state.total}
                                 pageRangeDisplayed={5}
@@ -141,6 +150,10 @@ class Filters extends React.Component {
     }
     _handlePageChange = async (pageNumber) => {
         await this.setState({ page: pageNumber });
+        this.props.history.push({
+            pathname: window.location.pathname,
+            search: "?" + new URLSearchParams({page: pageNumber}).toString()
+        })
         this._getDataPage(pageNumber);
     }
     _resetDataPage = async () => {

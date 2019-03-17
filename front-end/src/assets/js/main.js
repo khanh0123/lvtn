@@ -1,5 +1,12 @@
 "use strict";
+// addEventListener(document, "touchstart", function(e) {
+//     console.log(e.defaultPrevented);  // will be false
+//     e.preventDefault();   // does nothing since the listener is passive
+//     console.log(e.defaultPrevented);  // still false
+//   }, Modernizr.passiveeventlisteners ? {passive: true} : false);
+  
 jQuery(document).ready(function ($) {
+    
     
     // $('[data-toggle="tooltip"]').tooltip();
     //------------- wow js ---------------//
@@ -278,15 +285,15 @@ jQuery(document).ready(function ($) {
     // }
     // );
     /*** Top To ****/
-    $(window).on('scroll', function () {
+    // $(window).on('scroll', function () {
 
-        if ($(this).scrollTop() > 300) {
-            $('#back-top').fadeIn();
-        }
-        else {
-            $('#back-top').fadeOut();
-        }
-    });
+    //     if ($(this).scrollTop() > 300) {
+    //         $('#back-top').fadeIn();
+    //     }
+    //     else {
+    //         $('#back-top').fadeOut();
+    //     }
+    // });
     $('body').on('click', '#back-top', function () {
         $("html, body").animate({
             scrollTop: 0
@@ -336,27 +343,6 @@ function fadeOutEffect(el) {
         }
     }, 50);
 }
-function setLoading() {
-    document.querySelector("body").style.overflow = 'hidden';
-    var el = document.querySelector('.preloader');
-    var el_child = el.querySelectorAll('.preloader-lod');
-    for (var i = 0; i < el_child.length; i++) {
-        el_child[i].style.display = '';
-    }
-    el.style.display = '';
-    el.style.opacity = 1;
-}
-function unSetLoading() {
-    document.querySelector("body").style.overflow = 'auto';
-    var el = document.querySelector('.preloader');
-    var el_child = el.querySelectorAll('.preloader-lod');
-    for (var i = 0; i < el_child.length; i++) {
-        fadeOutEffect(el_child[i]);
-    }
-    setTimeout(function () {
-        fadeOutEffect(el);
-    }, 350);
-}
 // document.addEventListener("DOMContentLoaded", function () {
 //     window.scrollTo(0, 0);
 //     setTimeout(() => {
@@ -364,9 +350,9 @@ function unSetLoading() {
 //     }, 3000);
 
 // })
-document.addEventListener("DOMContentLoaded",function(){
-    setTimeout(() => {
-        window.scrollTo(0, 0);
-    }, 500);
+// document.addEventListener("DOMContentLoaded",function(){
+//     setTimeout(() => {
+//         window.scrollTo(0, 0);
+//     }, 500);
     
-});
+// });

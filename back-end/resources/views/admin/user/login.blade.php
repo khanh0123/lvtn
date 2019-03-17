@@ -29,7 +29,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="../dashboard.html">Quản Trị Hệ Thống</a>
+                <a class="navbar-brand" href="{{ url('admin') }}">Quản Trị Hệ Thống</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -164,8 +164,8 @@
 
 
         @if(!empty($message))
-            var type = '{{$message['type'] == 'success' ? 'success' : 'danger'}}';
-            var message = '{{ $message['message'] }}';
+            var type = '{{@$message['type'] == 'success' ? 'success' : 'danger'}}';
+            var message = '{{ @$message['msg'] }}';
             showNotification( type , message , 5000);
         @endif
     });

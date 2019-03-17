@@ -18,7 +18,7 @@ $router->get('/' , 'TestController@index');
 
 $router->group(['prefix' => 'api/v1','middleware' => 'cors' ], function() use($router) {
 
-    $router->get('/menu' , ['as' => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
+    $router->get('menu' , ['as' => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
     $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Api\MovieController@index']);
 
     

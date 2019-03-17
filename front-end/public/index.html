@@ -2,50 +2,51 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="A Template by themepul.com">
-    <meta name="keywords" content="film review, movie, movie database, movie series, presentation, showcase, tv show">
-    <meta name="author" content="Themepul">
-    <title>MOVIE</title>
-    <link href="%PUBLIC_URL%/assets/images/favicon.png" rel="icon" />
-    <!-- bootstrap css -->
-    <link href="%PUBLIC_URL%/assets/vendors/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="%PUBLIC_URL%/assets/css/bootstrap-select.min.css" rel="stylesheet" />
-    <!-- / bootstrap css -->
-    <!-- owl carousel css -->
-    <link href="%PUBLIC_URL%/assets/vendors/owlcarousel/owl.carousel.css" rel="stylesheet" />
-    <!-- / owl carousel css -->
-    <!--  icon css -->
-    <link href="%PUBLIC_URL%/assets/css/font-awesome.min.css" rel="stylesheet" />
-    <link href="%PUBLIC_URL%/assets/css/flaticon.css" rel="stylesheet" />
-    <link href="%PUBLIC_URL%/assets/css/icofont.css" rel="stylesheet" />
-    <!-- / icon css -->
-    <!-- animations css -->
-    <!-- <link href="%PUBLIC_URL%/assets/vendors/animations/animate.css" rel="stylesheet" /> -->
-    <!-- <link href="%PUBLIC_URL%/assets/vendors/video/video.popup.css" rel="stylesheet" /> -->
-    <!-- <link href="https://vjs.zencdn.net/7.2.2/video-js.css" rel="stylesheet"> -->
-    <!-- / animations css -->
-    <!-- animations css -->
-    <link href="%PUBLIC_URL%/assets/vendors/navmenu/bootsnav.css" rel="stylesheet" />
-    <!-- / animations css -->
-    <!-- slider css -->
-    <link rel="stylesheet" href="%PUBLIC_URL%/assets/vendors/bootstrap-slider/bootstrap-touch-slider.css">
-    <!-- / slider css -->
-    <!--  style css -->
-    <link href="%PUBLIC_URL%/assets/css/style.css" rel="stylesheet" />
-    <!-- / style css -->
-    <!--  media css -->
-    <link href="%PUBLIC_URL%/assets/css/media.css" rel="stylesheet" />
-    <!-- / media css -->
-    <!-- / font css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw"
-        crossorigin="anonymous">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,900' rel='stylesheet' type='text/css'>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A Template by themepul.com">
+  <meta name="keywords" content="film review, movie, movie database, movie series, presentation, showcase, tv show">
+  <meta name="author" content="Themepul">
+  <title>MOVIE</title>
+  <link href="%PUBLIC_URL%/assets/images/favicon.png" rel="icon" />
+  <!-- bootstrap css -->
+  <link href="%PUBLIC_URL%/assets/vendors/bootstrap/bootstrap.min.css" rel="stylesheet" />
+  <link href="%PUBLIC_URL%/assets/css/bootstrap-select.min.css" rel="stylesheet" />
+  <!-- / bootstrap css -->
+  <!-- owl carousel css -->
+  <link href="%PUBLIC_URL%/assets/vendors/owlcarousel/owl.carousel.css" rel="stylesheet" />
+  <!-- / owl carousel css -->
+  <!--  icon css -->
+  <link href="%PUBLIC_URL%/assets/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="%PUBLIC_URL%/assets/css/flaticon.css" rel="stylesheet" />
+  <link href="%PUBLIC_URL%/assets/css/icofont.css" rel="stylesheet" />
+  <!-- / icon css -->
+  <!-- animations css -->
+  <!-- <link href="%PUBLIC_URL%/assets/vendors/animations/animate.css" rel="stylesheet" /> -->
+  <!-- <link href="%PUBLIC_URL%/assets/vendors/video/video.popup.css" rel="stylesheet" /> -->
+  <!-- <link href="https://vjs.zencdn.net/7.2.2/video-js.css" rel="stylesheet"> -->
+  <!-- / animations css -->
+  <!-- animations css -->
+  <link href="%PUBLIC_URL%/assets/vendors/navmenu/bootsnav.css" rel="stylesheet" />
+  <!-- / animations css -->
+  <!-- slider css -->
+  <link rel="stylesheet" href="%PUBLIC_URL%/assets/vendors/bootstrap-slider/bootstrap-touch-slider.css">
+  <!-- / slider css -->
+  <!--  style css -->
+  <link href="%PUBLIC_URL%/assets/css/style.css" rel="stylesheet" />
+  <!-- / style css -->
+  <!--  media css -->
+  <link href="%PUBLIC_URL%/assets/css/media.css" rel="stylesheet" />
+  <!-- / media css -->
+  <!-- / font css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"
+    integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,900' rel='stylesheet'
+    type='text/css'>
 
-    <!-- <link rel="stylesheet" href="https://video-react.github.io/assets/video-react.css" /> -->
-    <!-- <style>
+  <!-- <link rel="stylesheet" href="https://video-react.github.io/assets/video-react.css" /> -->
+  <!-- <style>
     .fb_iframe_widget, .fb_iframe_widget span, .fb_iframe_widget span iframe[style] {
 width: 100% !important;
 }
@@ -53,53 +54,74 @@ width: 100% !important;
 </head>
 
 <body>
-    <div id="fb-root"></div>
-    <script>
-        (function(l) {
-        if (l.search) {
-          var q = {};
-          l.search.slice(1).split('&').forEach(function(v) {
-            var a = v.split('=');
-            q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
-          });
-          if (q.p !== undefined) {
-            window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + (q.p || '') +
-              (q.q ? ('?' + q.q) : '') +
-              l.hash
-            );
-          }
+  <div id="fb-root"></div>
+  <script>
+    (function (l) {
+      if (l.search) {
+        var q = {};
+        l.search.slice(1).split('&').forEach(function (v) {
+          var a = v.split('=');
+          q[a[0]] = a.slice(1).join('=').replace(/~and~/g, '&');
+        });
+        if (q.p !== undefined) {
+          window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + (q.p || '') +
+            (q.q ? ('?' + q.q) : '') +
+            l.hash
+          );
         }
-      }(window.location))
-    </script>
-    <script>(function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = 'https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v3.1&appId=361492804618262&autoLogAppEvents=1';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-    <noscript>
-        You need to enable JavaScript to run this app.
-    </noscript>
-    <div class="main" id="root"></div>
+      }
+    }(window.location))
+  </script>
+
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '361492804618262',
+        cookie: true,  // enable cookies to allow the server to access 
+        // the session
+        xfbml: true,  // parse social plugins on this page
+        version: 'v3.1' // The Graph API version to use for the call
+      });
+
+      // FB.getLoginStatus(function (response) {
+      //   statusChangeCallback(response);
+      // });
+
+    };
+    // Load the SDK asynchronously
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  </script>
 
 
-    <script src="%PUBLIC_URL%/assets/js/jquery-1.12.4.min.js"></script>
-    <script src="%PUBLIC_URL%/assets/vendors/bootstrap/bootstrap.min.js"></script>
-    <script src="%PUBLIC_URL%/assets/js/bootstrap-select.js"></script>
-    <script src="%PUBLIC_URL%/assets/vendors/navmenu/bootsnav.js"></script>
-    <script src="%PUBLIC_URL%/assets/vendors/animations/wow.min.js"></script>
-    <script src="%PUBLIC_URL%/assets/vendors/owlcarousel/owl.carousel.min.js"></script>
-    <!-- <script src="%PUBLIC_URL%/assets/vendors/pace/pace.min.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/assets/vendors/bootstrap-slider/jquery.touchSwipe.min.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/assets/vendors/bootstrap-slider/bootstrap-touch-slider.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/assets/vendors/jquery-ui/jquery-ui.min.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/assets/vendors/video/video.popup.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/assets/js/jquery.syotimer.min.js"></script>
+  
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div class="main" id="root"></div>
+
+
+  <script src="%PUBLIC_URL%/assets/js/jquery-1.12.4.min.js"></script>
+  <script src="%PUBLIC_URL%/assets/vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="%PUBLIC_URL%/assets/js/bootstrap-select.js"></script>
+  <script src="%PUBLIC_URL%/assets/vendors/navmenu/bootsnav.js"></script>
+  <script src="%PUBLIC_URL%/assets/vendors/animations/wow.min.js"></script>
+  <script src="%PUBLIC_URL%/assets/vendors/owlcarousel/owl.carousel.min.js"></script>
+  <!-- <script src="%PUBLIC_URL%/assets/vendors/pace/pace.min.js"></script> -->
+  <!-- <script src="%PUBLIC_URL%/assets/vendors/bootstrap-slider/jquery.touchSwipe.min.js"></script> -->
+  <!-- <script src="%PUBLIC_URL%/assets/vendors/bootstrap-slider/bootstrap-touch-slider.js"></script> -->
+  <!-- <script src="%PUBLIC_URL%/assets/vendors/jquery-ui/jquery-ui.min.js"></script> -->
+  <!-- <script src="%PUBLIC_URL%/assets/vendors/video/video.popup.js"></script> -->
+  <!-- <script src="%PUBLIC_URL%/assets/js/jquery.syotimer.min.js"></script>
     <script src="%PUBLIC_URL%/assets/js/jquery.mixitup.min.js"></script> -->
-    <script src="%PUBLIC_URL%/assets/js/tab.js"></script>
-    <script src="%PUBLIC_URL%/assets/js/main.js"></script>
+  <script src="%PUBLIC_URL%/assets/js/tab.js"></script>
+  <script src="%PUBLIC_URL%/assets/js/main.js"></script>
 </body>
 
 </html>

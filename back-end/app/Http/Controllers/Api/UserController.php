@@ -40,7 +40,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             $response =  [
                 'error' => true,
-                'msg'  => 'An access_token is required'
+                'msg'  => 'An access token is required'
             ];
             
         }
@@ -126,13 +126,10 @@ class UserController extends Controller
                 $response =  ['error' => true,'msg'  => 'login failed'];
             }
 
-            return $this->template_api($response);
+            
+        } else {
+            $response =  ['error' => true,'msg'  => 'access token is incorrect'];
         }
 
-
-        
-
-
-
-
+        return $this->template_api($response);
     }

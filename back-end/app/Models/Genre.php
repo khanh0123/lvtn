@@ -9,6 +9,7 @@ class Genre extends Model
 {
     protected $table = 'genre';
     public $timestamps = false;
+    protected $casts = ['id' => 'string'];
 
     public function get_page($filter = [] , $req)
     {

@@ -62,15 +62,15 @@ if (!function_exists('apiCurl')) {
         }
         if ($type === 'array') {
             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                    'X-Requested-With: XMLHttpRequest',
+                'X-Requested-With: XMLHttpRequest',
                     // 'X-Forwarded-For: ' . getRealUserIp(),
-                )
-            );
+            )
+        );
         }
         
         //execute post
         $result = curl_exec($ch);              
-       
+
         
         
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -136,13 +136,13 @@ if (!function_exists('getRealUserIp')) {
     {
         switch (true) {
             case (!empty($_SERVER['HTTP_X_REAL_IP'])) :
-                return $_SERVER['HTTP_X_REAL_IP'];
+            return $_SERVER['HTTP_X_REAL_IP'];
             case (!empty($_SERVER['HTTP_CLIENT_IP'])) :
-                return $_SERVER['HTTP_CLIENT_IP'];
+            return $_SERVER['HTTP_CLIENT_IP'];
             case (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) :
-                return $_SERVER['HTTP_X_FORWARDED_FOR'];
+            return $_SERVER['HTTP_X_FORWARDED_FOR'];
             default :
-                return $_SERVER['REMOTE_ADDR'];
+            return $_SERVER['REMOTE_ADDR'];
         }
     }
 
@@ -190,14 +190,14 @@ if (!function_exists('customDate')) {
 
         switch ($format) {
             case 'normal':
-                $format = "d/m/y";
-                break;
+            $format = "d/m/y";
+            break;
             case 'daytime':
-                $format = "d/m/y - h:i";
-                break;
+            $format = "d/m/y - h:i";
+            break;
             default:
-                $format = "d/m/y";
-                break;
+            $format = "d/m/y";
+            break;
         }
         if(is_numeric($time))
             return Date($format , $time);
@@ -233,6 +233,20 @@ if (!function_exists('create_slug')) {
         return $str;
     }
 }
+if (!function_exists('slugify')) {
+    /**
+     * Global helpers create slug from string
+     * 
+     * @return string
+     */
+    function slugify($text , $replace = "-")
+    {
+        $slugify = new \Cocur\Slugify\Slugify();
+        return $slugify->slugify($text,$replace);   
+    }
+
+
+}
 
 
 if (!function_exists('time_in_ms')) {
@@ -253,7 +267,7 @@ if (!function_exists('get_table_name')) {
      * @return string
      */
     function get_table_name($id){
-        
+
         $reg = "/^([a-zA-Z]+)([0-9]+)/";
         $array_table = ['genre','country','category'];
         $matches = [];
@@ -346,6 +360,7 @@ if (!function_exists('getIdFromLinkFb')) {
 
 if (!function_exists('addConditionsToQuery')) {
     function addConditionsToQuery($conditions , $result){
+
         if( count($conditions['and']) > 0 ){
             $result = $result->where($conditions['and']);
         }
@@ -358,16 +373,28 @@ if (!function_exists('addConditionsToQuery')) {
                 }
             });
         }
+        if( count($conditions['multi']) > 0 ){
+            foreach ($conditions['multi'] as $key => $value) {
+                if(count($value) > 0){
+                    $result = $result->whereIn($key,$value);
+                    $result = $result->havingRaw('count(*) = '.count($value));
+                    break;
+                }
+                
+                
+            }
+            
+        }
         return $result;
     }
 }
 
 if (!function_exists('formatResult')) {
     function formatResult($results , $rules = [] , $type = ''){  
-        
+
 
         if(count($results) > 0 && $results[0]->id !== null ){
-            
+
             $new_data = [];
             $arr_index = [];
             for ($i = 0; $i < count($results); $i++) {
@@ -424,7 +451,7 @@ if (!function_exists('formatResult')) {
 
 
             foreach ($new_data as $key => $value) {
-                
+
                 foreach ($rules as $new_name => $f) {
                     $dt = [];
                     if(!isset($new_data[$key]->$new_name) || is_array($new_data[$key]->$new_name) ){
@@ -435,14 +462,14 @@ if (!function_exists('formatResult')) {
                         
                         
                         foreach ($value->$ff as $kk => $vv) {
-                            
+
                             $dt[$kk][$f[$i]] = $vv;
                             
                             
                         }
                         
                     }
-                   
+
                     $new_data[$key]->$new_name = $dt;
                 }
 

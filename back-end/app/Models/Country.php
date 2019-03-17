@@ -9,6 +9,7 @@ class Country extends Model
 {
     protected $table = 'country';
     public $timestamps = false;
+    protected $casts = ['id' => 'string'];
 
     public function get_page($filter = [] , $req)
     {

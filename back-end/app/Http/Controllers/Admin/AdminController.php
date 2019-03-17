@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends MainAdminController
-{	
-	protected $model;
-	protected $view_folder = 'admin/user/';
-	protected $rules = [
+{   
+    protected $model;
+    protected $view_folder = 'admin/user/';
+    protected $rules = [
         'insert' => [
             'email'      => 'required|email',
             'first_name' => 'required',
@@ -30,7 +30,7 @@ class AdminController extends MainAdminController
             'last_name'  => 'required',
             'gad_id'     => 'required|exists:admin_group,id',
         ],
-	];
+    ];
     protected $columns_filter = [
         'id'         =>    'admin.id',            
         'gad_id'     =>    'admin.gad_id',            
@@ -43,12 +43,12 @@ class AdminController extends MainAdminController
     ];
     protected $columns_search = [];
 
-	public function __construct(Request $request) {
-		$this->model = new Admin;
-		parent::__construct($request);
-	}
+    public function __construct(Request $request) {
+        $this->model = new Admin;
+        parent::__construct($request);
+    }
 
-	public function setItem($type , $req , &$item){
+    public function setItem($type , $req , &$item){
         $validator = Validator::make($req->all(), $this->rules[$type]);
         if ($validator->fails()) {
 
@@ -152,29 +152,30 @@ class AdminController extends MainAdminController
         if($request->session()->has('user')){
             return redirect('/admin');
         }
-    	return $this->template($this->view_folder."login");
+        return $this->template($this->view_folder."login");
     }
 
     public function doLogin(Request $request)
     {
-    	if($request->session()->has('user')){
+        if($request->session()->has('user')){
             return redirect('/admin');
         }
-    	$email = $request->email;
-    	$password = $request->password;
-    	if(empty($email) || empty($password)){
-    		return view($this->view_folder.'login')
-    			->withMessage(['type' => 'error' , 'msg' => 'Email và mật khẩu không được để trống']);
-    	} else {
-    		$result = Admin::where([                
+        $email = $request->email;
+        $password = $request->password;
+        if(empty($email) || empty($password)){
+            return view($this->view_folder.'login')
+                ->withMessage(['type' => 'error' , 'msg' => 'Email và mật khẩu không được để trống']);
+        } else {
+            $result = Admin::where([                
                 'email' => $email , 
                 'password' => encode_password($request->password)
             ])->first();
+            
 
-    		if(empty($result)){
-    			return view($this->view_folder.'login')
-    			->withMessage(['type' => 'error' , 'msg' => 'Email hoặc mật khẩu chưa chính xác']);
-    		} else if($result->status !== 1){
+            if(empty($result)){
+                return view($this->view_folder.'login')
+                ->withMessage(['type' => 'error' , 'msg' => 'Email hoặc mật khẩu chưa chính xác']);
+            } else if((int)$result->status !== 1){
                 return view($this->view_folder.'login')
                 ->withMessage(['type' => 'error' , 'msg' => 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ với quản trị viên.']);
             } else {
@@ -185,7 +186,7 @@ class AdminController extends MainAdminController
                     $request->session()->put('permission', $per_user);
                 }
                 
-    			$request->session()->put('user', $result);
+                $request->session()->put('user', $result);
                 $session_id = session()->getId();
                 if($session_id){
                     $session = new Sessions();
@@ -198,9 +199,9 @@ class AdminController extends MainAdminController
                         $session->save();
                     }
                 }
-    			return redirect()->back();
-    		}
-    	}
+                return redirect()->back();
+            }
+        }
     }
 
     public function changepass(Request $request)

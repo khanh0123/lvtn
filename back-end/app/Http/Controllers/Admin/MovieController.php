@@ -62,6 +62,7 @@ class MovieController extends MainAdminController
         
     ];
     protected $columns_search = ['name'];
+    protected $columns_search_multi = ['cat_id'];
 	
 
 	public function __construct(Request $request) {

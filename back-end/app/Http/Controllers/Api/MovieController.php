@@ -33,9 +33,10 @@ class MovieController extends Controller
         
     ];
     protected $columns_search = ['name','slug'];
-	
+    protected $columns_search_multi = ['cat_id'];
 
-	public function __construct(Request $request) {
+
+    public function __construct(Request $request) {
         $this->model = new Movie;
         // parent::__construct($request);
     }
@@ -50,12 +51,12 @@ class MovieController extends Controller
         $data['info']   = formatResult($data['info'],[
             'genre'         => ['gen_id','gen_name','gen_slug'] ,
             'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
-            ],'get');
+        ],'get');
 
         foreach ($data['info'] as $key => $value) {
             $data['info'][$key]->images = json_decode($data['info'][$key]->images);
         }
-                
+
         return $this->template_api($data);
     }
 
@@ -71,14 +72,14 @@ class MovieController extends Controller
         $data['info']   = formatResult($data['info'],[
             'genre'         => ['gen_id','gen_name','gen_slug'] ,
             'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
-            ])[0];
+        ])[0];
         if($data['info']){
             $data['info']->images = json_decode($data['info']->images);
         } else {
             return $this->template_err('Error 404');
         }
         
-                
+
         return $this->template_api($data);
     }
     
@@ -95,7 +96,8 @@ class MovieController extends Controller
             $filter['limit']      = ($limit < 1 || $limit > 100)? $this->limit : $limit;
             $conditions = [
                 'and' => [],
-                'or' => []
+                'or' => [],
+                'multi' => [],
             ];
 
             //get tags
@@ -103,35 +105,52 @@ class MovieController extends Controller
             for ($i = 0; $i < count($tags); $i++) {
                 $slug = create_slug($tags[$i]);
                 $tag_info = $this->check_exist_slug($slug);
+
                 if(!empty($tag_info)){
-                    $table_name = $tag_info->getTable();
                     $info_tags[] = $tag_info;
-                    $conditions['and'][] = ["$table_name.slug",'=',$slug];
+                    switch ($tag_info->getTable()) {
+                        case 'category':
+                            $conditions['and'][] = ['category.id','=',$tag_info->id];
+                            break;
+                        case 'genre':
+                            if(empty($conditions['multi']['genre.id'])) $conditions['multi']['genre.id'] = [];
+                            $conditions['multi']['genre.id'][] = $tag_info->id;
+                            break;
+                        default:
+                            break;
+                    }              
+                    
                 }
                 
             }
-            $filter['conditions'] = $conditions;
+            if(count($info_tags) == 0) $data= ['error' => true , 'msg' => 'tags is required'];
+            else {
+                
+                $filter['conditions'] = $conditions;
+                $data['info']   = $this->model->get_page($filter , $request);
+                $data['info']   = formatResult($data['info'],[
+                    'genre'         => ['gen_id','gen_name','gen_slug'] ,
+                    'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
+                ],'get');
+                $data['meta']['tags'] = $info_tags;
 
-            $data['info']   = $this->model->get_page($filter , $request);
-            $data['info']   = formatResult($data['info'],[
-                'genre'         => ['gen_id','gen_name','gen_slug'] ,
-                'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
-            ],'get');
-            $data['meta']['tags'] = $info_tags;
-
-            foreach ($data['info'] as $key => $value) {
-                $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+                foreach ($data['info'] as $key => $value) {
+                    $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+                }
             }
+
+
+
 
         } else {
             $data= ['error' => true , 'msg' => 'tags is required'];
         }
         return $this->template_api($data);
-        
+
 
     }
 
 
-    
+
 
 }
