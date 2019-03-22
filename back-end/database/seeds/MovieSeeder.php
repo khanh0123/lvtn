@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\Episode;
+use App\Models\Episode_video;
 
 class MovieSeeder extends Seeder
 {
@@ -36,6 +38,7 @@ class MovieSeeder extends Seeder
 
             $data = $items->items;
             $array_data = [];
+            $_id = 1;
             foreach ($data as $key => $value) {
 
                 $images = [];
@@ -53,6 +56,7 @@ class MovieSeeder extends Seeder
 
 
                 $array_data[] = [
+                    'id' => $_id,
                     'name'         => $value->title,
                     'slug'         => slugify($value->title),
                     'total_rate'   => 0,
@@ -69,15 +73,20 @@ class MovieSeeder extends Seeder
                     'cat_id'       => "cat001",
                     'images'       => json_encode($images)
                 ];
+                $_id++;
             }
             $array_data = array_reverse($array_data);
             
             DB::table('movie')->insert($array_data);
 
             //Thêm phim lẻ
-            $path = storage_path() . "/jsons/phimle.json";
+            $path = storage_path() . "/jsons/phimle1.json";
             $data = json_decode(file_get_contents($path));            
             $array_data = [];
+            $arr_movie_episode = [];
+            $arr_video = [];
+            $arr_video_episode = [];
+            $arr_movie_country = [];
             $row_count_inserted = 0;
             $nextId = DB::table('movie')->max('id') + 1;
 
@@ -96,6 +105,7 @@ class MovieSeeder extends Seeder
 
                 ];
                 $array_data[] = [
+                    'id' => $_id,
                     'name'         => $value->name,
                     'slug'         => create_slug($value->name),
                     'total_rate'   => 0,
@@ -113,45 +123,123 @@ class MovieSeeder extends Seeder
                     'trailer'      => $value->trailer,
                     'images'       => json_encode($images)
                 ];
-                if($row_count_inserted < 300)
-                    $row_count_inserted ++;
-                else {
-                    $array_data = array_reverse($array_data);
-                    DB::table('movie')->insert($array_data);
-                    $row_count_inserted = 0;
-                    $array_data = [];
-                }
-            }
+                $arr_movie_episode[] = [
+                    'id'        => $_id,
+                    'mov_id'    => $_id,
+                    'slug'      => '',
+                    'title'     => '',
+                    'episode'   => 1,
+                    'images'    => '',
+                    'short_des' => '',
+                    'long_des'  => '',
 
-            //insert genre of movie
-            DB::table('movie')->insert($array_data);
-            $arr_genre = [];
-            $row_count_inserted = 0;
-            foreach ($data as $key => $value) {
-
-                foreach ($value->genres->data as $v) {
-
-                    $gen = DB::table("genre")->where("name","like","%$v->name%")->first();
-                    if(empty($gen)){
-                        echo "không tồn tại thể loại $v->name";
-                        continue;
-                    }
-                    $mov = DB::table("movie")->where("name","like","%$value->name%")->first();
-                    $arr_genre[] = [
-                        'gen_id' => $gen->id,
-                        'mov_id' => $mov->id
+                ];
+                if(!empty($value->episode_id)){
+                    $more = [
+                        'referer' => 'https://fimfast.com/'.$value->slug,
+                        'X-Requested-With' => 'XMLHttpRequest',
+                    ];
+                    $arr_video[] = [
+                        'id'          => $_id,
+                        'source_link' => 'https://fimfast.com/api/v2/films/'.$value->id.'/episodes/'.$value->episode_id,
+                        'source_name' => 'fimfast',
+                        'link_play'   => '',
+                        'ad_id'       => 1,
+                        'more_info'   => json_encode($more),
+                    ];
+                    $arr_video_episode[] = [
+                        'epi_id'   => $_id,
+                        'video_id' => $_id,
                     ];
                 }
 
-                if($row_count_inserted < 300)
+                //movie_country
+                if(!empty($value->country->data)){
+                    // foreach ( as $v) {
+                    //     echo "<pre>";
+                    //     var_dump($v);
+                    //     echo "</pre>";
+                    //     die();
+
+                        
+                        $country = DB::table('country')->where('name',"like","%".$value->country->data->name."%")->first();
+                        if(!empty($country)){
+                            $arr_movie_country[] = [
+                                'cou_id' => $country->id,
+                                'mov_id' => $_id,
+                            ];
+                        } else {
+                            echo "không tồn tại quoc gia ".$value->country->data->name;
+                        }
+                    // }
+                    
+                }
+
+                //movie_genre
+                if(!empty($value->genre->data)){
+                    foreach ($value->genre->data as $v) {
+                        $genre = DB::table('genre')->where('name',"like","%$v->name%")->first();
+                        if(!empty($genre)){
+                            $arr_movie_genre[] = [
+                                'gen_id' => $country->id,
+                                'mov_id' => $_id,
+                            ];
+                        } else {
+                            echo "không tồn tại the loai $v->name";
+                        }
+                    }
+                    
+                }
+                if($row_count_inserted < 300 && $key < count($data)-1)
                     $row_count_inserted ++;
                 else {
-                    DB::table('movie_genre')->insert($arr_genre);
+                    // $array_data = array_reverse($array_data);
+                    DB::table('movie')->insert($array_data);
+                    DB::table('episode')->insert($arr_movie_episode);
+                    DB::table('video')->insert($arr_video);
+                    DB::table('episode_video')->insert($arr_video_episode);
+                    DB::table('movie_country')->insert($arr_movie_country);
                     $row_count_inserted = 0;
-                    $arr_genre = [];
+                    $array_data         = [];
+                    $arr_video          = [];
+                    $arr_movie_episode  = [];
+                    $arr_video_episode  = [];
+                    $arr_movie_country  = [];
                 }
+
+                $_id++;
             }
-            DB::table('movie_genre')->insert($arr_genre);
+
+            //insert genre of movie
+            // DB::table('movie')->insert($array_data);
+            // $arr_genre = [];
+
+            // $row_count_inserted = 0;
+            // foreach ($data as $key => $value) {
+
+            //     foreach ($value->genres->data as $v) {
+
+            //         $gen = DB::table("genre")->where("name","like","%$v->name%")->first();
+            //         if(empty($gen)){
+            //             echo "không tồn tại thể loại $v->name";
+            //             continue;
+            //         }
+            //         $mov = DB::table("movie")->where("name","=","$value->name")->first();
+            //         $arr_genre[] = [
+            //             'gen_id' => $gen->id,
+            //             'mov_id' => $mov->id
+            //         ];
+            //     }
+
+            //     if($row_count_inserted < 300)
+            //         $row_count_inserted ++;
+            //     else {
+            //         DB::table('movie_genre')->insert($arr_genre);
+            //         $row_count_inserted = 0;
+            //         $arr_genre = [];
+            //     }
+            // }
+            // DB::table('movie_genre')->insert($arr_genre);
         }
     }
 }

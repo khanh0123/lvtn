@@ -106,12 +106,38 @@ class CountriesSeeder extends Seeder
            'slug' => create_slug('Nhật Bản'),
            'code' => 'NB',
         ];
+        $array_data[] = [
+           'id'   => 'cou012',
+           'name' => 'Châu Á',
+           'slug' => create_slug('Châu Á'),
+           'code' => 'CA',
+        ];
+        $array_data[] = [
+           'id'   => 'cou013',
+           'name' => 'Tây Ban Nha',
+           'slug' => create_slug('Tây Ban Nha'),
+           'code' => 'TBN',
+        ];
+        $array_data[] = [
+           'id'   => 'cou014',
+           'name' => 'Anh',
+           'slug' => create_slug('Anh'),
+           'code' => 'UK',
+        ];
+        $array_data[] = [
+           'id'   => 'cou015',
+           'name' => 'Châu Âu',
+           'slug' => create_slug('Châu Âu'),
+           'code' => 'EU',
+        ];
+
+
         $array_data = array_reverse($array_data);
         DB::table('country')->insert($array_data);
         DB::table('max_id')->insert(
             [
                 'table_name' => 'country',
-                'max_id' => 'cou011'
+                'max_id' => 'cou015'
             ],
         );
     }

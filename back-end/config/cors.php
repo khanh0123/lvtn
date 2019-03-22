@@ -23,7 +23,7 @@ return [
 
     'supportsCredentials' => true,
     'allowedOrigins' => $domain,
-    'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
+    'allowedHeaders' => ['Content-Type', 'X-Requested-With','Authorization'],
     'allowedMethods' => ['GET', 'POST', 'PUT', 'DELETE' , 'OPTIONS'],// ex: ['GET', 'POST', 'PUT', 'DELETE']
     'exposedHeaders' => [],
     'contentType' => ['application/json; charset=utf-8'],

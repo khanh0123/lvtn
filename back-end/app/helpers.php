@@ -12,7 +12,7 @@ if (!function_exists('apiCurl')) {
      *
      * @return mixed
      */
-    function apiCurl($url, $method = "GET", $params = array(), $type = 'array' , $type_ip = 'v4')
+    function apiCurl($url, $method = "GET", $params = array(), $type = 'array' , $type_ip = 'v4' , $header = [])
     {
         $full_url = $url;
         $data_string = '';
@@ -47,29 +47,34 @@ if (!function_exists('apiCurl')) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_ENCODING,  '');
+        if(isset($header['referer'])) {
+            curl_setopt($ch, CURLOPT_REFERER, $header['referer']);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-Requested-With: XMLHttpRequest']);
+        }
         // curl_setopt($ch, CURLOPT_USERAGENT, get_server_var('HTTP_USER_AGENT'));
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36");
 
-        if($type_ip == 'v4'){
-            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        } else {
-            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        }
+        // if($type_ip == 'v4'){
+        //     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        // } else {
+        //     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        // }
 
         if (!empty($params) && ($method == "POST" || $method == "PUT" || $method == "DELETE")) {
             curl_setopt($ch, CURLOPT_POST, count($params));
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
         }
         if ($type === 'array') {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'X-Requested-With: XMLHttpRequest',
                     // 'X-Forwarded-For: ' . getRealUserIp(),
-            )
-        );
+            ]);
         }
         
         //execute post
-        $result = curl_exec($ch);  
+        $result = curl_exec($ch);                       
+
+        
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
         if ($errno = curl_errno($ch)) {
@@ -90,7 +95,7 @@ if (!function_exists('apiCurl')) {
         
         
         try {
-            $res = json_decode($result);
+            $res = json_decode($result);            
             return $res !== null ? $res : $result;
         } catch (Exception $e) {
             return $result;

@@ -5,19 +5,35 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { FacebookProvider, LoginButton } from 'react-facebook';
+import cookie from "react-cookies";
 
 class LoginModal extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this._responseLoginFacebook = this._responseLoginFacebook.bind(this);
     }
 
     _responseLoginFacebook = (data) => {
-        if(data && data.authResponse){
-            let {accessToken} = data.authResponse;            
-            this.props.user_login(accessToken);
-            
+        if (data && data.authResponse) {
+            let { accessToken } = data.authResponse;
+            if (accessToken) {
+                this.props.user_login(accessToken).then((res) => {
+                    let data = res.payload.data;
+                    
+                    if(data.access_token){
+                        cookie.save("access_token", data.access_token, { path: '/' })
+                        this.props.onClose();
+                    }
+                });
+                // let info = await data;
+                // if (data.info) {
+                //     console.log("set cookie");
+                //     cookie.save("access_token", data.access_token, { path: '/' })
+                // }
+            }
+
+
         }
     }
 
@@ -53,9 +69,9 @@ class LoginModal extends React.Component {
                                 <div className="buttons">
                                     <a className="btn btn-buttons">Đăng nhập</a>
                                 </div>
-    
-                                <div style={{color:'white'}}>
-                                    Hoặc đăng nhập bằng <i style={{cursor:"pointer"}} className="fa fa-facebook-square fa-3x" onClick={this.onLoginFacebook}></i>
+
+                                <div style={{ color: 'white' }}>
+                                    Hoặc đăng nhập bằng <i style={{ cursor: "pointer" }} className="fa fa-facebook-square fa-3x" onClick={this.onLoginFacebook}></i>
                                 </div>
                                 <div className="forgat-pass">
                                     <div className="remember-me">
@@ -73,7 +89,7 @@ class LoginModal extends React.Component {
 
         )
     }
-    
+
 }
 const mapStateToProps = ({ user_result }) => {
     return Object.assign({}, user_result || {});
@@ -81,7 +97,7 @@ const mapStateToProps = ({ user_result }) => {
 
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
-        user_login:UserAction.user_login
+        user_login: UserAction.user_login
 
     }, dispatch);
     return { ...actions, dispatch };

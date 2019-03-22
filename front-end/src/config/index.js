@@ -37,6 +37,7 @@ let config = {
         movie_detail: domain_api + "movie",
         movie_filter_tags: domain_api + "movie/filter/tags",
         user_login: domain_api + "user/login",
+        user_get_status_login: domain_api + "user/get_login_status",
         
     },
     title: {

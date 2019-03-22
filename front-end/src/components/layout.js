@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import Loading from "./others/Loading";
-import { LoadingAction } from "../actions"
+import { LoadingAction,UserAction } from "../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router";
@@ -17,6 +17,7 @@ class Layout extends React.Component {
     }
     
     componentDidMount(){   
+        
         if(!this.props[LoadingAction.ACTION_SET_LOADING]){
             this.props.set_loading(true);
             this.setState({is_loading:true});
@@ -64,7 +65,8 @@ function mapStateToProps({ loading_results }) {
 
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
-        set_loading: LoadingAction.set_loading,        
+        set_loading: LoadingAction.set_loading,   
+        get_status_login:UserAction.user_get_status_login,     
     }, dispatch);
     return { ...actions, dispatch };
 }

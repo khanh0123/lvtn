@@ -7,8 +7,12 @@ use DB;
 class Controller extends BaseController
 {
     
-
-    protected function template_api($data = []){    
+    protected $jwt_secret_key;
+    public function __construct()
+    {
+        $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
+    }
+    protected function template_api($data = []){
 
         return !isset($data['error']) ? Response()->json($data , 200) : Response()->json($data , 400);
     }
@@ -18,7 +22,6 @@ class Controller extends BaseController
         return Response()->json(['error' => true,'msg' => $msg],400);
     }
     protected function generate_access_token($data){
-        $this->jwt_secret_key = !empty(env('JWT_SECRET')) ? env('JWT_SECRET') : 'gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6';
         $token = \Firebase\JWT\JWT::encode($data, $this->jwt_secret_key , 'HS256');
         return $token;
     }

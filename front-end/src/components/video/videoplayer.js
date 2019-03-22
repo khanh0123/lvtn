@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Player from "./player2";
+import { isString } from 'util';
 // import ReactPlayer from 'react-player'
 // import ReactJWPlayer from 'react-jw-player';
 // import videojs from 'video.js'
@@ -44,17 +45,20 @@ class VideoPlayer extends Component {
     render() {
         let { link_play } = this.state;
         let { thumbnail } = this.props;
+        console.log(link_play);
+        
 
-        link_play = {
+        let link = {
             src:'',
             type:'video/mp4'
         }
-        link_play.src = "https://r6---sn-25ge7nl6.googlevideo.com/videoplayback?id=3095c55bebaf9c97&itag=22&source=picasa&begin=0&requiressl=yes&mm=30&mn=sn-25ge7nl6&ms=nxu&mv=u&pl=23&sc=yes&ei=NHmPXMj1GISehAe15Y7YDA&susc=ph&app=fife&mime=video/mp4&cnr=14&dur=2552.499&lmt=1547472817594486&mt=1552905497&ipbits=0&cms_redirect=yes&keepalive=yes&ratebypass=yes&ip=51.15.218.197&expire=1552913748&sparams=ip,ipbits,expire,id,itag,source,requiressl,mm,mn,ms,mv,pl,sc,ei,susc,app,mime,cnr,dur,lmt&signature=3B8D76B7383087A7C140B655BE04A637EA7CAD7A3919231D919867235902B31E.5E05BA1413CF0AF46C9C2C6FE28C1D861B483B475E5201BA4A21829745FF0E58&key=us0";
+        link.src = link_play.src;
+        // link_play.src = "https://r6---sn-25ge7nl6.googlevideo.com/videoplayback?id=3095c55bebaf9c97&itag=22&source=picasa&begin=0&requiressl=yes&mm=30&mn=sn-25ge7nl6&ms=nxu&mv=u&pl=23&sc=yes&ei=NHmPXMj1GISehAe15Y7YDA&susc=ph&app=fife&mime=video/mp4&cnr=14&dur=2552.499&lmt=1547472817594486&mt=1552905497&ipbits=0&cms_redirect=yes&keepalive=yes&ratebypass=yes&ip=51.15.218.197&expire=1552913748&sparams=ip,ipbits,expire,id,itag,source,requiressl,mm,mn,ms,mv,pl,sc,ei,susc,app,mime,cnr,dur,lmt&signature=3B8D76B7383087A7C140B655BE04A637EA7CAD7A3919231D919867235902B31E.5E05BA1413CF0AF46C9C2C6FE28C1D861B483B475E5201BA4A21829745FF0E58&key=us0";
 
         const videoJsOptions = {
             autoplay: false,
             controls: true,
-            sources: [link_play]
+            sources: [link]
         }
         return (
             <div className='player-wrapper'>
@@ -64,7 +68,20 @@ class VideoPlayer extends Component {
     }
     _get_link_from_sources = (s, current) => {
         let index = 0;
+        s = s.sources;
+        if (typeof s.pt == 'object') {
+            for (let i = 0; i < s.pt.length; i++) {
+                index++;
+                if (index > current) {
+                    return {
+                        link_play: s.pt[i],
+                        index_play: index,
+                    }
+                }
 
+            }
+
+        }
         if (s.gd) {
             for (let i = 0; i < s.gd.length; i++) {
                 index++;
@@ -78,7 +95,8 @@ class VideoPlayer extends Component {
             }
 
         }
-        if (s.fb) {
+        
+        if (typeof s.fb == 'object') {
             for (let i = 0; i < s.fb.length; i++) {
                 index++;
                 return {
@@ -87,6 +105,8 @@ class VideoPlayer extends Component {
                 }
             }
         }
+
+
         return {
             link_play: {},
             index_play: '',

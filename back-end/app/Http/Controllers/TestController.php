@@ -14,6 +14,8 @@ class TestController extends Controller
 {
 
 	private $num_train = 1200;
+
+
 	private function show($path){
 		$files1 = scandir($path);
 		foreach ($files1 as $value) {
@@ -28,11 +30,60 @@ class TestController extends Controller
 		}
 	}
 
+
+
 	public function test_link_drive(Request $request)
 	{
-		$path = storage_path() . "/jsons/phimle.json"; 
-        $items = file_get_contents($path); 
-        echo $items;die;
+		die;
+		// $path_sm_2 = storage_path() . "/jsons/data_split/phimle16.json";
+		$path_big  = storage_path() . "/jsons/data_split/phimle16.json";
+
+		// $data_sm_2 = json_decode(file_get_contents($path_sm_2),true);
+		$data_big  = json_decode(file_get_contents($path_big),true);
+
+        // $data = array_merge($data_big,array_reverse($data_sm_2));
+
+
+        // echo "<pre>";
+        // var_dump($data);
+        // echo "</pre>";
+        // die();
+        
+
+		// $data_sm = $data_sm['data'];
+		// // $data = array_reverse($data);
+
+		// unset($data_sm['data']);
+		// unset($data_sm['total']);
+
+		// foreach ($data_sm_2 as $key => $value) {
+		// 	$data_sm_2[$key]['episode_id'] = $data_sm[$key]['episode_id'];
+		// 	$data_sm_2[$key]['country'] = $data_sm[$key]['country'];
+		// }
+
+		// $data = json_encode($data,JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
+		// $fp = fopen(storage_path() . "/jsons/phimle1.json", 'w');
+		// fwrite($fp, $data);
+		// fclose($fp);
+
+
+		// echo $data;
+		echo json_encode($data_big,JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
+		die;
+		// $this->get_id_episode_filmfast();
+		// die;
+
+        // $data = array_reverse($data);
+		// $this->get_id_episode_filmfast();
+
+
+
+
+
+
+
+
+        die;
 		// $link = $request->link;
 		$data = $this->get_curl();
 
@@ -443,6 +494,54 @@ class TestController extends Controller
 			return (int)$result[1];
 		}
 		return -1;
+	}
+
+	public function get_id_episode_filmfast()
+	{
+		$path = storage_path() . "/jsons/data_split/phimle15.json"; 
+        $data = json_decode(file_get_contents($path),true);
+
+        // $data = array_reverse($data);
+
+        $num = 0;
+        foreach ($data['data'] as $key => $value) {
+        	if($num > 200) break;
+        	if(isset($value['episode_id']) && isset($value['country'])) continue;
+        	$url = 'https://fimfast.com/'.$value['slug'];
+        	$content = apiCurl($url,'GET');        	
+        	
+        	if(!is_string($content)) break;
+        	$reg = "/data-episode-id=\"([0-9]+)\"/";
+        	$reg_country = '/Quốc gia:.*(\r\n|\r|\n).*<a href="\/([a-z-]+)" target="_blank">(.*)<\/a>/';
+        	$matches = [];
+        	$matches_country = [];
+        	if(preg_match($reg, $content , $matches)){
+        		$data[$key]['episode_id'] = $matches[1];
+        		$num++;
+        	};
+
+        	if(preg_match($reg_country, $content , $matches_country)){
+        		$data[$key]['country'] = [];
+        		$country = [
+        			'data' => [
+        				'slug' => $matches_country[2],
+        				'name' => $matches_country[3],
+        			]
+        		];
+        		$data[$key]['country'] = $country;
+        	}
+        	sleep(10);
+        }
+
+
+       
+        
+        $data = array_reverse($data);
+        $data = json_encode(array_reverse($data),JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
+        $fp = fopen(storage_path() . "/jsons/data_split/phimle15.json", 'w');
+        fwrite($fp, $data);
+        fclose($fp);
+        echo json_encode(array_reverse(json_decode($data,true)),JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS); 
 	}
 
 	

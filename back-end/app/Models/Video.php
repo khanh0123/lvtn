@@ -22,9 +22,13 @@ class Video extends Model
     {
     	$data = DB::table($this->table)
             ->select([
+                'video.id',
+                'source_link',
                 'source_name',
                 'max_qualify',
                 'link_play',
+                'more_info',
+
 
             ])
             ->join("episode_video","episode_video.video_id","=" , "video.id")

@@ -13,62 +13,51 @@ import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 
 
-class Filters extends React.Component {
+class Search extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             data: [],
-            tags: [],
+            keyword: '',
             page: 1,
             per_page: 12,
             total: 0,
-            meta:[],
-
         }
         this._handlePageChange = this._handlePageChange.bind(this);
         this._resetDataPage = this._resetDataPage.bind(this);
-        this._getTagsFromRoute = this._getTagsFromRoute.bind(this);
         this._getDataPage = this._getDataPage.bind(this);
     }
 
 
 
     async componentDidMount() {
-        let tags = this._getTagsFromRoute(this.props);  
-        let {page} = queryString.parse(this.props.location.search);
-        if(!page) page = 1;
-        await this.setState({ tags: tags , page:page });
+        let { page, q } = queryString.parse(this.props.location.search);
+        if (!page) page = 1;
+        await this.setState({ page: page, keyword: q });
         await this._getDataPage(page);
-        await this.props.set_loading(false);
-        
+        // await this.props.set_loading(false);
+
     }
     async componentWillReceiveProps(nextProps) {
-        let new_tags = this._getTagsFromRoute(nextProps);
-        let {tags} = this.state;
-        if(tags.length > 0){
-            for (let i = 0; i < new_tags.length; i++) {
-                if(tags[i] && tags[i] != new_tags[i]){
-                    await this._resetDataPage();
-                    await this.setState({ tags: new_tags });
-                    await this._getDataPage();
-                    await this.props.set_loading(false);
-                    return;
-                }
-                
-            }
+        let { page, q } = queryString.parse(nextProps.location.search);
+        if (q && q !== this.state.keyword) {
+            await this._resetDataPage();
+            await this.setState({ page: page, keyword: q });
+            await this._getDataPage();
+            await this.props.set_loading(false);
         }
-        
+
 
     }
-    
+
 
     render() {
-        let { data } = this.state;
-        let {page} = queryString.parse(this.props.location.search);
-        page = !page ?  1 : parseInt(page);
-        
-        
+        let { data , keyword } = this.state;
+        let { page } = queryString.parse(this.props.location.search);
+        page = !page ? 1 : parseInt(page);
+
+
 
         return data.length > 0 && (
             <React.Fragment>
@@ -76,6 +65,7 @@ class Filters extends React.Component {
                     <div className="container">
                         <ul className="breadcrumb">
                             <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
+                            <li><Link to="/tim-kiem"><span className="fa fa-home" /> Tìm kiếm</Link></li>
                             {this._renderBreadcrumbs()}
                         </ul>
                     </div>
@@ -107,63 +97,52 @@ class Filters extends React.Component {
             </React.Fragment>
 
 
-        ) || <p style={{textAlign:"center",color:"white"}}>Không có kết quả nào</p>;;
+        ) || <p style={{textAlign:"center",color:"white"}}>Không có kết quả tìm kiếm với từ khóa {keyword}</p>;
     }
     _renderBreadcrumbs = () => {
-        const {meta , tags} = this.state;
-        let tags_info = meta.tags ? meta.tags : [];
         let data = [];
-        for (let i = 0; i < tags.length; i++) {
-            for (let j = 0; j < tags_info.length; j++) {
-                if(tags_info[j].slug == tags[i]) {
-                    if(i == tags.length - 1)
-                        data.push(<li key={i}>{tags_info[j].name}</li>)
-                    else data.push(<li key={i}><Link to={`/${tags[i]}`}> {tags_info[j].name}</Link></li>)
-                }
-                
-            }
-            
-        }
+        // for (let i = 0; i < tags.length; i++) {
+        //     for (let j = 0; j < tags_info.length; j++) {
+        //         if(tags_info[j].slug == tags[i]) {
+        //             if(i == tags.length - 1)
+        //                 data.push(<li key={i}>{tags_info[j].name}</li>)
+        //             else data.push(<li key={i}><Link to={`/${tags[i]}`}> {tags_info[j].name}</Link></li>)
+        //         }
+
+        //     }
+
+        // }
         return data;
     }
-    _getTagsFromRoute = (props) => {
-        const { tag_1, tag_2, tag_3 } = props.match.params;
-        let tags = [];
-        if (tag_1 != undefined) tags.push(tag_1);
-        if (tag_2 != undefined) tags.push(tag_2);
-        if (tag_3 != undefined) tags.push(tag_3);
-        return tags;
-    }
     _getDataPage = async (page) => {
-        const {tags , per_page} = this.state;        
+        let { keyword } = this.state;
         let p = page != '' ? page : this.state.page;
-        if(tags.length > 0){
-            let data = await this.props.get_movie_filter(tags,per_page, p);
+        if (keyword) {
+            let data = await this.props.get_movie_search(keyword, p);
             let res = data.payload.data;
             await this.setState({
-                data: res.info.data,
-                total: res.info.total,
-                per_page: res.info.per_page,
-                meta:res.meta,
+                data: res.data,
+                total: res.total,
+                per_page: res.per_page,
             });
         }
     }
     _handlePageChange = async (pageNumber) => {
         await this.setState({ page: pageNumber });
+        let { keyword } = this.state;
         this.props.history.push({
             pathname: window.location.pathname,
-            search: "?" + new URLSearchParams({page: pageNumber}).toString()
+            search: "?" + new URLSearchParams({ q: keyword, page: pageNumber }).toString()
         })
         this._getDataPage(pageNumber);
     }
     _resetDataPage = async () => {
         await this.setState({
             data: [],
-            tags: [],
+            keyword: '',
             page: 1,
             per_page: 12,
             total: 0,
-            meta:[],
         });
     }
 }
@@ -173,14 +152,10 @@ const mapStateToProps = ({ movie_results, loading_results }) => {
 
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
-        get_movie_filter: MovieAction.get_movie_filter,
-        // get_detail_movie: MovieAction.get_detail_movie,
-        // get_linkplay_movie: MovieAction.get_linkplay_movie,
-        // get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        // get_hot_series_movies: MovieAction.get_hot_series_movies,
+        get_movie_search: MovieAction.get_movie_search,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);
     return { ...actions, dispatch };
 }
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Filters));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));

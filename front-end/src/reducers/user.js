@@ -6,6 +6,9 @@ export default function (state = {}, action) {
         case UserAction.ACTION_USER_LOGIN:
             result[action.type] = action.payload.data;
             break;
+        case UserAction.ACTION_USER_GET_STATUS_LOGIN:
+            result[action.type] = action.payload.data;
+            break;
         default:
             break;
     }

@@ -23,7 +23,7 @@ class Player extends React.Component {
     }
   
     componentWillUnmount() {
-      this.player.dispose();
+      // window.videojs.dispose();
     }
   }
   

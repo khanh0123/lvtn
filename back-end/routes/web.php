@@ -28,6 +28,7 @@ $router->group(['prefix' => 'api/v1','middleware' => 'cors' ], function() use($r
 
     $router->group(['prefix' => 'user'], function() use($router) {
         $router->post('login' , ['as' => "Api.UserController.login", 'uses' => 'Api\UserController@login']);
+        $router->get('get_login_status' , ['as' => "Api.UserController.get_login_status", 'uses' => 'Api\UserController@get_login_status']);
     });
 
 }); 

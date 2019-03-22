@@ -8,6 +8,7 @@ use App\Models\Video;
 use App\Models\Config;
 use Validator;
 
+
 class VideoController extends Controller
 {   
 
@@ -32,7 +33,12 @@ class VideoController extends Controller
         $data = ['sources' => []];
         $links = $this->model->api_get($mov_id,$episode);
         foreach ($links as $key => $value) {
+            
+            
             $link_play = json_decode($value->link_play);
+            $value->more_info = json_decode($value->more_info);
+
+            
             switch ($value->source_name) {
                 case 'facebook':
                     if(!isset($data['sources']['fb'])){
@@ -63,6 +69,15 @@ class VideoController extends Controller
                         ];
                     }
                     break;
+                case 'fimfast':
+                    if(empty($link_play)){
+                        $link_play = $this->get_link_fimfast($value);
+                        $link_play = json_encode($link_play);
+                        Video::where('id',$value->id)->update(['link_play' => $link_play]);
+                        $link_play = json_decode($link_play);
+                    }
+                    $data['sources'] = $link_play;
+                    break;
                                         
                 default:
                     foreach ($link_play as $v) {
@@ -80,6 +95,17 @@ class VideoController extends Controller
         }
         return Response()->json(['info' => $data]);
         
+    }
+
+    private function get_link_fimfast($item)
+    {
+        $data = apiCurl($item->source_link,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
+
+        if(isset($data->id)){
+            $result['sources'] = $data->sources;
+            return $result;
+        }
+        return ['sources' => []];
     }
     
 }

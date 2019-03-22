@@ -124,6 +124,21 @@ class Api {
         })
     }
 
+    static get_movie_search(keyword , page) {
+
+        const url = `${config.api.movie}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {
+                name:keyword,
+                page:page
+            }
+        })
+    }
+
 
     static user_login(access_token) {
         const url = `${config.api.user_login}`;
@@ -137,6 +152,18 @@ class Api {
             params: {}
         })
     }
+    static user_get_status_login() {
+        const url = `${config.api.user_get_status_login}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {}
+        })
+    }
+
+    
 
     
 

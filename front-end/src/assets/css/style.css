@@ -686,11 +686,12 @@ button:hover,
 }
 
 .header-search input {
-    padding: 20px 138px;
+    padding: 1em;
     padding-right: 0;
     border-radius: 100px;
     background: transparent;
     border-color: #182028;
+    color: white;
 }
 
 .social .attr-nav > ul > li > a {
@@ -703,7 +704,7 @@ button:hover,
     top: 0;
     background: #13be13;
     border: none;
-    padding: 9px 36px;
+    padding: 4px 36px;
     border-radius: 100px;
     color: #fff;
 }
@@ -898,15 +899,15 @@ a.btn.btn-button {
     position: relative;
 }
 @media only screen and (min-width: 768px){
-  .movie-item-contents.gradient>img {
-      min-height: 487px;
-  }
+    .movie-item-contents.gradient>img {
+        min-height: 487px;
+    }
 
-.filter-page .movie-item-contents>img {
-    min-height: 29em;
-    min-width: 18em;
+    .filter-page .movie-item-contents>img {
+        min-height: 29em;
+        min-width: 18em;
+    }
 }
-
 
 
 .time-bg {

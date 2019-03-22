@@ -26,20 +26,70 @@ class UserController extends Controller
     ];
     protected $columns_search = [];
 
-
     public function __construct(Request $request) {
+        parent::__construct();
         $this->model = new User;
     }
     /*
      * Show view add new item.
      */
+    public function get_login_status(Request $request)
+    {
+        $token = $request->header("Authorization");
+        if(empty($token)){
+            $response =  [
+                // 'error' => true,
+                'isLogged' => false,
+                'msg'  => 'An access token is required'
+            ];
+        } else {
+            try {
+                $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
+                $credentials = JWT::decode($token, $this->jwt_secret_key, ['HS256']);
 
+                //validate
+
+
+                //end
+                $result = $this->model::select('id','name','avatar','email')->where([
+                    ['user.id','=',$credentials->id],
+                    ['user.status' , '=' , 1],
+                ])->first();
+                if(empty($result)){
+                    $response =  [
+                        'isLogged' => false,
+                        'msg'  => 'Token is invalid'
+                    ];
+                } else {
+                    $response =  [
+                        'info'  => $result,
+                        'isLogged' => true,
+                    ];
+                }
+            } catch(ExpiredException $e) {
+                $response =  [
+                    'isLogged' => false,
+                    'msg'  => 'Access Token is expired.'
+                ];
+            } catch(\Exception $e) {
+
+                $response =  [
+                    'isLogged' => false,
+                    'msg'  => 'Access Token is invalid.',
+                    // 'exception' => $e->getMessage(),
+                ];
+            }
+            
+        }
+
+        return $this->template_api($response);
+    }
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), $this->rules['login']);
         if ($validator->fails()) {
             $response =  [
-                'error' => true,
+                // 'error' => true,
                 'msg'  => 'An access token is required'
             ];
             
@@ -51,12 +101,10 @@ class UserController extends Controller
         
 
         //request to get info
-        $info_user = apiCurl($url,'GET',$params,'array');        
-
-
+        $info_user = apiCurl($url,'GET',$params,'json');        
+        
         //check valid token facebook
         if(!is_string($info_user) && (isset($info_user->id) || isset($info_user['id'])) ){
-
             //define time expire of token
             $max_time   = !empty(env("MAX_TIME_LOGIN")) ? (double)env("MAX_TIME_LOGIN") : 60*60*2;
             $time_curr  = time();
@@ -91,6 +139,7 @@ class UserController extends Controller
                 }
                 
             } else { //user already exists
+                $user = $this->model;
                 $id_user = $user->id;
                 $email   = $user->email;
                 $fb_id   = $user->fb_id;
