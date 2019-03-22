@@ -15,7 +15,7 @@ class LoginModal extends React.Component {
 
     _responseLoginFacebook = (data) => {
         if(data && data.authResponse){
-            let {accessToken} = data.authResponse;
+            let {accessToken} = data.authResponse;            
             this.props.user_login(accessToken);
             
         }

@@ -32,12 +32,12 @@ class Detail extends React.Component {
         await this.setState({ id: id, slug: slug });
         this._get_link_play(this.props);
         if (!this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] || (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && !this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id])) {
-            let data = await this.props.get_detail_movie(id, slug);
-            this.setState({ data: data.payload.data.info });
+            let res = await this.props.get_detail_movie(id, slug);
+            this.setState({ data: res.payload.data });
             await this.props.set_loading(false);
         } else {
             let data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
-            this.setState({ data: data.info });
+            this.setState({ data: data });
             await this.props.set_loading(false);
         }
 
@@ -50,6 +50,7 @@ class Detail extends React.Component {
     }
     render() {
         let { data, hot_series_movies, hot_retail_movies, link_play } = this.state;
+        
 
         return data !== '' && (
             <React.Fragment>
@@ -111,10 +112,10 @@ class Detail extends React.Component {
         if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
             await props.get_hot_series_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_series_movies: r.info.data });
+                this.setState({ hot_series_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
             this.setState({ hot_series_movies: data });
         }
     }
@@ -122,10 +123,10 @@ class Detail extends React.Component {
         if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
             await props.get_hot_retail_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.info.data });
+                this.setState({ hot_retail_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
             this.setState({ hot_retail_movies: data });
         }
     }
@@ -136,10 +137,10 @@ class Detail extends React.Component {
             (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode])) {
             await props.get_linkplay_movie(id, episode).then((res) => {
                 let r = res.payload.data;
-                this.setState({ link_play: r.info.sources });
+                this.setState({ link_play: r.sources });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode].info.sources;
+            let data = props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode].sources;
             this.setState({ link_play: data });
         }
     }

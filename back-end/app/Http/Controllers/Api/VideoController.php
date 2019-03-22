@@ -44,6 +44,7 @@ class VideoController extends Controller
                             'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
                             'duration'  => $v->duration,
                             'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                            'type'      => $v->type,
                         ];
                     }
                     
@@ -58,6 +59,7 @@ class VideoController extends Controller
                             'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
                             'duration'  => $v->duration,
                             'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                            'type'      => $v->type,
                         ];
                     }
                     break;
@@ -69,6 +71,7 @@ class VideoController extends Controller
                             'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
                             'duration'  => $v->duration,
                             'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
+                            'type'      => $v->type,
                         ];
                     }
                     break;

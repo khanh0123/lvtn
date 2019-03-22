@@ -61,7 +61,6 @@ class Kernel extends HttpKernel
         'auth.basic'         => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cors'               => \Barryvdh\Cors\HandleCors::class,
         'api.cors'           => \App\Http\Middleware\Cors::class, 
-
         'bindings'           => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers'      => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can'                => \Illuminate\Auth\Middleware\Authorize::class,

@@ -12,7 +12,9 @@ class VideoController extends MainAdminController
 {	
 
 	private $domain_graph_FB = "https://graph.facebook.com/v2.6/";
-    private $domain_google_drive = 'https://docs.google.com/e/get_video_info';
+    private $domain_google_drive = [
+        'https://docs.google.com/e/get_video_info',
+    ];
 	protected $rules = [
         'insert' => [
             'source_link' => 'required',
@@ -72,10 +74,6 @@ class VideoController extends MainAdminController
         //get link play video
         $link_play = $this->getLink($item->source_link,$item->source_name);
         $link_play = !empty($link_play) ? json_encode($link_play) : json_encode([]);
-        // echo "<pre>";
-        // var_dump($link_play);
-        // echo "</pre>";
-        // die();
         
         $item->link_play = $link_play;
         
@@ -187,26 +185,41 @@ class VideoController extends MainAdminController
                 }
                 $params = [
                     'docid' => $docid,
-                    'access_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
-                    'authuser' => '',
+                    // 'access_token' => env('GOOGLE_DRIVE_REFRESH_TOKEN'),
+                    // 'authuser' => '',
                 ];
                 if($ip) {
-                  if($ip == 'v4') {
-                    // $result = "status=ok&hl=en_US&allow_embed=0&ps=docs&partnerid=30&autoplay=0&docid=1S35lOSgyG55egvg1_8WQaskST7-Bdp6b&abd=0&public=true&el=embed&title=B%E1%BA%A3n+sao+c%E1%BB%A7a+SieuSaoSieuNgo_4K_cliptv.mp4&iurl=https%3A%2F%2Fdocs.google.com%2Fvt%3Fid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26s%3DAMedNnoAAAAAXHZaGsFeJHx1EZSk_1G53t5vlebyLeUN&cc3_module=https%3A%2F%2Fs.ytimg.com%2Fyt%2Fswfbin%2Fsubtitles3_module.swf&ttsurl=https%3A%2F%2Fdocs.google.com%2Ftimedtext%3Fid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26vid%3De9c23dbe6b447244&reportabuseurl=https%3A%2F%2Fdocs.google.com%2Fabuse%3Fid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b&fmt_list=37%2F1920x1080%2F9%2F0%2F115%2C22%2F1280x720%2F9%2F0%2F115%2C59%2F854x480%2F9%2F0%2F115%2C18%2F640x360%2F9%2F0%2F115&token=1&plid=V0QVhyhftTHCtA&fmt_stream_map=18%7Chttps%3A%2F%2Fr3---sn-i3b7knl6.c.mail.google.com%2Fvideoplayback%3Fexpire%3D1551267386%26ei%3D-j12XJXdBYHw_QHi_p34Ag%26ip%3D118.69.66.168%26cp%3DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%26id%3De9c23dbe6b447244%26itag%3D18%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3b7knl6%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D5326.378%26lmt%3D1527706936564132%26mt%3D1551252868%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRAIgM2KeBjR7gd1EB_cwoOOwlvP-wx1eLupDhpWlXTWB1DwCIE_wD0s8BNmcH6kc_s-OVYYosXslo76dZ8w63Yguk3QP%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRAIgZwHxYrAncmMGDh9Bqen4qzd2LOd-wF5iUq5GI_hesWkCIHocIo1QOxTFqmyD9s7gXUJ7xWenXQ3esV8LaImzVtm9%2C22%7Chttps%3A%2F%2Fr3---sn-i3b7knl6.c.mail.google.com%2Fvideoplayback%3Fexpire%3D1551267386%26ei%3D-j12XJXdBYHw_QHi_p34Ag%26ip%3D118.69.66.168%26cp%3DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%26id%3De9c23dbe6b447244%26itag%3D22%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3b7knl6%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D5326.378%26lmt%3D1527705041721587%26mt%3D1551252868%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRgIhAKWW_4iED4uyx4OjLlN6jwSGFGDsXYegjVfg9nGDBqpmAiEA_fz5WuXzWnoP9jFRFfciMu_IV4O2ie_EefzvGyThGSU%3D%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRgIhAL4Pwzh8CwUuF4_RIpuHEq9Ym9wgnb1-KKRQaw0Em_dPAiEA8UAaofnsajFk4N1RqmJUPl1lLuP9sii873nfgJ9BfrU%3D%2C37%7Chttps%3A%2F%2Fr3---sn-i3b7knl6.c.mail.google.com%2Fvideoplayback%3Fexpire%3D1551267386%26ei%3D-j12XJXdBYHw_QHi_p34Ag%26ip%3D118.69.66.168%26cp%3DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%26id%3De9c23dbe6b447244%26itag%3D37%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3b7knl6%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D5326.378%26lmt%3D1527706471004515%26mt%3D1551252868%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRQIgTJdcZ48aDVUUZ0o3XpaDSwxPDc0TllJ_ySNbdkdIzLkCIQCYetpik1Cj_J-8lQ_MwEJjLA00j2a6mdQmI0isAKP_Uw%3D%3D%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRQIgSywjGnpdxxufR_IiLoHYTJt8NcihGOZph8VNgWq8i1wCIQCxtPIVd6KxCEU5ZWZKzUf_Ta6ndi_9oo20uzw3g_W-2A%3D%3D%2C59%7Chttps%3A%2F%2Fr3---sn-i3b7knl6.c.mail.google.com%2Fvideoplayback%3Fexpire%3D1551267386%26ei%3D-j12XJXdBYHw_QHi_p34Ag%26ip%3D118.69.66.168%26cp%3DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%26id%3De9c23dbe6b447244%26itag%3D59%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3b7knl6%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D5326.378%26lmt%3D1527706486452381%26mt%3D1551252868%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRgIhAJY1s7S5bUF2c8QAM6ykFohpqejVnPMNTVdTIwifOZGSAiEAzX0MSUIxUZSW7UzswmZKXm6GsbVLtEHn4MjSM4W_EQs%3D%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRAIgVTx-J19xv7hWBxrfY-y_nS06-F_2Bp0K_uWOFlv0dgsCICW_StcNon8zsJe_W6LLdvXJMGbUy7c5JW93sB5F4bBw&url_encoded_fmt_stream_map=itag%3D18%26url%3Dhttps%253A%252F%252Fr3---sn-i3b7knl6.c.mail.google.com%252Fvideoplayback%253Fexpire%253D1551267386%2526ei%253D-j12XJXdBYHw_QHi_p34Ag%2526ip%253D118.69.66.168%2526cp%253DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%2526id%253De9c23dbe6b447244%2526itag%253D18%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3b7knl6%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D5326.378%2526lmt%253D1527706936564132%2526mt%253D1551252868%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRAIgM2KeBjR7gd1EB_cwoOOwlvP-wx1eLupDhpWlXTWB1DwCIE_wD0s8BNmcH6kc_s-OVYYosXslo76dZ8w63Yguk3QP%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRAIgZwHxYrAncmMGDh9Bqen4qzd2LOd-wF5iUq5GI_hesWkCIHocIo1QOxTFqmyD9s7gXUJ7xWenXQ3esV8LaImzVtm9%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dmedium%2Citag%3D22%26url%3Dhttps%253A%252F%252Fr3---sn-i3b7knl6.c.mail.google.com%252Fvideoplayback%253Fexpire%253D1551267386%2526ei%253D-j12XJXdBYHw_QHi_p34Ag%2526ip%253D118.69.66.168%2526cp%253DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%2526id%253De9c23dbe6b447244%2526itag%253D22%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3b7knl6%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D5326.378%2526lmt%253D1527705041721587%2526mt%253D1551252868%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRgIhAKWW_4iED4uyx4OjLlN6jwSGFGDsXYegjVfg9nGDBqpmAiEA_fz5WuXzWnoP9jFRFfciMu_IV4O2ie_EefzvGyThGSU%253D%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRgIhAL4Pwzh8CwUuF4_RIpuHEq9Ym9wgnb1-KKRQaw0Em_dPAiEA8UAaofnsajFk4N1RqmJUPl1lLuP9sii873nfgJ9BfrU%253D%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dhd720%2Citag%3D37%26url%3Dhttps%253A%252F%252Fr3---sn-i3b7knl6.c.mail.google.com%252Fvideoplayback%253Fexpire%253D1551267386%2526ei%253D-j12XJXdBYHw_QHi_p34Ag%2526ip%253D118.69.66.168%2526cp%253DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%2526id%253De9c23dbe6b447244%2526itag%253D37%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3b7knl6%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D5326.378%2526lmt%253D1527706471004515%2526mt%253D1551252868%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRQIgTJdcZ48aDVUUZ0o3XpaDSwxPDc0TllJ_ySNbdkdIzLkCIQCYetpik1Cj_J-8lQ_MwEJjLA00j2a6mdQmI0isAKP_Uw%253D%253D%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRQIgSywjGnpdxxufR_IiLoHYTJt8NcihGOZph8VNgWq8i1wCIQCxtPIVd6KxCEU5ZWZKzUf_Ta6ndi_9oo20uzw3g_W-2A%253D%253D%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dhd1080%2Citag%3D59%26url%3Dhttps%253A%252F%252Fr3---sn-i3b7knl6.c.mail.google.com%252Fvideoplayback%253Fexpire%253D1551267386%2526ei%253D-j12XJXdBYHw_QHi_p34Ag%2526ip%253D118.69.66.168%2526cp%253DQVNKU0NfVlNWR1hOOldLblYtdGVKblVNZ0JfMWpXVVNIMWd4cnRxVjA4Y3lVcDFNc3NJcnZiT0M%2526id%253De9c23dbe6b447244%2526itag%253D59%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3b7knl6%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1S35lOSgyG55egvg1_8WQaskST7-Bdp6b%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D5326.378%2526lmt%253D1527706486452381%2526mt%253D1551252868%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRgIhAJY1s7S5bUF2c8QAM6ykFohpqejVnPMNTVdTIwifOZGSAiEAzX0MSUIxUZSW7UzswmZKXm6GsbVLtEHn4MjSM4W_EQs%253D%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRAIgVTx-J19xv7hWBxrfY-y_nS06-F_2Bp0K_uWOFlv0dgsCICW_StcNon8zsJe_W6LLdvXJMGbUy7c5JW93sB5F4bBw%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dlarge×tamp=1551252986106&length_seconds=5326";
-                    $result = apiCurl($this->domain_google_drive,'GET', $params , 'json');
-                    // $result = file_get_contents($this->domain_google_drive.$docid, false, stream_context_create(['socket' => ['bindto' => '[::]:0']])); // force IPv6
+                  if($ip == 'v4') {                    
+                    $result = apiCurl($this->domain_google_drive[0],'GET', $params , 'json');
                   } else {
-                    $result = apiCurl($this->domain_google_drive,'GET', $params , 'json');
-                    // $result = file_get_contents($this->domain_google_drive.$docid, false, stream_context_create(['socket' => ['bindto' => '0:0']])); // force IPv4
+                    $result = apiCurl($this->domain_google_drive[0],'GET', $params , 'json');                    
                   }
                 }
-                
-                
+
                 
                 if(isset($result['http_code']) || empty($result)){
                     return [];
                 }
+                // echo "<pre>";
+                // var_dump($result);
+                // echo "</pre>";
+                // die();
+                
                 $result = urldecode($result);
+                return $this->get_output($result,2);
+            
+            default:
+                break;
+        }
+        return [];
+        
+    }
+
+    private function get_output($result , $case = 1)
+    {
+        $output = [];
+        switch ($case) {
+            case 1:
                 preg_match('/(&fmt_stream_map=)(.*)/', $result, $matches);
                 // $result = urldecode($result);
                 
@@ -220,10 +233,9 @@ class VideoController extends MainAdminController
                 ];
                 $links = explode(',', $result);
 
-
                 
                 
-                $output = [];
+                
                 foreach($links as $key => $direct_link) {
                     
                     $direct_link = urldecode($direct_link);
@@ -265,41 +277,35 @@ class VideoController extends MainAdminController
                 $output = preg_replace('/(0)(720|480|360)(p)/', '$2$3', $output); // sort fix
                 $output = json_decode($output);
                 return $output;
+            case 2:
+                // $data = urldecode($result);
+                $arr = explode("&", $result);
+                
+                foreach ($arr as $value) {
+                    if(strpos($value, "url=https") === 0){
+                        $url = str_replace("url=", "", $value);
+                        $url = urldecode($url);
+                        $output[] = [
+                            'qualify'  => '',
+                            'src'      => $url,
+                            'type'     => '',
+                            'duration' => ''
+                        ];
+                        break;
+                    }
+                }
+                echo "<pre>";
+                var_dump($output);
+                echo "</pre>";
+                die();
                 
                 
-                // $googleDisk = Storage::disk('google');
-                // $filename = 'laravel.png';
-                // $filePath = public_path($filename);
-                // // Upload using a stream...
-                // Storage::cloud()->put($filename, fopen($filePath, 'r+'));
-                // // Get file listing...
-                // $dir = '/';
-                // $recursive = false; // Get subdirectories also?
-                // $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                // // Get file details...
-                // $file = $contents
-                //     ->where('type', '=', 'file')
-                //     ->where('filename', '=', pathinfo($filename, PATHINFO_FILENAME))
-                //     ->where('extension', '=', pathinfo($filename, PATHINFO_EXTENSION))
-                //     ->first(); // there can be duplicate file names!
-                // //return $file; // array with file info
-                // // Store the file locally...
-                // //$readStream = Storage::cloud()->getDriver()->readStream($file['path']);
-                // //$targetFile = storage_path("downloaded-{$filename}");
-                // //file_put_contents($targetFile, stream_get_contents($readStream), FILE_APPEND);
-                // // Stream the file to the browser...
-                // $readStream = Storage::cloud()->getDriver()->readStream($file['path']);
-                // return response()->stream(function () use ($readStream) {
-                //     fpassthru($readStream);
-                // }, 200, [
-                //     'Content-Type' => $file['mimetype'],
-                //     //'Content-disposition' => 'attachment; filename="'.$filename.'"', // force download?
-                // ]);
-            
+
+                break;            
             default:
                 break;
         }
-        return [];
+        return $output;
         
     }
 }

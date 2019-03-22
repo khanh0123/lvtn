@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import ReactPlayer from 'react-player'
-import ReactJWPlayer from 'react-jw-player';
+import Player from "./player2";
+// import ReactPlayer from 'react-player'
+// import ReactJWPlayer from 'react-jw-player';
+// import videojs from 'video.js'
+// import "video.js/dist/video-js.css"
 // const sources = {
 //     sintelTrailer: 'http://media.w3.org/2010/05/sintel/trailer.mp4',
 //     bunnyTrailer: 'http://media.w3.org/2010/05/bunny/trailer.mp4',
@@ -14,127 +17,79 @@ class VideoPlayer extends Component {
         super(props);
         this.state = {
             sources: [],
-            index_play:-1,
-            link_play:''
-            
+            index_play: -1,
+            link_play: ''
+
         };
 
-        this.onAdPlay = this.onAdPlay.bind(this);
-        this.onReady = this.onReady.bind(this);
-        this.onVideoLoad = this.onVideoLoad.bind(this);
-        this.onError = this.onError.bind(this);
-        this.onSetupError = this.onSetupError.bind(this);
     }
     async componentDidMount() {
+
         let { data } = this.props;
         if (data.length > 0) {
-            let obj = await this._get_link_from_sources(data,0);
-            this.setState({ sources: data,link_play:obj.link_play,index_play:obj.index_play });
-            
+            let obj = await this._get_link_from_sources(data, 0);
+            this.setState({ sources: data, link_play: obj.link_play, index_play: obj.index_play });
         }
+
 
     }
     async componentWillReceiveProps(nextProps) {
         let { data } = nextProps;
         if (data !== this.state.sources) {
-            let obj = await this._get_link_from_sources(data,0);
-            await this.setState({ sources: data,link_play:obj.link_play,index_play:obj.index_play });
+            let obj = await this._get_link_from_sources(data, 0);
+            await this.setState({ sources: data, link_play: obj.link_play, index_play: obj.index_play });
         }
-    }
-    onReady(event) {
-        // interact with JW Player API here
-        const player = window.jwplayer(this.playerId);
-    }
-    onAdPlay(event) {
-        // track the ad play here
-    }
-    onVideoLoad(event) {
-
-        console.log("loaded video");
-        
-    }
-    onError(event){
-        console.log(event);
-        
-        console.log('error');
-        
-    }
-    onSetupError(event){
-        let {index_play , sources , link_play} = this.state;
-            
-        if(index_play !== '' && link_play != ''){
-            // index_play++;
-            let obj = this._get_link_from_sources(sources , index_play);
-            this.setState({link_play:obj.link_play,index_play:obj.link_play});
-        }
-        
     }
 
     render() {
         let { link_play } = this.state;
         let { thumbnail } = this.props;
-        // let link = this._get_link_from_sources(sources , index_play);
-        // console.log(`
-        // link_play : ${link_play} vt : ${this.state.index_play}
-        
-        // `);
-        console.log(link_play);
-        
-        
-        
+
+        link_play = {
+            src:'',
+            type:'video/mp4'
+        }
+        link_play.src = "https://r6---sn-25ge7nl6.googlevideo.com/videoplayback?id=3095c55bebaf9c97&itag=22&source=picasa&begin=0&requiressl=yes&mm=30&mn=sn-25ge7nl6&ms=nxu&mv=u&pl=23&sc=yes&ei=NHmPXMj1GISehAe15Y7YDA&susc=ph&app=fife&mime=video/mp4&cnr=14&dur=2552.499&lmt=1547472817594486&mt=1552905497&ipbits=0&cms_redirect=yes&keepalive=yes&ratebypass=yes&ip=51.15.218.197&expire=1552913748&sparams=ip,ipbits,expire,id,itag,source,requiressl,mm,mn,ms,mv,pl,sc,ei,susc,app,mime,cnr,dur,lmt&signature=3B8D76B7383087A7C140B655BE04A637EA7CAD7A3919231D919867235902B31E.5E05BA1413CF0AF46C9C2C6FE28C1D861B483B475E5201BA4A21829745FF0E58&key=us0";
+
+        const videoJsOptions = {
+            autoplay: false,
+            controls: true,
+            sources: [link_play]
+        }
         return (
             <div className='player-wrapper'>
-                {/* <ReactPlayer
-                    className='react-player'
-                    url={link.src}
-                    width='100%'
-                    height='100%'
-                    controls={true}
-                    style={{ backgroundImage: `url(${link.thumbnail})` }}
-                /> */}
-                {/* file={link.src} */}
-                <ReactJWPlayer
-                    file={link_play}
-                    image={thumbnail != '' ? thumbnail : link.thumbnail}
-                    onAdPlay={this.onAdPlay}
-                    onReady={this.onReady}
-                    onVideoLoad={this.onVideoLoad}
-                    onError={this.onError}
-                    onSetupError={this.onSetupError}
-                    playerId={'player-movies'} // bring in the randomly generated playerId
-                    playerScript={'https://cdn.jwplayer.com/libraries/Yu5mXJ4F.js'}
-                />
+                <Player {...videoJsOptions} />
             </div>
         );
     }
-    _get_link_from_sources = (s , current) => {
+    _get_link_from_sources = (s, current) => {
         let index = 0;
-        
-        if(s.gd) {
+
+        if (s.gd) {
             for (let i = 0; i < s.gd.length; i++) {
                 index++;
-                if(index > current) {
+                if (index > current) {
                     return {
-                        link_play:s.gd[i].src,
-                        index_play:index,
-                    }  
+                        link_play: s.gd[i],
+                        index_play: index,
+                    }
                 }
-                             
+
             }
-            
+
         }
-        if (s.fb ) {
+        if (s.fb) {
             for (let i = 0; i < s.fb.length; i++) {
                 index++;
                 return {
-                    link_play:s.fb[i].src,
-                    index_play:index,
-                } 
+                    link_play: s.fb[i],
+                    index_play: index,
+                }
             }
         }
         return {
-            link_play:'',
-            index_play:'',
+            link_play: {},
+            index_play: '',
         }
     }
 }

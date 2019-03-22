@@ -27,6 +27,50 @@ class TestController extends Controller
 			echo "<br>";
 		}
 	}
+
+	public function test_link_drive(Request $request)
+	{
+		$path = storage_path() . "/jsons/phimle.json"; 
+        $items = file_get_contents($path); 
+        echo $items;die;
+		// $link = $request->link;
+		$data = $this->get_curl();
+
+		$data = urldecode($data);
+		$arr = explode("&", $data);
+		// strpos(haystack, needle)
+		foreach ($arr as $value) {
+			// echo strpos($value, "url=https")."<br>";
+			if(strpos($value, "url=https") === 0){
+				$url = str_replace("url=", "", $value);
+				$url = urldecode($url);
+				// $url = preg_replace("/(&driveid=.[a-z0-9A-Z_]+)&/", "", $url);
+				
+				break;
+			}
+		}
+		echo $url;
+		// echo json_encode($arr);
+	}
+	private function get_curl(){
+		return "status=ok&hl=vi&allow_embed=0&ps=docs&partnerid=30&autoplay=0&docid=1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO&abd=0&public=true&el=embed&title=B%E1%BA%A3n+sao+c%E1%BB%A7a+C%C3%B4+G%C3%A1i+%C4%90%E1%BA%BFn+T%E1%BB%AB+H%C3%B4m+Qua+-+Full+HD.mp4&iurl=https%3A%2F%2Fdocs.google.com%2Fvt%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26s%3DAMedNnoAAAAAXI9zSSfdZluUIFoxTs0JzOaSz58QhB50&cc3_module=https%3A%2F%2Fs.ytimg.com%2Fyt%2Fswfbin%2Fsubtitles3_module.swf&ttsurl=https%3A%2F%2Fdocs.google.com%2Ftimedtext%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26vid%3Dbc9a6ae9161dea94&reportabuseurl=https%3A%2F%2Fdocs.google.com%2Fabuse%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO&fmt_list=22%2F1280x720%2F9%2F0%2F115&token=1&plid=V0QVjQBaIRN5sA&fmt_stream_map=22%7Chttps%3A%2F%2Fr1---sn-i3belnez.c.docs.google.com%2Fvideoplayback%3Fexpire%3D1552912233%26ei%3DKVePXNj6JZiExwPP_7D4Cg%26ip%3D118.69.66.168%26cp%3DQVNKVEpfUVJRRFhOOk0wOUlvTDZPWFJtZmxmWUFTNk5lZ0U4WHRjVnBmd2dCWF9lU3ZreUZLbDM%26id%3Dbc9a6ae9161dea94%26itag%3D22%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3belnez%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D7694.791%26lmt%3D1512017222480781%26mt%3D1552897774%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRQIhAMAalel5IWShrkSWekR7JddNmPxcAnOH_k41i3kPNBJ3AiBGsjWqvOJuzHWXc6oe_IZ8_fNv3sICBYorCHnbXIhXwQ%3D%3D%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRQIgIRY4vquklUxCGhzdBRbrPkYCnT4cQue9C12CNCbi2KYCIQC1rcZhkmGgccPAKGg4fvduRBkQ_pTrIT_paHRKNkikqA%3D%3D&url_encoded_fmt_stream_map=itag%3D22%26url%3Dhttps%253A%252F%252Fr1---sn-i3belnez.c.docs.google.com%252Fvideoplayback%253Fexpire%253D1552912233%2526ei%253DKVePXNj6JZiExwPP_7D4Cg%2526ip%253D118.69.66.168%2526cp%253DQVNKVEpfUVJRRFhOOk0wOUlvTDZPWFJtZmxmWUFTNk5lZ0U4WHRjVnBmd2dCWF9lU3ZreUZLbDM%2526id%253Dbc9a6ae9161dea94%2526itag%253D22%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3belnez%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D7694.791%2526lmt%253D1512017222480781%2526mt%253D1552897774%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRQIhAMAalel5IWShrkSWekR7JddNmPxcAnOH_k41i3kPNBJ3AiBGsjWqvOJuzHWXc6oe_IZ8_fNv3sICBYorCHnbXIhXwQ%253D%253D%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRQIgIRY4vquklUxCGhzdBRbrPkYCnT4cQue9C12CNCbi2KYCIQC1rcZhkmGgccPAKGg4fvduRBkQ_pTrIT_paHRKNkikqA%253D%253D%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dhd720&timestamp=1552897833634&length_seconds=7694";
+		return "status=ok&hl=vi&allow_embed=0&ps=docs&partnerid=30&autoplay=0&docid=1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO&abd=0&public=true&el=embed&title=B%E1%BA%A3n+sao+c%E1%BB%A7a+C%C3%B4+G%C3%A1i+%C4%90%E1%BA%BFn+T%E1%BB%AB+H%C3%B4m+Qua+-+Full+HD.mp4&iurl=https%3A%2F%2Fdocs.google.com%2Fvt%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26s%3DAMedNnoAAAAAXI9lyUNAFhklI--0qnwoaXH9lcr5ER6M&cc3_module=https%3A%2F%2Fs.ytimg.com%2Fyt%2Fswfbin%2Fsubtitles3_module.swf&ttsurl=https%3A%2F%2Fdocs.google.com%2Ftimedtext%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26vid%3Dbc9a6ae9161dea94&reportabuseurl=https%3A%2F%2Fdocs.google.com%2Fabuse%3Fauthuser%3D0%26id%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO&fmt_list=22%2F1280x720%2F9%2F0%2F115&token=1&plid=V0QVjP01qqZg6w&fmt_stream_map=22%7Chttps%3A%2F%2Fr3---sn-i3b7kn7r.c.docs.google.com%2Fvideoplayback%3Fexpire%3D1552908777%26ei%3DqUmPXN2rF8KougWt9JrgBQ%26ip%3D118.69.66.168%26cp%3DQVNKVEpfV1dVSFhOOk0wOE90UDBPWFJtZmtsREVXNk5lZ0U3RHlnWnBmd2dCV19qV3preUZLbDI%26id%3Dbc9a6ae9161dea94%26itag%3D22%26source%3Dwebdrive%26requiressl%3Dyes%26mm%3D30%26mn%3Dsn-i3b7kn7r%26ms%3Dnxu%26mv%3Dm%26pl%3D24%26ttl%3Dtransient%26susc%3Ddr%26driveid%3D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%26app%3Dexplorer%26mime%3Dvideo%2Fmp4%26dur%3D7694.791%26lmt%3D1512017222480781%26mt%3D1552894296%26sparams%3Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%26sig%3DALgxI2wwRQIhAOIF7of5PbAqjLGI85jzYOmUG4K6dhywYMExa5lzxwE2AiA9Ju_KJ4Qdnvo7c2HV6WEaYDRrlo74RlATRKyZiW3u2w%3D%3D%26lsparams%3Dmm%252Cmn%252Cms%252Cmv%252Cpl%26lsig%3DAHylml4wRQIhAJ5XX1z5aFSwlpUi5ehphdZtx5FTuW8vt-pEDzC3xHXmAiBHea6cb4S-RM1nwM9ciEE9h7R2dktW7dsGo48ZU_oMUA%3D%3D&url_encoded_fmt_stream_map=itag%3D22%26url%3Dhttps%253A%252F%252Fr3---sn-i3b7kn7r.c.docs.google.com%252Fvideoplayback%253Fexpire%253D1552908777%2526ei%253DqUmPXN2rF8KougWt9JrgBQ%2526ip%253D118.69.66.168%2526cp%253DQVNKVEpfV1dVSFhOOk0wOE90UDBPWFJtZmtsREVXNk5lZ0U3RHlnWnBmd2dCV19qV3preUZLbDI%2526id%253Dbc9a6ae9161dea94%2526itag%253D22%2526source%253Dwebdrive%2526requiressl%253Dyes%2526mm%253D30%2526mn%253Dsn-i3b7kn7r%2526ms%253Dnxu%2526mv%253Dm%2526pl%253D24%2526ttl%253Dtransient%2526susc%253Ddr%2526driveid%253D1cdYTOXUYLBqWz52xeqPx51m9tEr_sPmO%2526app%253Dexplorer%2526mime%253Dvideo%252Fmp4%2526dur%253D7694.791%2526lmt%253D1512017222480781%2526mt%253D1552894296%2526sparams%253Dexpire%252Cei%252Cip%252Ccp%252Cid%252Citag%252Csource%252Crequiressl%252Cttl%252Csusc%252Cdriveid%252Capp%252Cmime%252Cdur%252Clmt%2526sig%253DALgxI2wwRQIhAOIF7of5PbAqjLGI85jzYOmUG4K6dhywYMExa5lzxwE2AiA9Ju_KJ4Qdnvo7c2HV6WEaYDRrlo74RlATRKyZiW3u2w%253D%253D%2526lsparams%253Dmm%252Cmn%252Cms%252Cmv%252Cpl%2526lsig%253DAHylml4wRQIhAJ5XX1z5aFSwlpUi5ehphdZtx5FTuW8vt-pEDzC3xHXmAiBHea6cb4S-RM1nwM9ciEE9h7R2dktW7dsGo48ZU_oMUA%253D%253D%26type%3Dvideo%252Fmp4%253B%2Bcodecs%253D%2522avc1.42001E%252C%2Bmp4a.40.2%2522%26quality%3Dhd720&timestamp=1552894377394&length_seconds=7694";
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public function index()
 	{
 		// die;

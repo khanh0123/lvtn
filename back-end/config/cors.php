@@ -1,5 +1,6 @@
 <?php
 
+$domain = ['http://localhost:3000'];
 return [
 
     /*
@@ -21,10 +22,11 @@ return [
     // 'maxAge' => 86400,
 
     'supportsCredentials' => true,
-    'allowedOrigins' => ['*'],// ex: ['abc.com', 'api.abc.com']
-    'allowedHeaders' => ['*'],
-    'allowedMethods' => ['GET', 'POST', 'PUT', 'DELETE'],// ex: ['GET', 'POST', 'PUT', 'DELETE']
+    'allowedOrigins' => $domain,
+    'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
+    'allowedMethods' => ['GET', 'POST', 'PUT', 'DELETE' , 'OPTIONS'],// ex: ['GET', 'POST', 'PUT', 'DELETE']
     'exposedHeaders' => [],
+    'contentType' => ['application/json; charset=utf-8'],
     'maxAge' => 87000,
 
 

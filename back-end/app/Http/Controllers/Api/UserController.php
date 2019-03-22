@@ -46,14 +46,16 @@ class UserController extends Controller
         }
         //data need to request graph facebook api
         $access_token = $request->access_token;
-        $url = $this->domain_graph_fb."/me";
+        $url = $this->domain_graph_fb."me";
         $params = ['access_token' => $access_token,'fields' => 'id,name,email'];
         
+
         //request to get info
-        $info_user = apiCurl($url,'GET',$params,'json');
+        $info_user = apiCurl($url,'GET',$params,'array');        
+
 
         //check valid token facebook
-        if(is_array($info_user) && isset($info_user['id'])){
+        if(!is_string($info_user) && (isset($info_user->id) || isset($info_user['id'])) ){
 
             //define time expire of token
             $max_time   = !empty(env("MAX_TIME_LOGIN")) ? (double)env("MAX_TIME_LOGIN") : 60*60*2;
@@ -64,14 +66,14 @@ class UserController extends Controller
             
             
             //check exists user already register
-            $this->model = $this->model::where('fb_id',$fb_id)->first();
+            $this->model = $this->model::where('fb_id',$info_user->id)->first();
 
             //user not exits
             if(empty($this->model->id)){
                 //get info facebook user
-                $email  = $info_user['email'] ? $info_user['email'] : '';
-                $fb_id  = $info_user['id'];
-                $name   = $info_user['name'];
+                $email  = $info_user->email ? $info_user->email : '';
+                $fb_id  = $info_user->id;
+                $name   = $info_user->name;
                 $avatar = "http://graph.facebook.com/$fb_id/picture?type=large";
 
                 //insert new user
@@ -133,3 +135,4 @@ class UserController extends Controller
 
         return $this->template_api($response);
     }
+}

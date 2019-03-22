@@ -50,20 +50,7 @@ class MovieSeeder extends Seeder
                         'url' => $value->images->poster
                     ],
                 ];
-                // foreach ($value->images as $k => $v) {
-                //     if($v != ''){
-                //         $images = [
-                //             'poster' => [
-                //                 'id' => $id,
-                //                 'url' => $v
-                //             ],
-                //             'thumbnail' => [
-                //                 'id' => $id,
-                //                 'url' => $value->thumbnail
-                //             ],
-                //         ];
-                //     }                                
-                // }
+
 
                 $array_data[] = [
                     'name'         => $value->title,
@@ -89,11 +76,7 @@ class MovieSeeder extends Seeder
 
             //Thêm phim lẻ
             $path = storage_path() . "/jsons/phimle.json";
-            $data = json_decode(file_get_contents($path));
-            // $data = array_reverse($data);
-            // echo json_encode($data,JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
-
-            // $data = $json->data;
+            $data = json_decode(file_get_contents($path));            
             $array_data = [];
             $row_count_inserted = 0;
             $nextId = DB::table('movie')->max('id') + 1;

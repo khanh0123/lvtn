@@ -2,10 +2,13 @@ import Api from '../apis/api';
 
 const ACTION_GET_MENU = 'ACTION_GET_MENU';
 
-function get_menu() {
+async function get_menu() {
+    let response = await Api.get_menu();
     return {
         type: ACTION_GET_MENU,
-        payload: Api.get_menu()
+        payload: {
+            data:response.data.info
+        }
     };
 }
 

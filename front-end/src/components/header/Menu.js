@@ -12,9 +12,9 @@ class Menu extends React.Component {
         this.state = {
             data_menu: []
         }
-        props.get_menu().then(res => {
-            let info = res.payload.data.info;
-            this.setState({ data_menu: info });
+        props.get_menu().then(res => {            
+            let data = res.payload.data;
+            this.setState({ data_menu: data });
         })
 
 

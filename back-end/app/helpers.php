@@ -69,10 +69,7 @@ if (!function_exists('apiCurl')) {
         }
         
         //execute post
-        $result = curl_exec($ch);              
-
-        
-        
+        $result = curl_exec($ch);  
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         
         if ($errno = curl_errno($ch)) {
@@ -89,14 +86,7 @@ if (!function_exists('apiCurl')) {
         }
         
         //close connection
-        curl_close($ch);
-        
-
-        // echo "<pre>";
-        // var_dump(urldecode($result));
-        // echo "</pre>";
-        // die();
-        
+        curl_close($ch);        
         
         
         try {

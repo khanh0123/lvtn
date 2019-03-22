@@ -19,7 +19,7 @@ class CreateTableUser extends Migration
             $table->string('password',255)->nullable();
             $table->string('name');
             $table->string('fb_id')->unique();
-            $table->string('avartar')->nullable();
+            $table->string('avatar')->nullable();
             $table->tinyInteger('status')->default('1');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

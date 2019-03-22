@@ -183,10 +183,10 @@ class Home extends React.Component {
         if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
             await props.get_hot_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_movies: r.info.data });
+                this.setState({ hot_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
             this.setState({ hot_movies: data });
         }
     }
@@ -194,10 +194,10 @@ class Home extends React.Component {
         if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
             await props.get_hot_series_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_series_movies: r.info.data });
+                this.setState({ hot_series_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
             this.setState({ hot_series_movies: data });
         }
     }
@@ -205,10 +205,10 @@ class Home extends React.Component {
         if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
             await props.get_hot_retail_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.info.data });
+                this.setState({ hot_retail_movies: r.data});
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
             this.setState({ hot_retail_movies: data });
         }
     }
@@ -217,10 +217,10 @@ class Home extends React.Component {
         if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
             await props.get_banner_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ banner_movies: r.info.data });
+                this.setState({ banner_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
             this.setState({ banner_movies: data });
         }
     }

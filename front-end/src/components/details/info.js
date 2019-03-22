@@ -31,11 +31,11 @@ class Info extends React.Component {
         this.setState({id:id,slug:slug});
         if(!this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] || (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && !this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id])){
             let data = await this.props.get_detail_movie(id,slug);
-            this.setState({data:data.payload.data.info});
+            this.setState({data:data.payload.data});
             await this.props.set_loading(false);
         } else {
             let data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
-            this.setState({data:data.info});
+            this.setState({data:data});
             await this.props.set_loading(false);
         }
         
@@ -47,12 +47,12 @@ class Info extends React.Component {
         if(id !== this.state.id && nextProps !== this.props){
             await this.setState({id:id,slug:slug});
             if(!nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE] || (nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE] && !nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE][id])){
-                let data = await nextProps.get_detail_movie(id,slug);
-                this.setState({data:data.payload.data.info});
+                let res = await nextProps.get_detail_movie(id,slug);
+                this.setState({data:res.payload.data});
                 await this.props.set_loading(false);
             } else {
                 let data = nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
-                this.setState({data:data.info});
+                this.setState({ data : data });
                 await nextProps.set_loading(false);
             }
         }
@@ -185,30 +185,28 @@ class Info extends React.Component {
         ) || <div/>
     }
     _action_trailer() {
-        this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {
-            console.log(this.state.is_open_trailer);
-            
+        this.setState({ is_open_trailer: !this.state.is_open_trailer } , () => {            
         });
     }
-    _get_hot_series_movies = async(props) => {
+    _get_hot_series_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
             await props.get_hot_series_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_series_movies: r.info.data });
+                this.setState({ hot_series_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
             this.setState({ hot_series_movies: data });
         }
     }
-    _get_hot_retail_movies = async(props) => {
+    _get_hot_retail_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
             await props.get_hot_retail_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.info.data });
+                this.setState({ hot_retail_movies: r.data });
             });
         } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].info.data;
+            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
             this.setState({ hot_retail_movies: data });
         }
     }

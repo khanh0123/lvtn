@@ -9,55 +9,71 @@ const ACTION_GET_LINKPLAY_MOVIE = 'ACTION_GET_LINKPLAY_MOVIE';
 const ACTION_GET_MOVIE_FILTER = 'ACTION_GET_MOVIE_FILTER';
 
 async function get_hot_movies() {
+    let res = await Api.get_hot_movies();
     return {
         type: ACTION_GET_HOT_MOVIES,
-        payload: await Api.get_hot_movies()
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 async function get_hot_series_movies() {
+    let res =  await Api.get_hot_series_movies();
     return {
         type: ACTION_GET_HOT_SERIES_MOVIES,
-        payload: await Api.get_hot_series_movies()
+        payload:  {
+            data:res.data.info
+        }
     };
 }
+
 async function get_hot_retail_movies() {
+    let res =  await Api.get_hot_retail_movies();
     return {
         type: ACTION_GET_HOT_RETAIL_MOVIES,
-        payload: await Api.get_hot_retail_movies()
-    };
-}
-async function get_hot_retail_movies() {
-    return {
-        type: ACTION_GET_HOT_RETAIL_MOVIES,
-        payload: await Api.get_hot_retail_movies()
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 async function get_detail_movie(id,slug) {
+    let res =  await Api.get_detail_movie(id,slug);
     return {
         id:id,
         type: ACTION_GET_DETAIL_MOVIE,
-        payload: await Api.get_detail_movie(id,slug)
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 
 async function get_banner_movies() {
+    let res =  await Api.get_banner_movies();    
     return {
         type: ACTION_GET_BANNER_MOVIES,
-        payload: await Api.get_banner_movies()
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 async function get_linkplay_movie(mov_id,episode) {
+    let res =  await Api.get_linkplay_movie(mov_id,episode)
     return {
         mov_id:mov_id,
         episode:episode,
         type: ACTION_GET_LINKPLAY_MOVIE,
-        payload: await Api.get_linkplay_movie(mov_id,episode)
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 async function get_movie_filter(tags,limit,page) {
+    let res =  await Api.get_movie_filter(tags,limit,page)
     return {
         type: ACTION_GET_MOVIE_FILTER,
-        payload: await Api.get_movie_filter(tags,limit,page)
+        payload: {
+            data:res.data.info
+        } 
     };
 }
 
