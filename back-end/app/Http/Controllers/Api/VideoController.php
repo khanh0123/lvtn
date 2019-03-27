@@ -32,11 +32,15 @@ class VideoController extends Controller
     {
         $data = ['sources' => []];
         $links = $this->model->api_get($mov_id,$episode);
+
+        
         foreach ($links as $key => $value) {
+            
             
             
             $link_play = json_decode($value->link_play);
             $value->more_info = json_decode($value->more_info);
+            
 
             
             switch ($value->source_name) {
@@ -70,9 +74,10 @@ class VideoController extends Controller
                     }
                     break;
                 case 'fimfast':
-                    if(empty($link_play)){
+                    $need_update = time()-strtotime($value->updated_at) > 43200; //12hours
+                    if(empty($link_play) || $need_update ){
                         $link_play = $this->get_link_fimfast($value);
-                        $link_play = json_encode($link_play);
+                        $link_play = json_encode($link_play['sources']);
                         Video::where('id',$value->id)->update(['link_play' => $link_play]);
                         $link_play = json_decode($link_play);
                     }
@@ -82,11 +87,11 @@ class VideoController extends Controller
                 default:
                     foreach ($link_play as $v) {
                         $data['sources']['others'][] = [
-                            'src'       => $v->src,
+                            'src'       => isset($v->src) ? $v->src : '',
                             'thumbnail' => isset($v->thumbnail) ? $v->thumbnail : '',
-                            'duration'  => $v->duration,
+                            'duration'  => isset($v->duration) ? $v->duration : '',
                             'qualify'   => isset($v->qualify) ? $v->qualify : $value->max_qualify,
-                            'type'      => $v->type,
+                            'type'      => isset($v->type) ? $v->type : '',
                         ];
                     }
                     break;

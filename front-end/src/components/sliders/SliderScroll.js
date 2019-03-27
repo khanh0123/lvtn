@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {custom_date} from "../helpers";
+import config from "../../config";
 
 class SliderScroll extends React.Component {
 
@@ -32,7 +33,10 @@ class SliderScroll extends React.Component {
                             return (
                                 <div className="plylist-single" key={i}>
                                     <div className="plylist-img">
-                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} />
+                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} onError={(e)=>{
+                                            e.target.onerror = null; 
+                                            e.target.src=config.images.empty_thumbnail
+                                        }}/>
                                     </div>
                                     <div className="plylist-single-content">
                                         <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>

@@ -817,8 +817,8 @@
             padding: 6% 0;
         }
         .footer-bg {
-            padding-top: 44%;
-            padding-bottom: 0;
+            /* padding-top: 44%; */
+            /* padding-bottom: 0; */
         }
         .home-3 .footer-bg,
         .home-4 .footer-bg {
@@ -1134,7 +1134,7 @@
             padding: 6% 0;
         }
         .footer-bg {
-            padding-top: 279px;
+            /* padding-top: 279px; */
         }
         .hiddens {
             display: none
@@ -1291,16 +1291,20 @@
         nav.navbar.bootsnav ul.nav > li > a {
             margin-bottom: -1px;
         }
+        nav.navbar.bootsnav ul.nav > li > ul > li {
+            margin-left:1em;
+        }
         nav.navbar.bootsnav ul.nav li.dropdown ul.dropdown-menu > li > a {
             color: #fff;
             font-weight: normal;
         }
         /*** END HEADER ***/
         .slider-content > h2 {
-            font-size: 28px;
+            font-size: 1.5em;
             letter-spacing: 0;
             word-spacing: 0;
             padding: 7px;
+            overflow: hidden;
         }
         .slider-content a.btn.btn-button {
             margin-top: 9px;
@@ -1316,7 +1320,7 @@
             padding: 11px 0;
         }
         .slider-content > p {
-            height: 72px;
+            height: 3em;
             overflow: hidden;
             display: block;
             padding: 0;
@@ -1554,12 +1558,12 @@
             top: -252px;
         }
         .footer-bg {
-            padding-top: 250px;
+            padding-top: 0 !important;
         }
         /** END BUY TECKET **/
         /** START FOOTER **/
         .ft-widget {
-            margin-top: 30px;
+            margin-top: 0;
         }
         .footer-menu ul li a {
             margin-right: 7px;
@@ -1730,7 +1734,7 @@
             margin: 0;
         }
         .footer-bg {
-            padding-top: 193px;
+            /* padding-top: 193px; */
         }
         .top-account {
             text-align: left;
@@ -1763,7 +1767,7 @@
             line-height: 24px;
         }
         .footer-bg {
-            padding-top: 123px;
+            /* padding-top: 123px; */
         }
         .home-2 .slider-2 .slider-content {
             padding: 14% 0;
@@ -1874,7 +1878,7 @@
             margin-top: 10px;
         }
         .footer-bg {
-            padding-top: 180px;
+            /* padding-top: 180px; */
         }
         ul.gallery-list li {
             margin-bottom: 30px;
@@ -1964,7 +1968,7 @@
             line-height: 26px;
         }
         .footer-bg {
-            padding-top: 286px;
+            /* padding-top: 286px; */
         }
         .movie-big .movie-item-content-center {
             top: 28%;
@@ -1976,7 +1980,7 @@
     
     @media (max-width: 992px) {
         nav.navbar.bootsnav .navbar-collapse.collapse.in {
-            background-color: #060f19;
+            background-color: #5e656d3d;
         }
         nav.navbar.bootsnav .dropdown .megamenu-content .col-menu .title {
             color: #ffffff;

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             // EpisodeVideoSeeder::class,
         	JsonTableSeeder::class,
             MenuSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

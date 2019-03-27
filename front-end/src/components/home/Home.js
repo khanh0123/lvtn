@@ -1,38 +1,37 @@
 import React from "react";
 import SliderBanner from "../Sliders/SliderBanner";
 import Slider from "../Sliders/Slider";
-import Slider2 from "../Sliders/Slider2";
 import SliderBig from "../Sliders/SliderBig";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { MovieAction , LoadingAction } from "../../actions"
+import { MovieAction, LoadingAction } from "../../actions"
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            banner_movies:[],
+            banner_movies: [],
             hot_movies: [],
-            hot_series_movies:[],
-            hot_retail_movies:[],
-            
+            hot_series_movies: [],
+            hot_retail_movies: [],
+
         };
 
     }
     componentDidMount() {
-        // this._get_hot_movies(this.props);
-        // this._get_hot_series_movies(this.props);
-        // this._get_hot_retail_movies(this.props);
         Promise.all([
             this._get_banner_movies(this.props),
-            
-        ]).then(() => {
             this._get_hot_movies(this.props),
+                
+
+        ]).then(() => {
             this._get_hot_series_movies(this.props),
-            this._get_hot_retail_movies(this.props),
+                this._get_hot_retail_movies(this.props),
+                this.props.set_loading(false);
+
+        }).catch(() => {
             this.props.set_loading(false);
-            
         });
     }
     componentWillReceiveProps(nextProps) {
@@ -42,11 +41,11 @@ class Home extends React.Component {
 
     }
     render() {
-        let { hot_movies , hot_series_movies, hot_retail_movies , banner_movies } = this.state;
+        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this.state;
 
         return (
             <React.Fragment>
-                <SliderBanner data={banner_movies}/>
+                <SliderBanner data={banner_movies} />
                 {hot_movies.length > 0 &&
                     <section className="top-rating pt-75">
                         <div className="haddings">
@@ -87,33 +86,36 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-
-                <section className="new-movie pt-75">
-                    <div className="haddings">
-                        <div className="container">
-                            <div className="hadding-area">
-                                <h2>Phim Bộ Hot</h2>
-                                <p>Phim bộ được xem nhiều nhất</p>
+                {hot_series_movies.length > 0 &&
+                    <section className="new-movie pt-75">
+                        <div className="haddings">
+                            <div className="container">
+                                <div className="hadding-area">
+                                    <h2>Phim Bộ Hot</h2>
+                                    <p>Phim bộ được xem nhiều nhất</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="new-movie-inner pt-50">
-                        <SliderBig title="Phim Bộ Hot" data={hot_series_movies}/>
-                    </div>
-                </section>
-                <section className="new-movie pt-75">
-                    <div className="haddings">
-                        <div className="container">
-                            <div className="hadding-area">
-                                <h2>Phim Lẻ Hot</h2>
-                                <p>Phim lẻ được xem nhiều nhất</p>
+                        <div className="new-movie-inner pt-50">
+                            <SliderBig title="Phim Bộ Hot" data={hot_series_movies} />
+                        </div>
+                    </section>
+                }
+                {hot_retail_movies.length > 0 &&
+                    <section className="new-movie pt-75">
+                        <div className="haddings">
+                            <div className="container">
+                                <div className="hadding-area">
+                                    <h2>Phim Lẻ Hot</h2>
+                                    <p>Phim lẻ được xem nhiều nhất</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="new-movie-inner pt-50">
-                        <SliderBig title="Phim Lẻ Hot" data={hot_retail_movies}/>
-                    </div>
-                </section>
+                        <div className="new-movie-inner pt-50">
+                            <SliderBig title="Phim Lẻ Hot" data={hot_retail_movies} />
+                        </div>
+                    </section>
+                }
 
                 {/* <section className="top-rating pt-75 ">
                     <div className="haddings">
@@ -179,7 +181,7 @@ class Home extends React.Component {
             </React.Fragment>
         )
     }
-    _get_hot_movies = async(props) => {
+    _get_hot_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
             await props.get_hot_movies().then((res) => {
                 let r = res.payload.data;
@@ -190,7 +192,7 @@ class Home extends React.Component {
             this.setState({ hot_movies: data });
         }
     }
-    _get_hot_series_movies = async(props) => {
+    _get_hot_series_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
             await props.get_hot_series_movies().then((res) => {
                 let r = res.payload.data;
@@ -201,11 +203,11 @@ class Home extends React.Component {
             this.setState({ hot_series_movies: data });
         }
     }
-    _get_hot_retail_movies = async(props) => {
+    _get_hot_retail_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
             await props.get_hot_retail_movies().then((res) => {
                 let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.data});
+                this.setState({ hot_retail_movies: r.data });
             });
         } else {
             let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
@@ -213,7 +215,7 @@ class Home extends React.Component {
         }
     }
 
-    _get_banner_movies = async(props) => {
+    _get_banner_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
             await props.get_banner_movies().then((res) => {
                 let r = res.payload.data;
@@ -225,18 +227,18 @@ class Home extends React.Component {
         }
     }
 }
-function mapStateToProps({ movie_results,loading_results }) {
-    return Object.assign({}, movie_results,loading_results || {});
+function mapStateToProps({ movie_results, loading_results }) {
+    return Object.assign({}, movie_results, loading_results || {});
 }
 
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
         get_hot_movies: MovieAction.get_hot_movies,
-        get_hot_retail_movies:MovieAction.get_hot_retail_movies,
-        get_hot_series_movies:MovieAction.get_hot_series_movies,
-        get_banner_movies:MovieAction.get_banner_movies,
-        set_loading:LoadingAction.set_loading,
-        
+        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
+        get_hot_series_movies: MovieAction.get_hot_series_movies,
+        get_banner_movies: MovieAction.get_banner_movies,
+        set_loading: LoadingAction.set_loading,
+
     }, dispatch);
     return { ...actions, dispatch };
 }

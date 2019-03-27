@@ -5,12 +5,40 @@ function padLeft(str, pad) {
     }
     return pad.substring(0, pad.length - str.length) + str
 }
-function custom_date(date,format) {
+const times_ago = (timestamp) => {
+    let date = (new Date(timestamp).getTime()) / 1000;
+    let today = (new Date().getTime()) / 1000;
+    let times_ago = today - date;
+    let time;
+    let unix = '';
+    if (times_ago < 60) {
+        time = 'Vài s';
+
+    } else if (times_ago < 60 * 60) {
+        time = Math.round(times_ago / 60);
+        unix = ' phút';
+    } else if (times_ago < 3600 * 24) {
+        time = Math.round(times_ago / 3600);
+        unix = ' giờ';
+    } else if(times_ago < 3600 * 24 * 30) {
+        time = Math.round(times_ago / (3600* 24));
+        unix = ' ngày';
+    } else if(times_ago < 3600 * 24 * 30 * 12) {
+        time = Math.round(times_ago /(3600 * 24 * 30));
+        unix = ' tháng';
+    } else {
+        time = Math.round(times_ago / (3600 * 24 * 30 * 12));
+        unix = ' năm';
+    }
+    return time+unix;
+
+}
+function custom_date(timestamp, format) {
     if (!format) {
         format = "dd/mm/yyyy";
     }
     let today = new Date();
-    var date = new Date(date*1000);
+    let date = new Date(timestamp * 1000);
 
 
     let dd = date.getDate();
@@ -31,5 +59,6 @@ function custom_date(date,format) {
 }
 
 module.exports = {
-    custom_date
+    custom_date,
+    times_ago
 };

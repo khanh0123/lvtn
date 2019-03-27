@@ -39,8 +39,13 @@ class Filters extends React.Component {
         let {page} = queryString.parse(this.props.location.search);
         if(!page) page = 1;
         await this.setState({ tags: tags , page:page });
-        await this._getDataPage(page);
-        await this.props.set_loading(false);
+        try {
+            await this._getDataPage(page);
+            await this.props.set_loading(false);
+        } catch (error) {
+            await this.props.set_loading(false);
+        }
+        
         
     }
     async componentWillReceiveProps(nextProps) {
@@ -51,8 +56,12 @@ class Filters extends React.Component {
                 if(tags[i] && tags[i] != new_tags[i]){
                     await this._resetDataPage();
                     await this.setState({ tags: new_tags });
-                    await this._getDataPage();
-                    await this.props.set_loading(false);
+                    try {
+                        await this._getDataPage();
+                        await this.props.set_loading(false);
+                    } catch (error) {
+                        await this.props.set_loading(false);
+                    }
                     return;
                 }
                 
@@ -70,9 +79,9 @@ class Filters extends React.Component {
         
         
 
-        return data.length > 0 && (
+        return (
             <React.Fragment>
-                <div className="breadcrumbs">
+                <div className="breadcrumbs hidden-xs">
                     <div className="container">
                         <ul className="breadcrumb">
                             <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
@@ -81,6 +90,7 @@ class Filters extends React.Component {
                     </div>
                 </div>
                 <div className="inner-page details-page filter-page">
+                {data.length > 0 &&
                     <div className="container">
                         <div style={{ marginTop: '2em', display: 'inline-block',width: '100%' }}>
                             {data.map((item, i) => {
@@ -101,13 +111,12 @@ class Filters extends React.Component {
                             />
                         </div>
                     </div>
-
+                    ||
+                    <h3 style={{ textAlign: "center", color: "black" , margin:"1em 0" }}>Không có kết quả</h3>
+                }
                 </div>
-
             </React.Fragment>
-
-
-        ) || <p style={{textAlign:"center",color:"white"}}>Không có kết quả nào</p>;;
+        )
     }
     _renderBreadcrumbs = () => {
         const {meta , tags} = this.state;

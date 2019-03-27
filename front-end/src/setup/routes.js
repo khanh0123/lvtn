@@ -1,4 +1,4 @@
-import React , {  lazy } from 'react';
+// import React , {  lazy } from 'react';
 import Home from "../components/Home";
 import InfoMovie from "../components/details/Info";
 import Detail from "../components/details/Detail";
@@ -32,20 +32,21 @@ export default [
         exact:true
     },
     {
-        path:"/:tag_1",
+        path:"/:tag_1([a-zA-Z-]+)?/:tag_2([a-zA-Z-]+)?/:tag_3([a-zA-Z-]+)?",
         component:Filters,
         exact:false
     },
+    // {
+    //     path:"/:tag_1/:tag_2",
+    //     component:Filters,
+    //     exact:false
+    // },
+    // {
+    //     path:"/:tag_1/:tag_2/:tag_3",
+    //     component:Filters,
+    //     exact:false
+    // },
     {
-        path:"/:tag_1/:tag_2",
-        component:Filters,
-        exact:false
-    },
-    {
-        path:"/:tag_1/:tag_2/:tag_3",
-        component:Filters,
-        exact:false
-    },{
         path: '*',
         component: NotFound,
         exact:false

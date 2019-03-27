@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Player from '../video/player';
-import VideoPlayer from '../video/videoplayer';
+// import Player from '../video/player';
+import PlayerMovie from '../video/videoplayer';
 import '../../assets/vendors/video-react/video-react.css';
 // import parseFB from "../helpers";
 import SliderScroll from "../sliders/SliderScroll";
-import FacebookProvider, { Comments } from 'react-facebook';
 import { custom_date } from "../helpers";
 import { MovieAction, LoadingAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import config from "../../config";
+import Comment from "../comment";
 
 class Detail extends React.Component {
 
@@ -32,13 +32,17 @@ class Detail extends React.Component {
         await this.setState({ id: id, slug: slug });
         this._get_link_play(this.props);
         if (!this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] || (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && !this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id])) {
-            let res = await this.props.get_detail_movie(id, slug);
-            this.setState({ data: res.payload.data });
-            await this.props.set_loading(false);
+            try {
+                let res = await this.props.get_detail_movie(id, slug);
+                this.setState({ data: res.payload.data });
+                this.props.set_loading(false);
+            } catch (error) {
+                this.props.set_loading(false);
+            }
         } else {
             let data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
             this.setState({ data: data });
-            await this.props.set_loading(false);
+            this.props.set_loading(false);
         }
 
         this._get_hot_series_movies(this.props);
@@ -49,8 +53,8 @@ class Detail extends React.Component {
 
     }
     render() {
-        let { data, hot_series_movies, hot_retail_movies, link_play } = this.state;
-        
+        let { data, hot_series_movies, hot_retail_movies, link_play,id } = this.state;
+
 
         return data !== '' && (
             <React.Fragment>
@@ -75,7 +79,7 @@ class Detail extends React.Component {
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="details-page">
                                     <div className="details-player" style={{ marginTop: '2em' }}>
-                                        <VideoPlayer data={link_play} thumbnail={data.images.poster.url} />
+                                        <PlayerMovie data={link_play} thumbnail={data.images.poster.url} />
                                     </div>
 
                                 </div>
@@ -87,14 +91,7 @@ class Detail extends React.Component {
                                     <h2 className="title">Nội Dung Phim</h2>
                                     <div dangerouslySetInnerHTML={{ __html: data.long_des }} />
                                 </div>
-                                <div className="comment-area">
-                                    <h2 className="title">Bình Luận</h2>
-                                    <FacebookProvider appId="361492804618262">
-                                        <Comments href={`${config.domain.fe}/${data.id}/${data.slug}`}></Comments>
-                                    </FacebookProvider>
-
-                                    {/* <div className="fb-comments" data-href={`${config.domain.fe}/${data.id}/${data.slug}`} data-numposts="5" data-colorscheme="dark" data-width="100%"></div> */}
-                                </div>
+                                {id && <Comment mov_id={id} />}
 
                             </div>
                             <div className="col-lg-3 col-md-3 hidden-xs">

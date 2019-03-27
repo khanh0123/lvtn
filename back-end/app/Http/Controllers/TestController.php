@@ -34,9 +34,10 @@ class TestController extends Controller
 
 	public function test_link_drive(Request $request)
 	{
-		die;
+		echo $request->header('User-Agent');die;
+		// die;
 		// $path_sm_2 = storage_path() . "/jsons/data_split/phimle16.json";
-		$path_big  = storage_path() . "/jsons/data_split/phimle16.json";
+		$path_big  = storage_path() . "/jsons/phimle1.json";
 
 		// $data_sm_2 = json_decode(file_get_contents($path_sm_2),true);
 		$data_big  = json_decode(file_get_contents($path_big),true);

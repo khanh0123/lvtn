@@ -1,8 +1,17 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { LoadingAction } from "../../actions"
 
-const NotFound = (props) => (
-    <div className="inner-page">
+class NotFound extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render(){
+        this.props.set_loading(false)
+        return<div className="inner-page">
         <div className="error-page">
             <div className="error-bg">
                 <div className="container">
@@ -24,7 +33,17 @@ const NotFound = (props) => (
             </div>
         </div>
     </div>
+    }
+}
 
-)
+function mapStateToProps({  loading_results }) {
+    return Object.assign({},  loading_results || {});
+}
 
-export default NotFound
+function mapDispatchToProps(dispatch) {
+    let actions = bindActionCreators({
+        set_loading: LoadingAction.set_loading,
+    }, dispatch);
+    return { ...actions, dispatch };
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NotFound));

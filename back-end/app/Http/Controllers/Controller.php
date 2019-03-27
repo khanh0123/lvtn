@@ -8,6 +8,10 @@ class Controller extends BaseController
 {
     
     protected $jwt_secret_key;
+    protected $limit = 20;
+    protected $columns_filter = [];
+    protected $columns_search = [];
+    protected $columns_search_multi = [];
     public function __construct()
     {
         $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
@@ -21,8 +25,35 @@ class Controller extends BaseController
 
         return Response()->json(['error' => true,'msg' => $msg],400);
     }
-    protected function generate_access_token($data){
-        $token = \Firebase\JWT\JWT::encode($data, $this->jwt_secret_key , 'HS256');
+    protected function generate_access_token($request,$result){
+        //info user
+        $id_user = $result->id;
+        $email   = $result->email;
+        $fb_id   = $result->fb_id;
+        $name    = $result->name;
+        $avatar  = $result->avatar;
+
+        //JWT progress
+        $max_time   = $request->remember ? 60*60*24*7 : ( !empty(env("MAX_TIME_LOGIN")) ? (double)env("MAX_TIME_LOGIN") : 60*60*2 );
+        $time_curr  = time();
+        $time_exp   = $time_curr+$max_time; // Expiration time default 2 hours
+        $clientIps  = $request->getClientIps();
+        $user_agent = $request->header('User-Agent');
+        $data_token = [
+            'id'  => $id_user,
+            'iat' => $time_curr,// Time when JWT was issued.
+            'exp' => $time_exp,
+        ];   
+
+        $data_encrypt_to_key  = array(//data need to create MD5 key to verify request
+            'id'         => $id_user,
+            'fb_id'      => $fb_id,
+            'name'       => $name,
+            'visitorIp'  => end($clientIps),
+            'user_agent' => $request->header('User-Agent'),
+        );
+        $data_token['key'] = createMD5Key($data_encrypt_to_key);
+        $token = \Firebase\JWT\JWT::encode($data_token, $this->jwt_secret_key , 'HS256');
         return $token;
     }
 

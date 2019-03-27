@@ -24,6 +24,7 @@ class Layout extends React.Component {
         }
     }
     componentWillReceiveProps(nextProps){
+        
         if (this.props.location.pathname !== nextProps.location.pathname) {  
             this.props.set_loading(true);
             this.setState({is_loading:true});   
@@ -35,9 +36,6 @@ class Layout extends React.Component {
         } else if(!this.state.is_loading){
             this.setState({is_loading:true});
         }
-    }
-    componentDidUpdate(prevProps) {
-        
     }
 
     render() {

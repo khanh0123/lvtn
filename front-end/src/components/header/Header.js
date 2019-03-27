@@ -1,7 +1,9 @@
 import React, { } from 'react';
 import { Link } from 'react-router-dom';
 import Menu from './Menu';
-import LoginModal from "../popup/LoginModal";
+import cookie from "react-cookies";
+// import LoginModal from "../popup/LoginModal";
+import LoginSignupModal from "../popup/LoginSignupModal";
 import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -16,21 +18,33 @@ class Header extends React.Component {
 
         };
         this._togglePopupLogin = this._togglePopupLogin.bind(this);
-        this._goSearchPage = this._goSearchPage.bind(this);
     }
 
     componentDidMount() {
         this.props.get_status_login().then((res) => {
             let data = res.payload.data;
-            if(data && data.isLogged){
-                this.setState({data_user:data.info})
+            if (data && data.isLogged) {
+                this.setState({ data_user: data.info })
             }
-            
+
         });
     }
 
+    // componentWillReceiveProps(nextProps) {
+    //     console.log(nextProps);
+
+    //     // if (this.props[UserAction.ACTION_GET_STATUS_LOGIN] != nextProps[UserAction.ACTION_GET_STATUS_LOGIN] || this.props[UserAction.ACTION_USER_LOGIN_FB] != nextProps[UserAction.ACTION_USER_LOGIN_FB] || this.props[UserAction.ACTION_USER_LOGIN] != nextProps[UserAction.ACTION_USER_LOGIN]) {
+
+
+    //     // }
+    //     let user = nextProps[UserAction.ACTION_GET_STATUS_LOGIN] || nextProps[UserAction.ACTION_USER_LOGIN_FB] || nextProps[UserAction.ACTION_USER_LOGIN] || undefined;
+    //     let info = user ? user.info : ''
+    //     this.setState({ data_user:info });
+
+    // }
+
     render() {
-        let { is_open_popup_login, data_user } = this.state;        
+        let { is_open_popup_login, data_user } = this.state;
         return (
             <header className="header-section">
                 <div className="top-header">
@@ -38,16 +52,21 @@ class Header extends React.Component {
                         <div className="row">
                             <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 top-account sm-width sm-width-33">
                                 <div className="top-accounts">
-                                        <ul>
+                                    <ul>
                                         {
-                                        data_user !== '' &&
-                                            <li><a href="javascript:void(0)"><span className="fa fa-lock" />Xin chào {data_user.name}</a></li>
-                                            
-                                            || 
-                                            <li onClick={this._togglePopupLogin}><a href="javascript:void(0)"><span className="fa fa-lock" />Đăng Nhập</a></li>
+                                            data_user !== '' &&
+                                            <li className="dropdown">
+                                                <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown"><span className="fa fa-lock" />Xin chào {data_user.name} <i className="fa fa-angle-down"></i></a>
+                                                <ul className="dropdown-menu">
+                                                    <li><a href="javascript:void(0)" onClick={this._logout}>Đăng xuất</a></li>
+                                                </ul>
+                                            </li>
+
+                                            ||
+                                            <li onClick={this._togglePopupLogin} ><a href="javascript:void(0)"><span className="fa fa-lock" />Đăng Nhập</a></li>
                                         }
-                                        </ul>
-                                    </div>
+                                    </ul>
+                                </div>
 
                             </div>
 
@@ -64,45 +83,22 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="header-center">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 header-logos sm-width">
-                                <div className="header-logo">
-                                    <Link to="/">
-                                        <img src='/assets/images/logo.png' alt="logo" />
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="col-lg-4 col-md-4 col-sm-4 col-xs-12 header-search-area sm-width col-md-offset-2">
-                                <div className="header-search categorie-search-box">
-                                    {/* <form action="/tim-kiem" > */}
-                                    <input className="form-control" type="text" placeholder="Nhập vào từ khóa" id="search_keyword" />
-                                    <button onClick={this._goSearchPage.bind(this)}><span className="fa fa-search" /></button>
-                                    {/* </form> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <Menu />
-                <LoginModal isOpen={is_open_popup_login} onClose={this._togglePopupLogin} />
+                <LoginSignupModal isOpen={is_open_popup_login} onClose={this._togglePopupLogin} handleLoginSucess={this._handleLoginSucess.bind(this)} />
 
             </header>
         )
     }
-    _goSearchPage() {
-        let keyword = document.getElementById("search_keyword");
-        if (keyword) {
-            keyword = keyword.value;
-            this.props.history.push({
-                pathname: '/tim-kiem',
-                search: "?" + new URLSearchParams({ q: keyword }).toString()
-            })
-        }
-
-
+    _logout = () => {        
+        cookie.remove("access_token",{ path: '/' });
+        window.location.reload();
     }
+    _handleLoginSucess(data) {
+        if (data && data.access_token) {
+            this.setState({ data_user: data.info })
+        }
+    }
+
     _togglePopupLogin() {
         this.setState({ is_open_popup_login: !this.state.is_open_popup_login });
     }

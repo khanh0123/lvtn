@@ -28,6 +28,7 @@ class Video extends Model
                 'max_qualify',
                 'link_play',
                 'more_info',
+                'video.updated_at',
 
 
             ])

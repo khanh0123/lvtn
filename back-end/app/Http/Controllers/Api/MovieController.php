@@ -21,6 +21,7 @@ class MovieController extends Controller
         'epi_num'      => 'movie.epi_num',
         'is_hot'       => 'movie.is_hot',
         'is_new'       => 'movie.is_new',
+        'is_banner'    => 'movie.is_banner',
         'release_date' => 'movie.release_date',
         'created_at'   => 'movie.created_at',
         'updated_at'   => 'movie.updated_at',

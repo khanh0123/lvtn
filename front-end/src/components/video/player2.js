@@ -4,6 +4,17 @@ class Player extends React.Component {
     constructor(props){
         super(props)
     }
+    componentDidMount() {
+      var self = this;      
+      var player = window.videojs(this.refs.player, {}).ready(() => {
+        player.src(this.props.sources);
+        player.play();
+      });
+    }
+  
+    componentWillUnmount() {
+      // window.videojs.dispose();
+    }
     render() {
       return(
           <video
@@ -14,17 +25,7 @@ class Player extends React.Component {
       )
     }
   
-    componentDidMount() {
-      var self = this;
-      var player = window.videojs(this.refs.player, {}).ready(() => {
-        player.src(this.props.sources);
-        player.play();
-      });
-    }
-  
-    componentWillUnmount() {
-      // window.videojs.dispose();
-    }
+    
   }
   
   export default Player;

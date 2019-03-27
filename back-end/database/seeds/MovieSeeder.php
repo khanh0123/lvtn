@@ -87,6 +87,7 @@ class MovieSeeder extends Seeder
             $arr_video = [];
             $arr_video_episode = [];
             $arr_movie_country = [];
+            $arr_movie_genre = [];
             $row_count_inserted = 0;
             $nextId = DB::table('movie')->max('id') + 1;
 
@@ -155,12 +156,6 @@ class MovieSeeder extends Seeder
 
                 //movie_country
                 if(!empty($value->country->data)){
-                    // foreach ( as $v) {
-                    //     echo "<pre>";
-                    //     var_dump($v);
-                    //     echo "</pre>";
-                    //     die();
-
                         
                         $country = DB::table('country')->where('name',"like","%".$value->country->data->name."%")->first();
                         if(!empty($country)){
@@ -176,12 +171,12 @@ class MovieSeeder extends Seeder
                 }
 
                 //movie_genre
-                if(!empty($value->genre->data)){
-                    foreach ($value->genre->data as $v) {
+                if(!empty($value->genres->data)){
+                    foreach ($value->genres->data as $v) {
                         $genre = DB::table('genre')->where('name',"like","%$v->name%")->first();
                         if(!empty($genre)){
                             $arr_movie_genre[] = [
-                                'gen_id' => $country->id,
+                                'gen_id' => $genre->id,
                                 'mov_id' => $_id,
                             ];
                         } else {
@@ -189,7 +184,7 @@ class MovieSeeder extends Seeder
                         }
                     }
                     
-                }
+                } 
                 if($row_count_inserted < 300 && $key < count($data)-1)
                     $row_count_inserted ++;
                 else {
@@ -199,12 +194,14 @@ class MovieSeeder extends Seeder
                     DB::table('video')->insert($arr_video);
                     DB::table('episode_video')->insert($arr_video_episode);
                     DB::table('movie_country')->insert($arr_movie_country);
+                    DB::table('movie_genre')->insert($arr_movie_genre);
                     $row_count_inserted = 0;
                     $array_data         = [];
                     $arr_video          = [];
                     $arr_movie_episode  = [];
                     $arr_video_episode  = [];
                     $arr_movie_country  = [];
+                    $arr_movie_genre  = [];
                 }
 
                 $_id++;

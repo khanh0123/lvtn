@@ -190,13 +190,13 @@
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả ngắn</label>
-                                            <input name="short_des" type="text" class="form-control">
+                                            <textarea name="short_des" class="form-control" rows="5" ></textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả đầy đủ</label>
-                                            <input name="long_des" type="text" class="form-control">
+                                            <textarea name="long_des" class="form-control" rows="5" ></textarea>
                                         </div>
                                     </div>
 

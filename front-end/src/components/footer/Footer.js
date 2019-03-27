@@ -20,10 +20,10 @@ class Footer extends React.Component {
                                         <div className="social-link">
                                             <ul>
                                                 <li><a href="" className="ft-fb"><span className="fa fa-facebook" /></a></li>
-                                                <li><a href=""className="ft-twitter"><span className="fa fa-twitter" /></a></li>
-                                                <li><a href=""className="ft-pintarest"><span className="fa fa-pinterest" /></a></li>
-                                                <li><a href=""className="ft-youtube"><span className="fa fa-youtube" /></a></li>
-                                                <li><a href=""className="ft-linkedin"><span className="fa fa-linkedin" /></a></li>
+                                                <li><a href="" className="ft-twitter"><span className="fa fa-twitter" /></a></li>
+                                                <li><a href="" className="ft-pintarest"><span className="fa fa-pinterest" /></a></li>
+                                                <li><a href="" className="ft-youtube"><span className="fa fa-youtube" /></a></li>
+                                                <li><a href="" className="ft-linkedin"><span className="fa fa-linkedin" /></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -31,7 +31,7 @@ class Footer extends React.Component {
                             </div>
                             {/* End Widget item */}
                             {/* Widget item */}
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 sm-width">
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6 sm-width">
                                 <div className="ft-widget">
                                     <h2><span>Movie Category</span></h2>
                                     <div className="ft-content">
@@ -49,7 +49,7 @@ class Footer extends React.Component {
                             </div>
                             {/* End Widget item */}
                             {/* Widget item */}
-                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 sm-width">
+                            <div className="col-lg-3 col-md-3 col-sm-6 col-xs-6 sm-width">
                                 <div className="ft-widget">
                                     <h2><span>Information</span></h2>
                                     <div className="ft-content">

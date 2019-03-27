@@ -138,10 +138,22 @@ class Api {
             }
         })
     }
-
-
-    static user_login(access_token) {
+    static user_login(email,password) {
         const url = `${config.api.user_login}`;
+
+        return axios({
+            method: 'post',
+            url: url,
+            data: {
+                email:email,
+                password:password,
+            },
+            params: {}
+        })
+    }
+
+    static user_login_fb(access_token) {
+        const url = `${config.api.user_login_fb}`;
 
         return axios({
             method: 'post',
@@ -159,6 +171,37 @@ class Api {
             method: 'get',
             url: url,
             data: {},
+            params: {}
+        })
+    }
+    static get_comment(mov_id,limit,page) {
+        const url = `${config.api.get_comment}/${mov_id}/get_comment`;
+        return axios({
+            method: 'get',
+            url: url,
+            data: {
+                
+            },
+            params: {
+                page:page,
+                limit:limit,
+            }
+        })
+    }
+    static user_comment(mov_id,content,reply_id) {        
+        if(!reply_id) reply_id = 0;
+        const url = `${config.api.user_comment}`;
+        let data = {
+            mov_id:mov_id,
+            content:content
+        };
+        if(reply_id != 0){
+            data.reply_id = reply_id;
+        }
+        return axios({
+            method: 'post',
+            url: url,
+            data: data,
             params: {}
         })
     }

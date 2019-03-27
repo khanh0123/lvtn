@@ -230,13 +230,17 @@
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả ngắn</label>
-                                            <input name="short_des" type="text" class="form-control" value="{!! $data['info']->short_des !!}">
+                                            <textarea class="form-control" rows="5" id="short_des" name="short_des">
+                                                {!! $data['info']->short_des !!}
+                                            </textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Mô tả đầy đủ</label>
-                                            <input name="long_des"  type="text" class="form-control" value="{!! $data['info']->long_des !!}">
+                                            <textarea class="form-control" rows="5" id="long_des" name="long_des">
+                                                {!! $data['info']->long_des !!}
+                                            </textarea>
                                         </div>
                                     </div>
 

@@ -343,16 +343,3 @@ function fadeOutEffect(el) {
         }
     }, 50);
 }
-// document.addEventListener("DOMContentLoaded", function () {
-//     window.scrollTo(0, 0);
-//     setTimeout(() => {
-//         unSetLoading();
-//     }, 3000);
-
-// })
-// document.addEventListener("DOMContentLoaded",function(){
-//     setTimeout(() => {
-//         window.scrollTo(0, 0);
-//     }, 500);
-    
-// });

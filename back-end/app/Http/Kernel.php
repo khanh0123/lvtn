@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'auth.editer'        => \App\Http\Middleware\EditerUser::class,
         'auth.editer.delete' => \App\Http\Middleware\EditerDelete::class,
         'auth.master'        => \App\Http\Middleware\SupperAdmin::class,
+        'auth.user'          => \App\Http\Middleware\AuthUser::class,
         'auth.basic'         => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cors'               => \Barryvdh\Cors\HandleCors::class,
         'api.cors'           => \App\Http\Middleware\Cors::class, 

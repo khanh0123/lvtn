@@ -24,13 +24,16 @@ class SliderBanner extends React.Component {
             let needed = arrList[i].querySelectorAll('.animate');
 
             for (let j = 0; j < needed.length; j++) {
-                if (needed[j].classList.contains('animated')) {
-                    needed[j].classList.remove('fadeInUp');
+                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInLeft')) {
+                    needed[j].classList.remove('fadeInLeft');
                     needed[j].classList.remove('animated');
-
+                }
+                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInRight')) {
+                    needed[j].classList.remove('fadeInRight');
+                    needed[j].classList.remove('animated');
                 }
                 if(arrList[i].classList.contains('active')){
-                    needed[j].className += ' fadeInUp animated';
+                    needed[j].className += needed[j].classList.contains('delay-1s') ? ' fadeInLeft animated' : ' fadeInRight animated' ;
                 }
             }
             
@@ -46,9 +49,9 @@ class SliderBanner extends React.Component {
     slidePrev = () => {
         this.slider.slidePrev();
     };
-    goToSlide = () => {
-        this.slider.goToSlide(4);
-    };
+    // goToSlide = () => {
+    //     this.slider.goToSlide(4);
+    // };
     autoplay = () => {
         this.setState({ autoplay: !this.state.autoplay });
     };
@@ -86,8 +89,9 @@ class SliderBanner extends React.Component {
                                         <div className="row">
                                             <div className="col-md-offset-4 col-lg-offset-4 col-lg-7 col-md-7 col-sm-12  col-xs-12">
                                                 <div className="slider-content">
-                                                    <h2 className="fadeInUp animated delay-1s animate" >{item.name}</h2>
-                                                    <p className="fadeInUp animated delay-2s animate" dangerouslySetInnerHTML={{__html:item.short_des}}></p>
+                                                    <h2 className={`animated delay-1s animate${i ==0 ? ' fadeInLeft' : ''}`}>{item.name}</h2>
+                                                    <p className={`animated delay-2s animate${i ==0 ? ' fadeInRight' : ''}`} dangerouslySetInnerHTML={{__html:item.short_des}}></p>
+                                                    
                                                     <Link to={`/phim/${item.id}/${item.slug}`} className="fadeInUp animated delay-3s btn btn-button green-bg button-1 animation animate">Xem Ngay</Link>
                                                 </div>
                                             </div>

@@ -35,17 +35,25 @@ class Search extends React.Component {
         let { page, q } = queryString.parse(this.props.location.search);
         if (!page) page = 1;
         await this.setState({ page: page, keyword: q });
-        await this._getDataPage(page);
-        // await this.props.set_loading(false);
+        try {
+            await this._getDataPage(page);
+            await this.props.set_loading(false);
+        } catch (error) {
+            await this.props.set_loading(false);
+        }
 
     }
     async componentWillReceiveProps(nextProps) {
         let { page, q } = queryString.parse(nextProps.location.search);
-        if (q && q !== this.state.keyword) {
+        if (q && q !== this.state.keyword && this.props.location.search != nextProps.location.search) {
             await this._resetDataPage();
             await this.setState({ page: page, keyword: q });
-            await this._getDataPage();
-            await this.props.set_loading(false);
+            try {
+                await this._getDataPage();
+                await this.props.set_loading(false);
+            } catch (error) {
+                await this.props.set_loading(false);
+            }
         }
 
 
@@ -53,13 +61,13 @@ class Search extends React.Component {
 
 
     render() {
-        let { data , keyword } = this.state;
+        let { data, keyword } = this.state;
         let { page } = queryString.parse(this.props.location.search);
         page = !page ? 1 : parseInt(page);
 
 
 
-        return data.length > 0 && (
+        return (
             <React.Fragment>
                 <div className="breadcrumbs">
                     <div className="container">
@@ -71,36 +79,38 @@ class Search extends React.Component {
                     </div>
                 </div>
                 <div className="inner-page details-page filter-page">
-                    <div className="container">
-                        <div style={{ marginTop: '2em', display: 'inline-block',width: '100%' }}>
-                            {data.map((item, i) => {
-                                return (
-                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                        <SlideItem item={item} />
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        <div className="text-center">
-                            <Pagination
-                                activePage={page}
-                                itemsCountPerPage={10}
-                                totalItemsCount={this.state.total}
-                                pageRangeDisplayed={5}
-                                onChange={this._handlePageChange}
-                            />
-                        </div>
-                    </div>
+                    {data.length > 0 &&
+                        <div className="container">
 
+                            <div style={{ marginTop: '2em', display: 'inline-block', width: '100%' }}>
+                                {data.map((item, i) => {
+                                    return (
+                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                            <SlideItem item={item} />
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <div className="text-center">
+                                <Pagination
+                                    activePage={page}
+                                    itemsCountPerPage={10}
+                                    totalItemsCount={this.state.total}
+                                    pageRangeDisplayed={5}
+                                    onChange={this._handlePageChange}
+                                />
+                            </div>
+                        </div>
+                        || 
+                        <h3 style={{ textAlign: "center", color: "black", margin:"1em 0" }}>Không có kết quả tìm kiếm với từ khóa {keyword}</h3>
+                    }
                 </div>
-
             </React.Fragment>
-
-
-        ) || <p style={{textAlign:"center",color:"white"}}>Không có kết quả tìm kiếm với từ khóa {keyword}</p>;
+        ) 
     }
     _renderBreadcrumbs = () => {
         let data = [];
+        data.push(<li key={100}>{`Từ khóa: ${this.state.keyword}`}</li>)
         // for (let i = 0; i < tags.length; i++) {
         //     for (let j = 0; j < tags_info.length; j++) {
         //         if(tags_info[j].slug == tags[i]) {

@@ -80,6 +80,7 @@ class Movie extends Model
         $result = addConditionsToQuery($filter['conditions'],$result);
         $result = $result->paginate($filter['limit']);
         $result->appends($req->all())->links();
+        
         return $result;
     }
 

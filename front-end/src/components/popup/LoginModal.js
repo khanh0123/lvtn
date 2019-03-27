@@ -18,12 +18,15 @@ class LoginModal extends React.Component {
         if (data && data.authResponse) {
             let { accessToken } = data.authResponse;
             if (accessToken) {
-                this.props.user_login(accessToken).then((res) => {
+                this.props.user_login_fb(accessToken).then((res) => {
                     let data = res.payload.data;
                     
                     if(data.access_token){
                         cookie.save("access_token", data.access_token, { path: '/' })
+                        this.props.handleLoginSucess ? this.props.handleLoginSucess(data) : '';
+                        // this.props.get_status_login();
                         this.props.onClose();
+                        window.location.reload();
                     }
                 });
                 // let info = await data;
@@ -70,9 +73,7 @@ class LoginModal extends React.Component {
                                     <a className="btn btn-buttons">Đăng nhập</a>
                                 </div>
 
-                                <div style={{ color: 'white' }}>
-                                    Hoặc đăng nhập bằng <i style={{ cursor: "pointer" }} className="fa fa-facebook-square fa-3x" onClick={this.onLoginFacebook}></i>
-                                </div>
+                                <span style={{ color: 'white' }}>Hoặc đăng nhập bằng <i style={{ cursor: "pointer" }} className="fa fa-facebook-square fa-3x" onClick={this.onLoginFacebook}></i></span>
                                 <div className="forgat-pass">
                                     <div className="remember-me">
                                         <input type="checkbox" id="remember" className="checkbox" />
@@ -97,7 +98,9 @@ const mapStateToProps = ({ user_result }) => {
 
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
-        user_login: UserAction.user_login
+        user_login_fb: UserAction.user_login_fb,
+        user_login: UserAction.user_login,
+        get_status_login: UserAction.user_get_status_login,
 
     }, dispatch);
     return { ...actions, dispatch };

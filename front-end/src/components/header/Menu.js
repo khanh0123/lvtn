@@ -12,66 +12,103 @@ class Menu extends React.Component {
         this.state = {
             data_menu: []
         }
-        props.get_menu().then(res => {            
+        props.get_menu().then(res => {
             let data = res.payload.data;
             this.setState({ data_menu: data });
         })
+        this._goSearchPage = this._goSearchPage.bind(this);
 
 
     }
-    renderMenuitem(item){        
-        return (
-            item.sub_menu.map((mnu,i) => {
-                return <li key={i}><Link to={`/${item.slug}/${mnu.slug}`} >{mnu.name}</Link></li>
-            })
-            
-        );
-    }
+    
     render() {
         let { data_menu } = this.state;
         return (
             <nav className="navbar navbar-default bootsnav navbar-sticky">
                 <div className="container">
-                    <div className="social">
+                    {/* <div className="social">
                         <div className="attr-nav">
                             <ul>
                                 <li><Link to="#"><i className="fa fa-facebook" /></Link></li>
                             </ul>
                         </div>
+                    </div> */}
+                    <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12 header-logos sm-width">
+                        <div className="header-logo">
+                            <Link to="/">
+                                <img src='/assets/images/logo.png' alt="logo" />
+                            </Link>
+                        </div>
                     </div>
 
-                    <div className="navbar-header">
-                        <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                            <i className="fa fa-align-justify" />
-                        </button>
+
+
+                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 sm-width">
+                        <div className="navbar-header">
+                            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                                <i className="fa fa-align-justify" />
+                            </button>
+                        </div>
+
+                        <div className="collapse navbar-collapse" id="navbar-menu">
+                            <ul className="nav navbar-nav navbar-left" data-in="" data-out="">
+                                <li><Link to="/" >Trang Chủ</Link></li>
+                                {data_menu.map((item, i) => {
+                                    return (item.sub_menu.length > 1 ?
+                                        <li className="dropdown" key={i}>
+                                            <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">{item.name}</a>
+                                            <ul className="dropdown-menu">
+                                                {this._renderMenuitem(item)}
+                                            </ul>
+                                        </li>
+                                        :
+                                        <li key={i}>
+                                            <Link to={'/'+item.sub_menu[0].slug} >{item.sub_menu[0].name}</Link>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
                     </div>
 
-                    <div className="collapse navbar-collapse" id="navbar-menu">
-                        <ul className="nav navbar-nav navbar-left" data-in="" data-out="">
-                            <li>
-                                <Link to="/" >Trang Chủ</Link>
-                            </li>
-                            {data_menu.map((item , i) => {
-                                
-                                return (item.sub_menu.length > 1 ?
-                                    <li className="dropdown" key={i}>
-                                        <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">{item.name}</a>
-                                        <ul className="dropdown-menu">
-                                            {this.renderMenuitem(item)}
-                                        </ul>
-                                    </li>
-                                    :
-                                    <li key={i}>
-                                        <Link to={item.sub_menu[0].slug} >{item.sub_menu[0].name}</Link>
-                                    </li>
-                                )
+                    <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12 sm-width search-box">
+                        <div className="header-search categorie-search-box">
 
-                            })}
-                        </ul>
+                            <div className="newsletter-input">
+                                <input type="text" className="form-control"  placeholder="Nhập từ khóa" id="search_keyword" onKeyUp={
+                                    (event) => {
+                                        if(event.key == "Enter"){
+                                            this._goSearchPage(event.target.value);
+                                        }
+                                    }
+                                }/>
+                                <button className="newsletter-btn" onClick={() => this._goSearchPage()}><span className="fa fa-search"></span></button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </nav>
         );
+    }
+    _renderMenuitem(item) {
+        return (
+            item.sub_menu.map((mnu, i) => {
+                return <li key={i}><Link to={`/${item.slug}/${mnu.slug}`} >{mnu.name}</Link></li>
+            })
+
+        );
+    }
+    _goSearchPage() {
+        let search_box = document.getElementById("search_keyword");
+        if (search_box) {
+            let keyword = search_box.value;
+            this.props.history.push({
+                pathname: '/tim-kiem',
+                search: "?" + new URLSearchParams({ q: keyword }).toString()
+            })
+            search_box.value = '';
+        }
+        
     }
 }
 function mapStateToProps({ menu_results }) {

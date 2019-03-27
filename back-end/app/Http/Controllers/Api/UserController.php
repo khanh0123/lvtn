@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\User_rating_movie;
+use App\Models\User_end_times_episode;
 use Validator;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
@@ -12,14 +14,26 @@ use Firebase\JWT\ExpiredException;
 class UserController extends Controller
 {
 	
-    private $domain_graph_fb = "https://graph.facebook.com/v2.6/";
+    private $domain_graph_fb = "https://graph.facebook.com/v2.8/";
 
     protected $model;
     protected $limit = 20;
     protected $rules = [
         'login' => [
+            'email'    => 'required|exists:user,email',
+            'password' => 'required',
+        ],
+        'login_fb' => [
             'access_token' => 'required',
-        ]
+        ],
+        'rating' => [
+            'mov_id' => 'required|exists:movie,id',
+            'rate' => 'required|min:0|max:5',
+        ],
+        'end_time' => [
+            'episode_id' => 'required|exists:episode,id',
+            'time_watched' => 'min:0',
+        ],
     ];
     protected $columns_filter = [
 
@@ -88,6 +102,36 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), $this->rules['login']);
         if ($validator->fails()) {
+            $response =  ['msg'  => 'Email or password maynot be empty'];
+            return $this->template_api($response);
+        }
+        $email    = $request->email;
+        $password = $request->password;
+        $result   = $this->model::where([['email' , $email] , ['password' , encode_password($password)]])->first();
+        if(isset($result->id)){
+            
+            $token = $this->generate_access_token($request,$result);
+            unset($result->password);
+            unset($result->created_at);
+            unset($result->updated_at);
+            $response =  [
+                'info'         => $result,
+                'access_token' => $token
+            ];
+            
+        } else {
+            $response =  [
+                'msg' => 'email or password not correct'
+            ];
+        }
+
+        return $this->template_api($response);
+
+    }
+    public function login_fb(Request $request)
+    {
+        $validator = Validator::make($request->all(), $this->rules['login_fb']);
+        if ($validator->fails()) {
             $response =  [
                 // 'error' => true,
                 'msg'  => 'An access token is required'
@@ -97,7 +141,7 @@ class UserController extends Controller
         //data need to request graph facebook api
         $access_token = $request->access_token;
         $url = $this->domain_graph_fb."me";
-        $params = ['access_token' => $access_token,'fields' => 'id,name,email'];
+        $params = ['access_token' => $access_token,'fields' => 'id,name,email,picture.type(large)'];
         
 
         //request to get info
@@ -105,65 +149,30 @@ class UserController extends Controller
         
         //check valid token facebook
         if(!is_string($info_user) && (isset($info_user->id) || isset($info_user['id'])) ){
-            //define time expire of token
-            $max_time   = !empty(env("MAX_TIME_LOGIN")) ? (double)env("MAX_TIME_LOGIN") : 60*60*2;
-            $time_curr  = time();
-            $time_exp   = $time_curr+$max_time; // Expiration time default 2 hours
-            $clientIps  = $request->getClientIps();
-            $user_agent = $request->header('User-Agent');
-            
-            
+
             //check exists user already register
             $this->model = $this->model::where('fb_id',$info_user->id)->first();
 
             //user not exits
             if(empty($this->model->id)){
-                //get info facebook user
-                $email  = $info_user->email ? $info_user->email : '';
-                $fb_id  = $info_user->id;
-                $name   = $info_user->name;
-                $avatar = "http://graph.facebook.com/$fb_id/picture?type=large";
 
                 //insert new user
                 $this->model         = new User();
-                $this->model->fb_id  = $fb_id;
-                $this->model->name   = $name;
-                $this->model->email  = $email;
-                $this->model->avatar = $avatar;
+                $this->model->fb_id  = $info_user->id;
+                $this->model->name   = $info_user->name;
+                $this->model->email  = $info_user->email ? $info_user->email : '';
+                $this->model->avatar = "http://graph.facebook.com/".$info_user->id."/picture?type=large";
 
                 //insert success
-                if($this->model->save()){
-                    $id_user = $this->model->id;
-                } else {
+                if(!$this->model->save()){
                     $response = ['error' => true,'msg'  => 'error 500'];
                 }
-                
-            } else { //user already exists
-                $user = $this->model;
-                $id_user = $user->id;
-                $email   = $user->email;
-                $fb_id   = $user->fb_id;
-                $name    = $user->name;
-                $avatar  = $user->avatar;
             }
 
             if(!isset($response['error'])){
-                $data_token = [
-                    'id'  => $id_user,
-                    'iat' => $time_curr,// Time when JWT was issued.
-                    'exp' => $time_exp,
-                ];   
-
-                $data_encrypt_to_key  = array(//data need to create MD5 key to verify request
-                    'id'         => $id_user,
-                    'fb_id'      => $fb_id,
-                    'name'       => $name,
-                    'visitorIp'  => end($clientIps),
-                    'user_agent' => $request->header('User-Agent'),
-                );
-                $data_token['key'] = createMD5Key($data_encrypt_to_key);
-
-                $token = $this->generate_access_token($data_token);
+                //define time expire of token
+                
+                $token = $this->generate_access_token($request,$this->model);
 
                 unset($this->model->password);
                 unset($this->model->created_at);
@@ -180,6 +189,67 @@ class UserController extends Controller
             
         } else {
             $response =  ['error' => true,'msg'  => 'access token is incorrect'];
+        }
+
+        return $this->template_api($response);
+    }
+
+
+
+    public function rating_movie(Request $request)
+    {
+        $validator = Validator::make($request->all(), $this->rules['rating']);
+        if ($validator->fails()) {
+            $response =  [
+                'error' => true,
+                'msg'  => 'err'
+            ];
+            
+        } else {
+            $rating = User_rating_movie::where([
+                ['user_id',$request->authUser->id],['mov_id' => $request->mov_id]
+            ])->first();
+            if(empty($rating)) {
+                $rating = new User_rating_movie();
+                $rating->user_id = $request->authUser->id;
+                $rating->mov_id = $request->mov_id;
+            } 
+            $rating->rating = $request->rating;
+            $rating->save();
+            $response = [
+                'success' => true
+            ];
+
+        }
+
+        return $this->template_api($response);
+    }
+
+    public function end_time_episode(Request $request)
+    {
+        $validator = Validator::make($request->all(), $this->rules['end_time']);
+        if ($validator->fails()) {
+            $response =  [
+                'error' => true,
+                'msg'  => 'err'
+            ];
+            
+        } else {
+            $end_time = User_end_times_episode::where([
+                ['user_id',$request->authUser->id],['episode_id' => $request->mov_id]
+            ])->first();
+            if(empty($end_time)) {
+                $end_time             = new User_rating_movie();
+                $end_time->user_id    = $request->authUser->id;
+                $end_time->episode_id = $request->episode_id;
+                
+            } 
+            $end_time->time_watched = $request->time_watched;
+            $end_time->save();
+            $response = [
+                'success' => true
+            ];
+
         }
 
         return $this->template_api($response);

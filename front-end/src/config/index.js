@@ -25,11 +25,6 @@ let config = {
         episode: 4,
         channel: 5
     },
-    uri_format: {
-        detail: "/detail/",
-        search: "/search/",
-        vod: "/vod"
-    },
     app_config: domain_api + "cas/public/getconfig",
     api: {
         menu: domain_api + "menu",
@@ -37,7 +32,10 @@ let config = {
         movie_detail: domain_api + "movie",
         movie_filter_tags: domain_api + "movie/filter/tags",
         user_login: domain_api + "user/login",
+        user_login_fb: domain_api + "user/login_fb",
         user_get_status_login: domain_api + "user/get_login_status",
+        get_comment: domain_api + "movie",
+        user_comment: domain_api + "user/comment",
         
     },
     title: {
