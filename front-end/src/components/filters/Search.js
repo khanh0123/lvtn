@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // import SliderScroll from "../sliders/SliderScroll";
 // import FacebookProvider, { Comments } from 'react-facebook';
-// import { custom_date } from "../helpers";
+import { getMovie } from "../helpers";
 import { MovieAction, LoadingAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 // import config from "../../config";
-import SlideItem from "../sliders/SlideItem";
+import SlideItem from "../Sliders/SlideItem";
+import SliderScroll from "../sliders/SliderScroll";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 
@@ -23,6 +24,8 @@ class Search extends React.Component {
             page: 1,
             per_page: 12,
             total: 0,
+            hot_series_movies: [],
+            hot_retail_movies: [],
         }
         this._handlePageChange = this._handlePageChange.bind(this);
         this._resetDataPage = this._resetDataPage.bind(this);
@@ -41,6 +44,8 @@ class Search extends React.Component {
         } catch (error) {
             await this.props.set_loading(false);
         }
+        getMovie(this, this.props, 'hot_series_movies', MovieAction);
+        getMovie(this, this.props, 'hot_retail_movies', MovieAction);
 
     }
     async componentWillReceiveProps(nextProps) {
@@ -61,7 +66,7 @@ class Search extends React.Component {
 
 
     render() {
-        let { data, keyword } = this.state;
+        let { data, keyword, hot_series_movies, hot_retail_movies } = this.state;
         let { page } = queryString.parse(this.props.location.search);
         page = !page ? 1 : parseInt(page);
 
@@ -79,34 +84,46 @@ class Search extends React.Component {
                     </div>
                 </div>
                 <div className="inner-page details-page filter-page">
-                    {data.length > 0 &&
                         <div className="container">
+                            <div className="row" >
 
-                            <div style={{ marginTop: '2em', display: 'inline-block', width: '100%' }}>
-                                {data.map((item, i) => {
-                                    return (
-                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                            <SlideItem item={item} />
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                            <div className="text-center">
-                                <Pagination
-                                    activePage={page}
-                                    itemsCountPerPage={10}
-                                    totalItemsCount={this.state.total}
-                                    pageRangeDisplayed={5}
-                                    onChange={this._handlePageChange}
-                                />
+                                <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
+                                    {data.length > 0 &&
+                                        (
+                                            <React.Fragment>
+                                                {data.map((item, i) => {
+                                                    return (
+                                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                                            <SlideItem item={item} />
+                                                        </div>
+                                                    )
+                                                })}
+
+                                                <div className="text-center">
+                                                    <Pagination
+                                                        activePage={page}
+                                                        itemsCountPerPage={10}
+                                                        totalItemsCount={this.state.total}
+                                                        pageRangeDisplayed={5}
+                                                        onChange={this._handlePageChange}
+                                                    />
+                                                </div>
+                                            </React.Fragment>
+                                        )
+                                        ||
+                                        <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
+                                    }
+
+                                </div>
+                                <div className="col-lg-3 col-md-3 hidden-xs">
+                                    <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies} />
+                                    <SliderScroll title="Phim Bộ Hot" data={hot_series_movies} />
+                                </div>
                             </div>
                         </div>
-                        || 
-                        <h3 style={{ textAlign: "center", color: "black", margin:"1em 0" }}>Không có kết quả tìm kiếm với từ khóa {keyword}</h3>
-                    }
                 </div>
             </React.Fragment>
-        ) 
+        )
     }
     _renderBreadcrumbs = () => {
         let data = [];

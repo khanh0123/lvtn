@@ -6,11 +6,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Video;
 use App\Models\Config;
+use App\Models\User_end_times_episode;
 use Validator;
 
 
 class VideoController extends Controller
 {   
+    public function __construct(Request $request)
+    {
+        parent::__construct($request);
+        $this->model = new Video;
+    }
 
     private $domain_graph_FB = "https://graph.facebook.com/v2.6/";
     protected $columns_filter = [
@@ -25,15 +31,29 @@ class VideoController extends Controller
     ];
     protected $columns_search = [];
 
-    public function __construct(Request $request) {
-        $this->model = new Video;
-    }
     public function detail(Request $request,$mov_id,$episode)
     {
-        $data = ['sources' => []];
+
+
         $links = $this->model->api_get($mov_id,$episode);
 
-        
+        $data = [
+            'mov_id' => (int)$mov_id,
+            'episode_id' => count($links) > 0 ? $links[0]->episode_id : '',
+            'sources' => [],
+            'time_current' => 0,
+        ];
+        if(count($links) > 0 && $request->header("Authorization")){
+            $user = $this->getUserFromAccessToken($request->header("Authorization"));            
+            if(!empty($user)) {
+                $endtime              = new User_end_times_episode();
+                $endtime              = $endtime->get_current_time($data['episode_id'],$user->id);
+                $data['time_current'] = !empty($endtime) ? $endtime->time_current : 0;
+            }
+            
+
+        }
+                
         foreach ($links as $key => $value) {
             
             
@@ -74,7 +94,7 @@ class VideoController extends Controller
                     }
                     break;
                 case 'fimfast':
-                    $need_update = time()-strtotime($value->updated_at) > 43200; //12hours
+                    $need_update = time()-strtotime($value->updated_at) > 21000; //6hours
                     if(empty($link_play) || $need_update ){
                         $link_play = $this->get_link_fimfast($value);
                         $link_play = json_encode($link_play['sources']);

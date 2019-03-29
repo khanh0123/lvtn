@@ -12,6 +12,10 @@ use DB;
 
 class MenuController extends Controller
 {
+    public function __construct(Request $request) {
+        
+        parent::__construct($request);
+    }
     public function index(Request $request ) {
     	$data['info'] = Menu::all();
     	foreach ($data['info'] as $key => $value) {

@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import cookie from "react-cookies";
 import "../../assets/css/loginsignup.css";
+// import { notify } from 'react-notify-toast';
+import { toast } from 'react-toastify';
+import config from "../../config";
 
 class LoginSignupModal extends React.Component {
 
@@ -14,7 +17,7 @@ class LoginSignupModal extends React.Component {
         this.state = {
             login_tab: true,
         };
-        this._showTab = this._showTab.bind(this);
+        this._init_();
     }
 
 
@@ -34,10 +37,10 @@ class LoginSignupModal extends React.Component {
                                 <a href="javascript:void(0)" className="social"><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng email để đăng ký</span>
-                            <input type="text" placeholder="Tên hiển thị" />
-                            <input type="email" placeholder="Email" />
-                            <input type="password" placeholder="Mật khẩu" />
-                            <button>Đăng ký</button>
+                            <input type="text" placeholder="Tên hiển thị" ref={inputName => this.inputName = inputName} />
+                            <input type="email" placeholder="Email" ref={inputEmailRegister => this.inputEmailRegister = inputEmailRegister} />
+                            <input type="password" placeholder="Mật khẩu" ref={inputPasswordRegister => this.inputPasswordRegister = inputPasswordRegister} />
+                            <button onClick={this._onRegister.bind(this)}>Đăng ký</button>
                         </form>
                     </div>
                     <div className="form-container sign-in-container">
@@ -48,10 +51,10 @@ class LoginSignupModal extends React.Component {
                                 <a href="javascript:void(0)" className="social"><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng tài khoản</span>
-                            <input type="email" placeholder="Email" />
-                            <input type="password" placeholder="Mật khẩu" />
+                            <input ref={inputEmail => this.inputEmail = inputEmail} type="email" placeholder="Email" />
+                            <input ref={inputPassword => this.inputPassword = inputPassword} type="password" placeholder="Mật khẩu" />
                             <a href="#">Quên mật khẩu?</a>
-                            <button >Đăng nhập</button>
+                            <button onClick={this._onLoginEmail}>Đăng nhập</button>
                         </form>
                     </div>
                     <div className="overlay-container hidden-xs">
@@ -73,34 +76,114 @@ class LoginSignupModal extends React.Component {
 
         )
     }
-    _showTab = (tabname) => {
+
+    _showTab = () => {
         let { login_tab } = this.state;
         this.setState({ login_tab: !login_tab });
     }
-    _onLoginFacebook = (e) => {
+    _onRegister = async (e) => {
         e.preventDefault();
-        
-        // window.FB.login(this._responseLoginFacebook, { scope: 'email' })
-        window.FB.login((data) => {
+        let email = this.inputEmailRegister.value;
+        let password = this.inputPasswordRegister.value;
+        let name = this.inputName.value;
+
+        if (email && password && name) {
+            this.toastId = toast.info(config.msg.is_progressing, { autoClose: false });
+            let res = await this.props.user_register(email, password, name);
+            if (res.type == "ERROR") {
+                return toast.update(this.toastId, { type: toast.TYPE.ERROR, autoClose: 3000, render: res.msg });
+            }
+            let data = res.payload.data;
+            if (data.access_token) {
+
+                toast.update(this.toastId, { type: toast.TYPE.INFO, autoClose: 3000, render: config.msg.login_success });
+                this.props.onClose();
+                await cookie.save("access_token", data.access_token, {
+                    path: '/',
+                    maxAge: 600000,
+                })
+                // this.props.handleLoginSucess ? this.props.handleLoginSucess(data) : '';
+                // this.props.get_status_login();
+
+                window.location.reload();
+            }
+
+
+        }
+
+    }
+    _onLoginEmail = async (e) => {
+        e.preventDefault();
+
+        let email = this.inputEmail.value;
+        let password = this.inputPassword.value;
+        if (email && password) {
+
+            this.toastId = toast.info(config.msg.is_progressing, { autoClose: false });
+            let res = await this.props.user_login(email, password);
+            if (res.type == "ERROR") {
+                return toast.update(this.toastId, { type: toast.TYPE.ERROR, autoClose: 3000, render: res.msg });
+            }
+            let data = res.payload.data;
+            if (data.access_token) {
+
+                toast.update(this.toastId, { type: toast.TYPE.INFO, autoClose: 3000, render: config.msg.login_success });
+                this.props.onClose();
+                await cookie.save("access_token", data.access_token, {
+                    path: '/',
+                    maxAge: 600000,
+                })
+                // this.props.handleLoginSucess ? this.props.handleLoginSucess(data) : '';
+                // this.props.get_status_login();
+
+                window.location.reload();
+            }
+
+
+        } else {
+            toast.warn(config.msg.miss_field);
+        }
+
+
+    }
+    _onLoginFacebook = async (e) => {
+        e.preventDefault();
+        window.FB.login(async (data) => {
             if (data && data.authResponse) {
                 let { accessToken } = data.authResponse;
                 if (accessToken) {
-                    this.props.user_login_fb(accessToken).then( async (res) => {
-                        let data = res.payload.data;
-                        if (data.access_token) {
-                            await cookie.save("access_token", data.access_token, {
-                                path: '/',
-                                maxAge: 600000,
-                            })
-                            // this.props.handleLoginSucess ? this.props.handleLoginSucess(data) : '';
-                            // this.props.get_status_login();
-                            // this.props.onClose();
-                            window.location.reload();
-                        }
-                    });
+                    this.toastId = toast.info(config.msg.is_progressing, { autoClose: false });
+                    this.props.onClose();
+                    let res = await this.props.user_login_fb(accessToken);
+                    if (res.type == "ERROR") {
+                        return toast.update(this.toastId, { type: toast.TYPE.ERROR, autoClose: 3000, render: res.msg });
+                    }
+                    let data = res.payload.data;
+                    if (data.access_token) {
+                        toast.update(this.toastId, { type: toast.TYPE.INFO, autoClose: 3000, render: config.msg.login_success });
+                        await cookie.save("access_token", data.access_token, {
+                            path: '/',
+                            maxAge: 60000000,
+                        })
+                        // this.props.handleLoginSucess ? this.props.handleLoginSucess(data) : '';
+                        // this.props.get_status_login();
+                        window.location.reload();
+                    }
+
                 }
             }
         }, { scope: 'email' });
+    }
+
+    _init_ = () => {
+        this._showTab = this._showTab.bind(this);
+        this._onLoginEmail = this._onLoginEmail.bind(this);
+        this.inputEmail = '';
+        this.inputEmailRegister = '';
+        this.inputPassword = '';
+        this.inputPasswordRegister = '';
+        this.inputName = '';
+        this.toastId = null;
     }
 
 }
@@ -112,6 +195,7 @@ const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
         user_login_fb: UserAction.user_login_fb,
         user_login: UserAction.user_login,
+        user_register: UserAction.user_register,
         get_status_login: UserAction.user_get_status_login,
 
     }, dispatch);

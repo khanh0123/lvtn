@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import Player from '../video/player';
 import PlayerMovie from '../video/videoplayer';
 import '../../assets/vendors/video-react/video-react.css';
-// import parseFB from "../helpers";
 import SliderScroll from "../sliders/SliderScroll";
-import { custom_date } from "../helpers";
-import { MovieAction, LoadingAction } from "../../actions"
+import { getMovie } from "../helpers";
+import { MovieAction, LoadingAction ,UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import config from "../../config";
 import Comment from "../comment";
+import { stringify } from 'querystring';
 
 class Detail extends React.Component {
 
@@ -26,11 +25,12 @@ class Detail extends React.Component {
             hot_retail_movies: [],
             link_play: [],
         }
+        this._getCurrentTimeOnEpisode = this._getCurrentTimeOnEpisode.bind(this);
     }
     async componentDidMount() {
         let { id, slug } = this.props.match.params;
         await this.setState({ id: id, slug: slug });
-        this._get_link_play(this.props);
+        
         if (!this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] || (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && !this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id])) {
             try {
                 let res = await this.props.get_detail_movie(id, slug);
@@ -45,17 +45,19 @@ class Detail extends React.Component {
             this.props.set_loading(false);
         }
 
-        this._get_hot_series_movies(this.props);
-        this._get_hot_retail_movies(this.props);
+        this._getLinkPlay(this.props);
+
+        getMovie(this,this.props,'hot_series_movies',MovieAction);
+        getMovie(this,this.props,'hot_retail_movies',MovieAction);
 
     }
     componentWillMount() {
 
     }
     render() {
-        let { data, hot_series_movies, hot_retail_movies, link_play,id } = this.state;
-
-
+        let { data, hot_series_movies, hot_retail_movies, link_play,id,episode } = this.state;
+        let  currentTime  =  this._getCurrentTimeOnEpisode();
+        
         return data !== '' && (
             <React.Fragment>
                 <div className="breadcrumbs">
@@ -79,7 +81,7 @@ class Detail extends React.Component {
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="details-page">
                                     <div className="details-player" style={{ marginTop: '2em' }}>
-                                        <PlayerMovie data={link_play} thumbnail={data.images.poster.url} />
+                                        <PlayerMovie data={link_play} thumbnail={data.images.poster.url} onUpdateUserEndTime={this._updateUserEndTime.bind(this)} currentTime={currentTime}/>
                                     </div>
 
                                 </div>
@@ -105,46 +107,60 @@ class Detail extends React.Component {
             </React.Fragment>
         ) || <div />
     }
-    _get_hot_series_movies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-            await props.get_hot_series_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_series_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
-            this.setState({ hot_series_movies: data });
-        }
-    }
-    _get_hot_retail_movies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-            await props.get_hot_retail_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
-            this.setState({ hot_retail_movies: data });
-        }
-    }
-    _get_link_play = async (props) => {
+
+    _updateUserEndTime = async (timestamp) => {
+        let loginStatus = this.props[UserAction.ACTION_GET_STATUS_LOGIN];
         let { id, episode } = this.state;
-        if (!props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] ||
-            (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id]) ||
-            (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode])) {
+        let videoinfo = this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode];
+        
+        if(loginStatus && loginStatus.isLogged && videoinfo && videoinfo.episode_id){
+            
+            this.props.user_end_time_episode(videoinfo.episode_id,timestamp);
+        } else if(typeof window.localStorage !== undefined  && videoinfo && videoinfo.episode_id ) {
+            let endtime = window.localStorage.getItem('endtimeepisode');
+            if(!endtime) endtime = {};
+            else endtime = JSON.parse(endtime);
+            endtime[videoinfo.episode_id] = timestamp;
+            window.localStorage.setItem('endtimeepisode', JSON.stringify(endtime));
+        }
+        
+
+    }
+
+    _getCurrentTimeOnEpisode = () => {
+        let { id, episode } = this.state;
+        if(id == '' || episode == ''|| !this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] || !this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] || !this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode]) return 0;
+        
+        let videoinfo = this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode];
+        let currentTime = 0;
+        if(typeof window.localStorage !== undefined){
+            let endtime = window.localStorage.getItem('endtimeepisode');
+            if(!endtime) endtime = {};
+            else endtime = JSON.parse(endtime);
+            currentTime = endtime[videoinfo.episode_id] ? endtime[videoinfo.episode_id] : 0;
+        }
+        currentTime = currentTime == 0 ? ((this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] && this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] && this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode]) ? this.props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode].time_current : 0) : currentTime;
+
+        return currentTime
+    }
+    _getLinkPlay = async (props) => {
+        let { id, episode } = this.state;
+        // if (!props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] ||
+        //     (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id]) ||
+        //     (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode])) {
             await props.get_linkplay_movie(id, episode).then((res) => {
                 let r = res.payload.data;
                 this.setState({ link_play: r.sources });
             });
-        } else {
-            let data = props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode].sources;
-            this.setState({ link_play: data });
-        }
+        // } else {
+        //     let data = props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode].sources;
+        //     this.setState({ link_play: data });
+        // }
     }
 }
 
-const mapStateToProps = ({ movie_results, loading_results }) => {
-    return Object.assign({}, movie_results, loading_results || {});
+const mapStateToProps = ({ movie_results, loading_results,user_results }) => {
+    return Object.assign({}, movie_results, loading_results, user_results || {});
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -153,6 +169,7 @@ const mapDispatchToProps = (dispatch) => {
         get_linkplay_movie: MovieAction.get_linkplay_movie,
         get_hot_retail_movies: MovieAction.get_hot_retail_movies,
         get_hot_series_movies: MovieAction.get_hot_series_movies,
+        user_end_time_episode: UserAction.user_end_time_episode,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

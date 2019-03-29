@@ -2,37 +2,38 @@ import React from "react";
 import SliderBanner from "../Sliders/SliderBanner";
 import Slider from "../Sliders/Slider";
 import SliderBig from "../Sliders/SliderBig";
+import { getMovie } from "../helpers";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { MovieAction, LoadingAction } from "../../actions"
+import { MovieAction, LoadingAction } from "../../actions";
+import config from "../../config";
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             banner_movies: [],
+            recommend_movies:[],
             hot_movies: [],
             hot_series_movies: [],
             hot_retail_movies: [],
+            
 
         };
 
     }
     componentDidMount() {
         Promise.all([
-            this._get_banner_movies(this.props),
-            this._get_hot_movies(this.props),
-                
-
-        ]).then(() => {
-            this._get_hot_series_movies(this.props),
-                this._get_hot_retail_movies(this.props),
-                this.props.set_loading(false);
-
+            getMovie(this,this.props,'banner_movies',MovieAction),
+            getMovie(this,this.props,'hot_movies',MovieAction),
+        ]).then(() => {            
+            this.props.set_loading(false);
         }).catch(() => {
             this.props.set_loading(false);
         });
+        getMovie(this,this.props,'hot_series_movies',MovieAction);
+        getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
     componentWillReceiveProps(nextProps) {
         // this._get_hot_movies(nextProps);
@@ -181,6 +182,9 @@ class Home extends React.Component {
             </React.Fragment>
         )
     }
+    _get_recommand_movies = async () => {
+
+    }
     _get_hot_movies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
             await props.get_hot_movies().then((res) => {
@@ -237,6 +241,7 @@ function mapDispatchToProps(dispatch) {
         get_hot_retail_movies: MovieAction.get_hot_retail_movies,
         get_hot_series_movies: MovieAction.get_hot_series_movies,
         get_banner_movies: MovieAction.get_banner_movies,
+        get_recommand_movies: MovieAction.get_recommand_movies,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

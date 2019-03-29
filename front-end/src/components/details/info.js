@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FacebookProvider, { Share } from 'react-facebook';
+// import FacebookProvider, { Share } from 'react-facebook';
 import Trailer from "../video/trailer";
 import SliderScroll from "../sliders/SliderScroll";
-import { custom_date } from "../helpers";
+import { custom_date,getMovie } from "../helpers";
 import { MovieAction,  LoadingAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -45,8 +45,8 @@ class Info extends React.Component {
             this.props.set_loading(false);
         }
 
-        this._get_hot_series_movies(this.props);
-        this._get_hot_retail_movies(this.props);
+        getMovie(this,this.props,'hot_series_movies',MovieAction);
+        getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
     async componentWillReceiveProps(nextProps) {
         let { id, slug } = nextProps.match.params;
@@ -148,11 +148,11 @@ class Info extends React.Component {
                                                             </div>
                                                             <div className="social-links">
                                                                 <strong>Chia sẻ :</strong>
-                                                                <FacebookProvider appId="361492804618262">
+                                                                {/* <FacebookProvider appId="361492804618262">
                                                                     <Share href={`${config.domain.fe}/${data.id}/${data.slug}`}>
                                                                         <a className="socila-tw"><i className="fa fa-facebook" /></a>
                                                                     </Share>
-                                                                </FacebookProvider>
+                                                                </FacebookProvider> */}
                                                                 <a href="" className="socila-tw"><i className="fa fa-twitter" /></a>
                                                                 <a href="" className="socila-sk"><i className="fa fa-skype" /></a>
                                                                 <a href="" className="socila-pin"><i className="fa fa-pinterest" /></a>
@@ -193,28 +193,7 @@ class Info extends React.Component {
         this.setState({ is_open_trailer: !this.state.is_open_trailer }, () => {
         });
     }
-    _get_hot_series_movies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-            await props.get_hot_series_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_series_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
-            this.setState({ hot_series_movies: data });
-        }
-    }
-    _get_hot_retail_movies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-            await props.get_hot_retail_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
-            this.setState({ hot_retail_movies: data });
-        }
-    }
+   
     _render_star = (avg) => {
         let result = [];
         for (let i = 1; i <= 5; i++) {

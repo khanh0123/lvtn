@@ -9,6 +9,10 @@ use App\Models\Movie;
 use Validator;
 class CommentController extends Controller
 {
+    public function __construct(Request $request) {
+        parent::__construct($request);
+        $this->model = new Comment;
+    }
 	protected $rules = [
         'insert' => [
 			'content'  => 'required|max:255',
@@ -26,9 +30,7 @@ class CommentController extends Controller
     ];
     protected $columns_search = [];
 
-    public function __construct(Request $request) {
-        $this->model = new Comment;
-    }
+    
 
     public function setItem($type , $req , &$item){
 

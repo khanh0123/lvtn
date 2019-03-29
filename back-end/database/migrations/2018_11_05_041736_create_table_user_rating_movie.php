@@ -19,6 +19,8 @@ class CreateTableUserRatingMovie extends Migration
             $table->integer('rating');
             $table->foreign('user_id','fk_user_rating_movie_user')->references('id')->on('user')->onDelete('cascade');
             $table->foreign('mov_id', 'fk_user_rating_movie_movie')->references('id')->on('movie')->onDelete('cascade');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
 

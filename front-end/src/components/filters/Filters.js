@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 // import SliderScroll from "../sliders/SliderScroll";
 // import FacebookProvider, { Comments } from 'react-facebook';
-// import { custom_date } from "../helpers";
-import { MovieAction, LoadingAction } from "../../actions"
+import { getMovie } from "../helpers";
+import { MovieAction, LoadingAction } from "../../actions";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 // import config from "../../config";
-import SlideItem from "../sliders/SlideItem";
+import SlideItem from "../Sliders/SlideItem";
+import SliderScroll from "../sliders/SliderScroll";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 
@@ -23,7 +24,9 @@ class Filters extends React.Component {
             page: 1,
             per_page: 12,
             total: 0,
-            meta:[],
+            meta: [],
+            hot_series_movies: [],
+            hot_retail_movies: [],
 
         }
         this._handlePageChange = this._handlePageChange.bind(this);
@@ -35,25 +38,28 @@ class Filters extends React.Component {
 
 
     async componentDidMount() {
-        let tags = this._getTagsFromRoute(this.props);  
-        let {page} = queryString.parse(this.props.location.search);
-        if(!page) page = 1;
-        await this.setState({ tags: tags , page:page });
+        let tags = this._getTagsFromRoute(this.props);
+        let { page } = queryString.parse(this.props.location.search);
+        if (!page) page = 1;
+        await this.setState({ tags: tags, page: page });
         try {
             await this._getDataPage(page);
             await this.props.set_loading(false);
         } catch (error) {
             await this.props.set_loading(false);
         }
-        
-        
+
+        getMovie(this, this.props, 'hot_series_movies', MovieAction);
+        getMovie(this, this.props, 'hot_retail_movies', MovieAction);
+
+
     }
     async componentWillReceiveProps(nextProps) {
         let new_tags = this._getTagsFromRoute(nextProps);
-        let {tags} = this.state;
-        if(tags.length > 0){
+        let { tags } = this.state;
+        if (tags.length > 0) {
             for (let i = 0; i < new_tags.length; i++) {
-                if(tags[i] && tags[i] != new_tags[i]){
+                if (tags[i] && tags[i] != new_tags[i]) {
                     await this._resetDataPage();
                     await this.setState({ tags: new_tags });
                     try {
@@ -64,25 +70,23 @@ class Filters extends React.Component {
                     }
                     return;
                 }
-                
+
             }
         }
-        
+
 
     }
-    
+
 
     render() {
-        let { data } = this.state;
-        let {page} = queryString.parse(this.props.location.search);
-        page = !page ?  1 : parseInt(page);
-        
-        
-
+        let { data, hot_retail_movies, hot_series_movies } = this.state;
+        let { page } = queryString.parse(this.props.location.search);
+        page = !page ? 1 : parseInt(page);
         return (
             <React.Fragment>
-                <div className="breadcrumbs hidden-xs">
-                    <div className="container">
+                <div className="container">
+                    <div className="breadcrumbs">
+
                         <ul className="breadcrumb">
                             <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
                             {this._renderBreadcrumbs()}
@@ -90,48 +94,66 @@ class Filters extends React.Component {
                     </div>
                 </div>
                 <div className="inner-page details-page filter-page">
-                {data.length > 0 &&
+
                     <div className="container">
-                        <div style={{ marginTop: '2em', display: 'inline-block',width: '100%' }}>
-                            {data.map((item, i) => {
-                                return (
-                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                        <SlideItem item={item} />
-                                    </div>
-                                )
-                            })}
+                        <div className="row" >
+
+                            <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
+                                {data.length > 0 &&
+                                    (
+                                        <React.Fragment>
+                                            {data.map((item, i) => {
+                                                return (
+                                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                                        <SlideItem item={item} />
+                                                    </div>
+                                                )
+                                            })}
+
+                                            <div className="text-center">
+                                                <Pagination
+                                                    activePage={page}
+                                                    itemsCountPerPage={10}
+                                                    totalItemsCount={this.state.total}
+                                                    pageRangeDisplayed={5}
+                                                    onChange={this._handlePageChange}
+                                                />
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                    ||
+                                    <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
+                                }
+
+                            </div>
+                            <div className="col-lg-3 col-md-3 hidden-xs">
+                                <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies} />
+                                <SliderScroll title="Phim Bộ Hot" data={hot_series_movies} />
+                            </div>
                         </div>
-                        <div className="text-center">
-                            <Pagination
-                                activePage={page}
-                                itemsCountPerPage={10}
-                                totalItemsCount={this.state.total}
-                                pageRangeDisplayed={5}
-                                onChange={this._handlePageChange}
-                            />
-                        </div>
+
+
                     </div>
-                    ||
-                    <h3 style={{ textAlign: "center", color: "black" , margin:"1em 0" }}>Không có kết quả</h3>
-                }
+
+                    }
                 </div>
             </React.Fragment>
         )
     }
     _renderBreadcrumbs = () => {
-        const {meta , tags} = this.state;
+        const { meta, tags } = this.state;
         let tags_info = meta.tags ? meta.tags : [];
         let data = [];
         for (let i = 0; i < tags.length; i++) {
             for (let j = 0; j < tags_info.length; j++) {
-                if(tags_info[j].slug == tags[i]) {
-                    if(i == tags.length - 1)
+                if (tags_info[j].slug == tags[i]) {
+                    if (i == tags.length - 1)
                         data.push(<li key={i}>{tags_info[j].name}</li>)
                     else data.push(<li key={i}><Link to={`/${tags[i]}`}> {tags_info[j].name}</Link></li>)
                 }
-                
+
             }
-            
+
         }
         return data;
     }
@@ -144,16 +166,16 @@ class Filters extends React.Component {
         return tags;
     }
     _getDataPage = async (page) => {
-        const {tags , per_page} = this.state;        
+        const { tags, per_page } = this.state;
         let p = page != '' ? page : this.state.page;
-        if(tags.length > 0){
-            let data = await this.props.get_movie_filter(tags,per_page, p);
+        if (tags.length > 0) {
+            let data = await this.props.get_movie_filter(tags, per_page, p);
             let res = data.payload.data;
             await this.setState({
                 data: res.info.data,
                 total: res.info.total,
                 per_page: res.info.per_page,
-                meta:res.meta,
+                meta: res.meta,
             });
         }
     }
@@ -161,7 +183,7 @@ class Filters extends React.Component {
         await this.setState({ page: pageNumber });
         this.props.history.push({
             pathname: window.location.pathname,
-            search: "?" + new URLSearchParams({page: pageNumber}).toString()
+            search: "?" + new URLSearchParams({ page: pageNumber }).toString()
         })
         this._getDataPage(pageNumber);
     }
@@ -172,7 +194,7 @@ class Filters extends React.Component {
             page: 1,
             per_page: 12,
             total: 0,
-            meta:[],
+            meta: [],
         });
     }
 }
@@ -183,10 +205,8 @@ const mapStateToProps = ({ movie_results, loading_results }) => {
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
         get_movie_filter: MovieAction.get_movie_filter,
-        // get_detail_movie: MovieAction.get_detail_movie,
-        // get_linkplay_movie: MovieAction.get_linkplay_movie,
-        // get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        // get_hot_series_movies: MovieAction.get_hot_series_movies,
+        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
+        get_hot_series_movies: MovieAction.get_hot_series_movies,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

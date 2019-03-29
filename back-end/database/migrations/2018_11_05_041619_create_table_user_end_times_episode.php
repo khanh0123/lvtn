@@ -15,11 +15,15 @@ class CreateTableUserEndTimesEpisode extends Migration
     {
         Schema::create('user_end_times_episode', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->index();
-            $table->integer('epi_id')->unsigned()->index();
-            $table->double('time_watched');
+            $table->integer('episode_id')->unsigned()->index();
+            $table->double('time_watched')->default(0);
             $table->double('time_current');
             $table->foreign('user_id', 'fk_user_end_times_episode_user')->references('id')->on('user')->onDelete('cascade');
-            $table->foreign('epi_id', 'fk_user_end_times_episode_episode')->references('id')->on('episode')->onDelete('cascade');
+            $table->foreign('episode_id', 'fk_user_end_times_episode_episode')->references('id')->on('episode')->onDelete('cascade');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+
+            $table->primary(array('user_id', 'episode_id'));
         });
     }
 

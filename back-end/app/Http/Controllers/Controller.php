@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use DB;
 class Controller extends BaseController
 {
-    
+    protected $req;
     protected $jwt_secret_key;
     protected $limit = 20;
     protected $columns_filter = [];
     protected $columns_search = [];
     protected $columns_search_multi = [];
-    public function __construct()
+    
+    public function __construct(Request $request)
     {
+        $this->req = $request;
         $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
     }
     protected function template_api($data = []){
@@ -55,6 +57,49 @@ class Controller extends BaseController
         $data_token['key'] = createMD5Key($data_encrypt_to_key);
         $token = \Firebase\JWT\JWT::encode($data_token, $this->jwt_secret_key , 'HS256');
         return $token;
+    }
+
+    protected function getUserFromAccessToken($token){
+        if(!$token) {
+            // Unauthorized response if token not there
+            return null;
+        }
+
+        try {
+            $credentials = \Firebase\JWT\JWT::decode($token, $this->jwt_secret_key, ['HS256']);
+        } catch(\Firebase\JWT\ExpiredException $e) {
+            return null;
+        } catch(Exception $e) {
+            return null;
+        }
+
+        
+        $result = \App\Models\User::where([
+            ['id', '=', $credentials->id],
+            ['status', '=', 1],
+        ])->first();
+                
+
+        if(!empty($result)){
+            //get the visitor ip
+            $clientIps = $this->req->getClientIps();
+            $visitorIp = end($clientIps);
+
+            $data_encrypt_to_key  = array(//data need to create MD5 key to verify request
+                'id'         => $result->id,
+                'fb_id'      => $result->fb_id,
+                'name'       => $result->name,
+                'visitorIp'  => $visitorIp,
+                'user_agent' => $this->req->header('User-Agent'),
+            );
+            
+            if($credentials->key === createMD5Key($data_encrypt_to_key)){
+                // put the user in the request class
+                return $result;
+            }
+        } 
+
+        return null;
     }
 
     /*

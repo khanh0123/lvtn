@@ -46,11 +46,11 @@ class MovieSeeder extends Seeder
                 $images = [
                     'poster' => [
                         'id' => $id,
-                        'url' => $value->images->vod_thumb_big
+                        'url' => $value->images->poster
                     ],
                     'thumbnail' => [
                         'id' => $id,
-                        'url' => $value->images->poster
+                        'url' => $value->images->vod_thumb_big
                     ],
                 ];
 
@@ -116,8 +116,8 @@ class MovieSeeder extends Seeder
                     'is_banner'    => rand(0,1),
                     'runtime'      => (int)$value->time,
                     'epi_num'      => 1,
-                    'short_des'    => html_entity_decode($value->description),
-                    'long_des'     => html_entity_decode($value->description),
+                    'short_des'    => strip_tags(html_entity_decode($value->description)),
+                    'long_des'     => strip_tags(html_entity_decode($value->description)),
                     'release_date' => time(),
                     'ad_id'        => 1,
                     'cat_id'       => "cat002",

@@ -13,7 +13,11 @@ use Firebase\JWT\ExpiredException;
 
 class UserController extends Controller
 {
-	
+    public function __construct(Request $request) {
+        parent::__construct($request);
+        $this->model = new User;
+    }
+
     private $domain_graph_fb = "https://graph.facebook.com/v2.8/";
 
     protected $model;
@@ -28,22 +32,34 @@ class UserController extends Controller
         ],
         'rating' => [
             'mov_id' => 'required|exists:movie,id',
-            'rate' => 'required|min:0|max:5',
+            'rate'   => 'required|min:0|max:5',
         ],
         'end_time' => [
-            'episode_id' => 'required|exists:episode,id',
-            'time_watched' => 'min:0',
+            'episode_id'   => 'required|exists:episode,id',
+            'time_watched' => 'min:5',
         ],
+        'register' => [
+            'email'    => 'required|email|unique:user,email',
+            'password' => 'required',
+            'name'     => 'required',
+        ],
+
     ];
+    protected $customMessages = [
+        'name'                  => 'Tên không được để trống',
+        'required'              => ':attribute không được để trống',
+        'email'                 => 'Email không hợp lệ',
+        'access_token.required' => 'Token không hợp lệ',
+        'email.unique'          => 'Email đã tồn tại trong hệ thống',
+        'email.exists'          => 'Tài khoản hoặc mật khẩu không chính xác',
+    ];
+
     protected $columns_filter = [
 
     ];
     protected $columns_search = [];
 
-    public function __construct(Request $request) {
-        parent::__construct();
-        $this->model = new User;
-    }
+    
     /*
      * Show view add new item.
      */
@@ -100,9 +116,12 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules['login']);
+        $validator = Validator::make($request->all(), $this->rules['login'],$this->customMessages);
         if ($validator->fails()) {
-            $response =  ['msg'  => 'Email or password maynot be empty'];
+            $response =  [
+                'msg'   => $validator->errors()->first(),
+                'error' => true,
+            ];
             return $this->template_api($response);
         }
         $email    = $request->email;
@@ -121,7 +140,8 @@ class UserController extends Controller
             
         } else {
             $response =  [
-                'msg' => 'email or password not correct'
+                'msg'   => 'email or password not correct',
+                'error' =>true
             ];
         }
 
@@ -130,11 +150,11 @@ class UserController extends Controller
     }
     public function login_fb(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules['login_fb']);
+        $validator = Validator::make($request->all(), $this->rules['login_fb'],$this->customMessages);
         if ($validator->fails()) {
             $response =  [
-                // 'error' => true,
-                'msg'  => 'An access token is required'
+                'msg'   => $validator->errors()->first(),
+                'error' => true,
             ];
             
         }
@@ -145,7 +165,7 @@ class UserController extends Controller
         
 
         //request to get info
-        $info_user = apiCurl($url,'GET',$params,'json');        
+        $info_user = apiCurl($url,'GET',$params,'json');
         
         //check valid token facebook
         if(!is_string($info_user) && (isset($info_user->id) || isset($info_user['id'])) ){
@@ -194,15 +214,45 @@ class UserController extends Controller
         return $this->template_api($response);
     }
 
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(),$this->rules['register'] ,$this->customMessages);
+        if ($validator->fails()) {
+            $response =  [
+                'msg'   => $validator->errors()->first(),
+                'error' => true,
+            ];
+            
+        } else {
+            $this->model           = new User();
+            $this->model->name     = $request->name;
+            $this->model->email    = $request->email;
+            $this->model->password = encode_password($request->password);
+            if($this->model->save()){
+                $token = $this->generate_access_token($request,$this->model);
+                unset($this->model->password);
+                unset($this->model->created_at);
+                unset($this->model->updated_at);
+                $response =  [
+                    'info'         => $this->model,
+                    'access_token' => $token
+                ];
+            } else $response =  ['error' => true,'msg'  => 'Đăng ký không thành công. Vui lòng thử lại sau'];
+        }
+        
+        
+
+        return $this->template_api($response);
+    }
 
 
     public function rating_movie(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules['rating']);
+        $validator = Validator::make($request->all(), $this->rules['rating'],$this->customMessages);
         if ($validator->fails()) {
             $response =  [
+                'msg'   => $validator->errors()->first(),
                 'error' => true,
-                'msg'  => 'err'
             ];
             
         } else {
@@ -227,29 +277,37 @@ class UserController extends Controller
 
     public function end_time_episode(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rules['end_time']);
+        $validator = Validator::make($request->all(), $this->rules['end_time'],$this->customMessages);
         if ($validator->fails()) {
             $response =  [
+                'msg'   => $validator->errors()->first(),
                 'error' => true,
-                'msg'  => 'err'
             ];
             
         } else {
             $end_time = User_end_times_episode::where([
-                ['user_id',$request->authUser->id],['episode_id' => $request->mov_id]
+                ['user_id',$request->authUser->id],['episode_id' , $request->episode_id]
             ])->first();
+            
+            
             if(empty($end_time)) {
-                $end_time             = new User_rating_movie();
-                $end_time->user_id    = $request->authUser->id;
-                $end_time->episode_id = $request->episode_id;
+                $end_time               = new User_end_times_episode();
+                $end_time->user_id      = $request->authUser->id;
+                $end_time->episode_id   = $request->episode_id;
+                $end_time->time_watched = (double)$request->time_current;
                 
-            } 
-            $end_time->time_watched = $request->time_watched;
-            $end_time->save();
-            $response = [
-                'success' => true
-            ];
-
+            } else {
+                if((double)$request->time_current > $end_time->time_watched )
+                    $end_time->time_watched = (double)$request->time_current;
+            }
+            $end_time->time_current = (double)$request->time_current;
+            // die;
+            
+            if($end_time->save()){
+                $response = ['success' => true];
+            } else {
+                $response = ['error' => true , 'msg' => 'error'];
+            }
         }
 
         return $this->template_api($response);

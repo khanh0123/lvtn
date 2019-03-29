@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 // import Player from "./player2";
 // import VideoPlayer from 'react-video-js-player';
-import { isString } from 'util';
+import config from '../../config';
 
 class PlayerMovie extends Component {
     constructor(props) {
@@ -9,85 +9,84 @@ class PlayerMovie extends Component {
         this.player = null;
         this.state = {
             sources: [],
-            
+            currentTime: 0,
+
         };
+        this._onVideoTimeUpdate = this._onVideoTimeUpdate.bind(this);
+        this._onVideoPause = this._onVideoPause.bind(this);
+        this._onVideoPlay = this._onVideoPlay.bind(this);
+        this._onVideoEnd = this._onVideoEnd.bind(this);
+        this._onVideoError = this._onVideoError.bind(this);
+
+        this._trackingUserEndTimeEpisode = this._trackingUserEndTimeEpisode.bind(this);
+        this.userEndTimeEpisode = null;
 
     }
 
     async componentDidMount() {
-        let { data } = this.props;
-        if (data && data.length > 0) {
+        console.log("componentDidMount");
+
+        let { data, currentTime } = this.props;
+        if (data !== '') {
             data = this._initSource(data);
-            await this.setState({ sources: data });
-        }
-        
-        if (!this.player) {
-            let _linkPlay = this._get_link_from_sources(data);
-            // this.player = window.videojs(this.refs.player, {
-            //     controls: true,
-            //     autoplay: true,
-            //     techOrder: ['html5'],
-            //     fluid: true,
-            //     widescreen: true,
-            //     metadata: {
-            //         "base_url": "Http://domain."
-            //     },
-            //     ads: [],
-            //     sources: [_linkPlay]
-            // });
-            console.log(_linkPlay);
-            
-            this.player = window.videojs(this.refs.player, {}).ready(() => {
-                console.log(this.refs.player);
-                
-                this.player.src(_linkPlay);
-                this.player.play();
-            });
+            await this.setState({ sources: data, currentTime: currentTime });
         }
 
-       
+        let _linkPlay = this._getLinkFromSources(data);
 
+        // try { if (window.videojs.getPlayers()['player']) delete window.videojs.getPlayers()['player']; } catch (e) { };
 
-    }
-    async componentWillReceiveProps(nextProps) {
-        let { data } = nextProps;
-        if (data && data !== this.state.sources) {
-            data = this._initSource(data);
-            await this.setState({ sources: data });
-        }
-        try {
-            if (window.videojs.getPlayers()['player']) {
-                delete window.videojs.getPlayers()['player'];
-            }
-        } catch (e) { }
         this.player = null;
-        if (!this.player) {
-            let _linkPlay = this._get_link_from_sources(data);
-            // this.player = window.videojs(this.refs.player, {
-            //     controls: true,
-            //     autoplay: true,
-            //     techOrder: ['html5'],
-            //     fluid: true,
-            //     widescreen: true,
-            //     metadata: {
-            //         "base_url": "Http://domain."
-            //     },
-            //     ads: [],
-            //     sources: [_linkPlay]
-            // });
+        // if (_linkPlay && _linkPlay.src != '') {
+        //     console.log("1");
+
+
             this.player = window.videojs(this.refs.player, {}).ready(() => {
+
                 this.player.src(_linkPlay);
+                this.player.currentTime(currentTime);
                 this.player.play();
-              });
-        }
+                this.player.on('pause', this._onVideoPause);
+                this.player.on('play', this._onVideoPlay);
+                this.player.on('error', this._onVideoError);
+                this.player.on('timeupdate', this._onVideoTimeUpdate);
+                this.player.on('ended', this._onVideoEnd);
+
+            });
+
+        // }
+
+
+
+
     }
-    componentWillUnmount(){
+    async componentWillReceiveProps(nextProps) {        
+        let { data, currentTime } = nextProps;
+        if (data !== '') {
+            data = this._initSource(data);
+            await this.setState({ sources: data, currentTime: currentTime });
+            let _linkPlay = this._getLinkFromSources(data);
+            if (this.player && _linkPlay && _linkPlay.src != '') {
+                this.player.src(_linkPlay);
+                this.player.currentTime(currentTime);
+                this.player.trigger('srcchange');
+                this.player.play();
+            }
+        }
+
+
+
+    }
+    componentWillUnmount() {
+
         try {
             this.player.dispose();
-            console.log("dispose");
-            
-        } catch (e) { console.log(e);
-         }
+            clearInterval(this.userEndTimeEpisode);
+            console.log("dispose player");
+
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     render() {
@@ -102,6 +101,7 @@ class PlayerMovie extends Component {
             </div>
         );
     }
+
     _initSource = (data) => {
         if (data && data.pt) {
             data.pt[0]['is_play'] = true;
@@ -111,7 +111,8 @@ class PlayerMovie extends Component {
         }
         return data;
     }
-    _get_link_from_sources = (s, current) => {        
+    
+    _getLinkFromSources = (s, current) => {
         if (s && s.pt) {
             for (let i = 0; i < s.pt.length; i++) {
                 if (s.pt[i].is_play) return s.pt[i];
@@ -120,33 +121,50 @@ class PlayerMovie extends Component {
         }
         return { src: '', type: '' };
     }
-    onPlayerReady(player) {
+    _onPlayerReady = (player) => {
         console.log("Player is ready: ", player);
-        this.player = player;
+        // this.player = player;
     }
 
-    onVideoPlay(duration) {
-        console.log("Video played at: ", duration);
+    _onVideoPlay = () => {
+        if (this.userEndTimeEpisode !== null) return;
+        this.userEndTimeEpisode = setInterval(() => {
+            this._trackingUserEndTimeEpisode()
+            console.log("tracking");
+            
+        }, config.time.user_end_time);
     }
 
-    onVideoPause(duration) {
-        console.log("Video paused at: ", duration);
+    _onVideoPause = (duration) => {
+        clearInterval(this.userEndTimeEpisode);
+        this.userEndTimeEpisode = null;
     }
 
-    onVideoTimeUpdate(duration) {
-        console.log("Time updated: ", duration);
+    _onVideoTimeUpdate = () => {
+
     }
 
-    onVideoSeeking(duration) {
+    _onVideoSeeking = (duration) => {
         console.log("Video seeking: ", duration);
     }
 
-    onVideoSeeked(from, to) {
+    _onVideoSeeked = (from, to) => {
         console.log(`Video seeked from ${from} to ${to}`);
     }
 
-    onVideoEnd() {
+    _onVideoEnd = () => {
         console.log("Video ended");
+    }
+    _onVideoError = () => {
+        console.log("Video error");
+    }
+
+    _trackingUserEndTimeEpisode = () => {
+        if (this.userEndTimeEpisode !== null && typeof this.props.onUpdateUserEndTime !== undefined) {
+            let currentTime = this.player.currentTime();
+            this.props.onUpdateUserEndTime(currentTime);
+        }
+
     }
 }
 

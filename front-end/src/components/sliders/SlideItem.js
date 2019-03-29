@@ -16,6 +16,7 @@ class SlideItem extends React.Component {
         return item && (
             <div className="item" key={item.id}>
                 <div className="movie-item-contents gradient">
+                    <div className="background-opacity"></div>
                     <img src={type == 2 ? item.images.poster.url : item.images.thumbnail.url} onError={(e)=>{e.target.onerror = null; e.target.src=config.images.empty_thumbnail}}/>
                     <div className="movie-item-content">
                         <div className="movie-item-content-top">

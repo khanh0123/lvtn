@@ -4,10 +4,12 @@ const ACTION_GET_HOT_MOVIES = 'ACTION_GET_HOT_MOVIES';
 const ACTION_GET_BANNER_MOVIES = 'ACTION_GET_BANNER_MOVIES';
 const ACTION_GET_HOT_SERIES_MOVIES = 'ACTION_GET_HOT_SERIES_MOVIES';
 const ACTION_GET_HOT_RETAIL_MOVIES = 'ACTION_GET_HOT_RETAIL_MOVIES';
+const ACTION_GET_RECOMMEND_MOVIES = 'ACTION_GET_RECOMMEND_MOVIES';
 const ACTION_GET_DETAIL_MOVIE = 'ACTION_GET_DETAIL_MOVIE';
 const ACTION_GET_LINKPLAY_MOVIE = 'ACTION_GET_LINKPLAY_MOVIE';
 const ACTION_GET_MOVIE_FILTER = 'ACTION_GET_MOVIE_FILTER';
 const ACTION_GET_MOVIE_SEARCH = 'ACTION_GET_MOVIE_SEARCH';
+
 
 
 async function get_hot_movies() {
@@ -88,10 +90,21 @@ async function get_movie_search(q,p) {
     };
 }
 
+async function get_recommend_movies() {
+    let res = await Api.get_recommend_movies();
+    return {
+        type: ACTION_GET_RECOMMEND_MOVIES,
+        payload: {
+            data:res.data.info
+        } 
+    };
+}
+
 module.exports =  {
     ACTION_GET_HOT_MOVIES,
     ACTION_GET_HOT_SERIES_MOVIES,
     ACTION_GET_HOT_RETAIL_MOVIES,
+    ACTION_GET_RECOMMEND_MOVIES,
     ACTION_GET_DETAIL_MOVIE,
     ACTION_GET_BANNER_MOVIES,
     ACTION_GET_LINKPLAY_MOVIE,
@@ -100,6 +113,7 @@ module.exports =  {
     get_hot_movies,
     get_hot_series_movies,
     get_hot_retail_movies,
+    get_recommend_movies,
     get_detail_movie,
     get_banner_movies,
     get_linkplay_movie,

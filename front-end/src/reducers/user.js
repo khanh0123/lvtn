@@ -5,6 +5,7 @@ export default function (state = {}, action) {
     switch (action.type) {
         case UserAction.ACTION_USER_LOGIN:
         case UserAction.ACTION_USER_LOGIN_FB:
+        case UserAction.ACTION_USER_REGISTER:
             result[action.type] = action.payload.data;
             break;
         case UserAction.ACTION_GET_STATUS_LOGIN:            

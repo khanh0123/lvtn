@@ -48,6 +48,17 @@ class Api {
             }
         })
     }
+    static get_recommend_movies() {
+        const url = `${config.api.movie_recommend}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+            data: {},
+            params: {}
+        })
+
+    }
     static get_hot_retail_movies() {
         const url = `${config.api.movie}`;
 
@@ -152,6 +163,22 @@ class Api {
         })
     }
 
+    static user_register(email,password,name) {
+        const url = `${config.api.user_register}`;
+
+        return axios({
+            method: 'post',
+            url: url,
+            data: {
+                name:name,
+                email:email,
+                password:password,
+                
+            },
+            params: {}
+        })
+    }
+
     static user_login_fb(access_token) {
         const url = `${config.api.user_login_fb}`;
 
@@ -205,6 +232,20 @@ class Api {
             params: {}
         })
     }
+    static user_end_time_episode(episode_id,time_current) {
+        const url = `${config.api.user_end_time_episode}`;
+        let data = {
+            episode_id:episode_id,
+            time_current:time_current
+        };
+        return axios({
+            method: 'post',
+            url: url,
+            data: data,
+            params: {}
+        })
+    }
+    
 
     
 

@@ -1445,6 +1445,10 @@
             position: relative;
             margin-bottom: 30px;
         }
+
+.filter-page .movie-item-contents.gradient {
+    margin: 0;
+}
         .movie-item-title > a {
             font-size: 14px;
         }
@@ -1620,11 +1624,13 @@
             padding-right: 10px;
         }
         .breadcrumbs {
-            background-color: #182028;
-            padding: 19px 0;
+            background-color: white;
+            padding: 19px 3px;
+            position: relative;
         }
         .breadcrumb>li {
             font-size: 15px;
+            overflow: hidden;
         }
         .comment-area {
             padding: 18px 26px;
@@ -1966,9 +1972,6 @@
             font-size: 19px;
             white-space: normal;
             line-height: 26px;
-        }
-        .footer-bg {
-            /* padding-top: 286px; */
         }
         .movie-big .movie-item-content-center {
             top: 28%;

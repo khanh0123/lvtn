@@ -13,6 +13,11 @@ use App\Models\Movie_country;
 
 class MovieController extends Controller
 {
+    public function __construct(Request $request) {
+        
+        parent::__construct($request);
+        $this->model = new Movie;
+    }
 	protected $model;
 	protected $limit = 20;
     protected $columns_filter = [
@@ -37,10 +42,7 @@ class MovieController extends Controller
     protected $columns_search_multi = ['cat_id'];
 
 
-    public function __construct(Request $request) {
-        $this->model = new Movie;
-        // parent::__construct($request);
-    }
+    
     /*
      * Show view add new item.
      */

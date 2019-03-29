@@ -31,13 +31,14 @@ axios.interceptors.request.use(cfg => {
     // hide_loader(error.config);
     // return Promise.reject(error);
 });
-// axios.interceptors.response.use(response => {
-//     hide_loader(response.config);
-//     return response;
-// }, error => {
-//     hide_loader(error.config);
-//     return Promise.reject(error);
-// });
+axios.interceptors.response.use(response => {
+    // hide_loader(response.config);
+    // window.scrollTo(0,0);
+    return response;
+}, error => {
+    // hide_loader(error.config);
+    return Promise.reject(error);
+});
 
 
 // function hide_loader(xhr_config) {
