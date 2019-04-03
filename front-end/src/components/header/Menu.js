@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { MenuAction } from "../../actions"
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import config from "../../config";
+// import config from "../../config";
 
 class Menu extends React.Component {
     constructor(props) {
@@ -12,13 +12,16 @@ class Menu extends React.Component {
         this.state = {
             data_menu: []
         }
-        props.get_menu().then(res => {
-            let data = res.payload.data;
-            this.setState({ data_menu: data });
-        })
+        
         this._goSearchPage = this._goSearchPage.bind(this);
 
 
+    }
+    async componentDidMount(){
+        let res = await this.props.get_menu();
+        let menu = res.payload.data;
+        this.setState({ data_menu: menu });
+        document.querySelector('.wrap-sticky').style.height = '5em';
     }
     
     render() {

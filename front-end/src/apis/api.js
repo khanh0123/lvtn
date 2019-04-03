@@ -36,7 +36,7 @@ class Api {
         })
     }
     static get_hot_movies() {
-        const url = `${config.api.movie}`;
+        const url = `${config.api.movie}`;        
 
         return axios({
             method: 'get',

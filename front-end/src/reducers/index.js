@@ -1,9 +1,20 @@
-import {combineReducers} from 'redux';
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import thunkMiddleware from "redux-thunk";
+import promise from 'redux-promise';
+
+
 import MenuReducer from './menu';
 import MovieReducer from './movie';
 import LoadingReducer from './loading';
 import CommentReducer from "./comment";
 import UserReducer from "./user";
+
+const initializeSession = () => ({
+    type: "INITIALIZE_SESSION",
+});
+
+
+// const store = createStoreWithMiddleware(reducers);
 
 const rootReducer = combineReducers({
     menu_results: MenuReducer,
@@ -12,5 +23,12 @@ const rootReducer = combineReducers({
     comment_results:CommentReducer,
     user_results:UserReducer,
 });
+const customStore = applyMiddleware(promise,thunkMiddleware)(createStore,initializeSession)(rootReducer);
+const createCustomStore = (initialState = {}) =>  createStore(rootReducer, initialState,applyMiddleware(promise));
 
-export default rootReducer;
+module.exports={
+    initializeSession,
+    customStore,
+    createCustomStore
+
+}

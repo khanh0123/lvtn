@@ -1,7 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom"
 import RBCarousel from "react-bootstrap-carousel";
-import "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
+// import withStyles from 'isomorphic-style-loader/withStyles'
+// import s from "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
 
 class SliderBanner extends React.Component {
 
@@ -112,4 +113,5 @@ class SliderBanner extends React.Component {
     }
 }
 
-export default SliderBanner;
+export default (SliderBanner);
+// export default withStyles(s)(SliderBanner);

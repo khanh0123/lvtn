@@ -73,7 +73,9 @@ const getMovie = async (_this, props, type, MovieAction) => {
         case 'recommend_movies':
             break;
         case 'hot_movies':
+        
             if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
+                
                 await props.get_hot_movies().then((res) => {
                     let r = res.payload.data;
                     _this.setState({ hot_movies: r.data });

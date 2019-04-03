@@ -1,20 +1,48 @@
 var path = require('path');
-// var webpack = require('webpack');
+var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
+// const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const InterpolateHtmlPlugin = require("interpolate-html-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const uglifyJsContents = require('uglify-js');
 const uglifyCssContents = require('uglifycss');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-let is_minimize = false;
 
+let is_minimize = false;
+let version = require("../package.json").version;
 module.exports = {
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        sourceMap: true, // Must be set to true if using source-maps in production
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+          ecma: undefined,
+          warnings: false,
+          parse: {},
+          mangle: true, // Note `mangle.properties` is `false` by default.
+          module: false,
+          output: null,
+          toplevel: false,
+          nameCache: null,
+          ie8: false,
+          keep_classnames: undefined,
+          keep_fnames: false,
+          safari10: false,
+        },
+      }),
+    ],
+  },
   entry: [
     path.join(__dirname, '../src', 'App.js')
   ],
   output: {
     path: path.join(__dirname, '../build'),
-    filename: 'bundle.[hash:16].js',
+    filename: `app.[hash:16].js?v=${version}`,
     publicPath: '/'
   },
   plugins: [
@@ -39,13 +67,28 @@ module.exports = {
         minifyURLs: true,
       },
     }),
+    // new webpack.optimize.UglifyJsPlugin({
+
+    //   // Eliminate comments
+    //      comments: false,
+ 
+    //  // Compression specific options
+    //     compress: {
+    //       // remove warnings
+    //          warnings: false,
+ 
+    //       // Drop console statements
+    //          drop_console: true
+    //     },
+    //  }),
+    // new HtmlWebpackInlineSourcePlugin(),  
     new InterpolateHtmlPlugin({
       PUBLIC_URL: ''
     }),
 
     new CopyWebpackPlugin([{
       from: 'src/assets/',
-      to: 'assets/',
+      to: 'assets/[path]/[name].[ext]',
       transform: function (fileContent, path) {
         if (!is_minimize) {
           console.log(`Running copy assets folders with minimize ...`);
@@ -101,7 +144,7 @@ module.exports = {
         use: [
           {
             loader: "html-loader",
-            options: { minimize: true }
+            options: { minimize: false }
           }
         ]
       }

@@ -181,7 +181,7 @@ class UserController extends Controller
                 $this->model->fb_id  = $info_user->id;
                 $this->model->name   = $info_user->name;
                 $this->model->email  = $info_user->email ? $info_user->email : '';
-                $this->model->avatar = "http://graph.facebook.com/".$info_user->id."/picture?type=large";
+                $this->model->avatar = "https://graph.facebook.com/".$info_user->id."/picture?type=large";
 
                 //insert success
                 if(!$this->model->save()){

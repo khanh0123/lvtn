@@ -1,16 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PlayerMovie from '../video/videoplayer';
-import '../../assets/vendors/video-react/video-react.css';
-import SliderScroll from "../sliders/SliderScroll";
-import { getMovie } from "../helpers";
-import { MovieAction, LoadingAction ,UserAction } from "../../actions"
+// import '../../assets/vendors/video-react/video-react.css';
+import ScrollRight from "../others/ScrollRight";
+import { MovieAction, LoadingAction ,UserAction ,ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import config from "../../config";
+// import config from "../../config";
 import Comment from "../comment";
-import { stringify } from 'querystring';
+import CreateHelmetTag from "../metaseo";
 
 class Detail extends React.Component {
 
@@ -20,9 +19,7 @@ class Detail extends React.Component {
             data: '',
             id: '',
             slug: '',
-            episode: 1,
-            hot_series_movies: [],
-            hot_retail_movies: [],
+            episode: 1,            
             link_play: [],
         }
         this._getCurrentTimeOnEpisode = this._getCurrentTimeOnEpisode.bind(this);
@@ -47,19 +44,22 @@ class Detail extends React.Component {
 
         this._getLinkPlay(this.props);
 
-        getMovie(this,this.props,'hot_series_movies',MovieAction);
-        getMovie(this,this.props,'hot_retail_movies',MovieAction);
-
     }
     componentWillMount() {
 
     }
+    
     render() {
-        let { data, hot_series_movies, hot_retail_movies, link_play,id,episode } = this.state;
+        let { data,link_play,id,url } = this._getDataRender();
         let  currentTime  =  this._getCurrentTimeOnEpisode();
         
         return data !== '' && (
             <React.Fragment>
+                <CreateHelmetTag
+                    page="detail"
+                    data={data}
+                    url={url}
+                />
                 <div className="breadcrumbs">
                     <div className="container">
                         <ul className="breadcrumb">
@@ -97,8 +97,7 @@ class Detail extends React.Component {
 
                             </div>
                             <div className="col-lg-3 col-md-3 hidden-xs">
-                                <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies} />
-                                <SliderScroll title="Phim Bộ Hot" data={hot_series_movies} />
+                                <ScrollRight/>
                             </div>
                         </div>
                     </div>
@@ -107,7 +106,16 @@ class Detail extends React.Component {
             </React.Fragment>
         ) || <div />
     }
-
+    _getDataRender = () => {        
+        let {url} = this.props.match;
+        let {id , slug} = this.props.match.params;
+        let { data ,link_play } = this.state;
+        if(data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]){
+            data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
+        }
+        return {data, id , url ,link_play};
+    }
+    
     _updateUserEndTime = async (timestamp) => {
         let loginStatus = this.props[UserAction.ACTION_GET_STATUS_LOGIN];
         let { id, episode } = this.state;
@@ -148,7 +156,7 @@ class Detail extends React.Component {
         // if (!props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] ||
         //     (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id]) ||
         //     (props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id] && !props[MovieAction.ACTION_GET_LINKPLAY_MOVIE][id][episode])) {
-            await props.get_linkplay_movie(id, episode).then((res) => {
+            props.get_linkplay_movie(id, episode).then((res) => {
                 let r = res.payload.data;
                 this.setState({ link_play: r.sources });
             });
@@ -158,6 +166,7 @@ class Detail extends React.Component {
         // }
     }
 }
+Detail.serverFetch = ServerAction.init_data_page_detail;
 
 const mapStateToProps = ({ movie_results, loading_results,user_results }) => {
     return Object.assign({}, movie_results, loading_results, user_results || {});
@@ -166,9 +175,7 @@ const mapStateToProps = ({ movie_results, loading_results,user_results }) => {
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
         get_detail_movie: MovieAction.get_detail_movie,
-        get_linkplay_movie: MovieAction.get_linkplay_movie,
-        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        get_hot_series_movies: MovieAction.get_hot_series_movies,
+        get_linkplay_movie: MovieAction.get_linkplay_movie,        
         user_end_time_episode: UserAction.user_end_time_episode,
         set_loading: LoadingAction.set_loading,
 

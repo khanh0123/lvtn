@@ -162,6 +162,12 @@ class VideoController extends MainAdminController
 
                 }
                 break;
+            case 'fimfast':
+                    $link_play = $this->get_link_fimfast($value);
+                    $link_play = json_encode($link_play['sources']);
+                    Video::where('id',$value->id)->update(['link_play' => $link_play]);
+                    $link_play = json_decode($link_play);
+                    break;
             case 'google':
                 $url = htmlspecialchars($source_link);
                 $support_domain = 'drive.google.com';

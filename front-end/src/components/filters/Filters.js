@@ -1,17 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import SliderScroll from "../sliders/SliderScroll";
-// import FacebookProvider, { Comments } from 'react-facebook';
-import { getMovie } from "../helpers";
-import { MovieAction, LoadingAction } from "../../actions";
+import { MovieAction, LoadingAction, ServerAction } from "../../actions";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-// import config from "../../config";
 import SlideItem from "../Sliders/SlideItem";
-import SliderScroll from "../sliders/SliderScroll";
+import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
+import CreateHelmetTag from "../metaseo";
 
 
 class Filters extends React.Component {
@@ -25,9 +22,6 @@ class Filters extends React.Component {
             per_page: 12,
             total: 0,
             meta: [],
-            hot_series_movies: [],
-            hot_retail_movies: [],
-
         }
         this._handlePageChange = this._handlePageChange.bind(this);
         this._resetDataPage = this._resetDataPage.bind(this);
@@ -39,6 +33,8 @@ class Filters extends React.Component {
 
     async componentDidMount() {
         let tags = this._getTagsFromRoute(this.props);
+        console.log(this.props.location.search);
+        
         let { page } = queryString.parse(this.props.location.search);
         if (!page) page = 1;
         await this.setState({ tags: tags, page: page });
@@ -48,11 +44,6 @@ class Filters extends React.Component {
         } catch (error) {
             await this.props.set_loading(false);
         }
-
-        getMovie(this, this.props, 'hot_series_movies', MovieAction);
-        getMovie(this, this.props, 'hot_retail_movies', MovieAction);
-
-
     }
     async componentWillReceiveProps(nextProps) {
         let new_tags = this._getTagsFromRoute(nextProps);
@@ -79,17 +70,22 @@ class Filters extends React.Component {
 
 
     render() {
-        let { data, hot_retail_movies, hot_series_movies } = this.state;
-        let { page } = queryString.parse(this.props.location.search);
-        page = !page ? 1 : parseInt(page);
+        let { data ,meta, tags ,page , url } = this._getDataRender();
+        
         return (
             <React.Fragment>
+                <CreateHelmetTag
+                    page="filter"
+                    data={meta}
+                    url={url}
+
+                />
                 <div className="container">
                     <div className="breadcrumbs">
 
                         <ul className="breadcrumb">
                             <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
-                            {this._renderBreadcrumbs()}
+                            {this._renderBreadcrumbs(meta,tags)}
                         </ul>
                     </div>
                 </div>
@@ -127,8 +123,7 @@ class Filters extends React.Component {
 
                             </div>
                             <div className="col-lg-3 col-md-3 hidden-xs">
-                                <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies} />
-                                <SliderScroll title="Phim Bộ Hot" data={hot_series_movies} />
+                                <ScrollRight />
                             </div>
                         </div>
 
@@ -140,8 +135,24 @@ class Filters extends React.Component {
             </React.Fragment>
         )
     }
-    _renderBreadcrumbs = () => {
-        const { meta, tags } = this.state;
+
+    _getDataRender = () => {        
+        let {url} = this.props.match;
+        let { data , meta } = this.state;
+        let tags = this._getTagsFromRoute(this.props);
+        if(data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_FILTER]){
+            data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].info.data;
+            meta = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].meta;
+            
+        }        
+        
+        let { page } = queryString.parse(this.props.location.search);
+        page = !page ? 1 : parseInt(page);
+        
+        return { data , meta  , tags , page,url };
+    }
+    _renderBreadcrumbs = (meta,tags) => {
+        
         let tags_info = meta.tags ? meta.tags : [];
         let data = [];
         for (let i = 0; i < tags.length; i++) {
@@ -170,6 +181,7 @@ class Filters extends React.Component {
         let p = page != '' ? page : this.state.page;
         if (tags.length > 0) {
             let data = await this.props.get_movie_filter(tags, per_page, p);
+
             let res = data.payload.data;
             await this.setState({
                 data: res.info.data,
@@ -198,6 +210,9 @@ class Filters extends React.Component {
         });
     }
 }
+
+Filters.serverFetch = ServerAction.init_data_page_filter;
+
 const mapStateToProps = ({ movie_results, loading_results }) => {
     return Object.assign({}, movie_results, loading_results || {});
 }
@@ -205,8 +220,6 @@ const mapStateToProps = ({ movie_results, loading_results }) => {
 const mapDispatchToProps = (dispatch) => {
     let actions = bindActionCreators({
         get_movie_filter: MovieAction.get_movie_filter,
-        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        get_hot_series_movies: MovieAction.get_hot_series_movies,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

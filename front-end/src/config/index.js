@@ -1,12 +1,15 @@
-let domain_api = "http://dev.lvtn/api/v1/";
 
+let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
+let protocol = typeof window == 'undefined' ? 'http://' : "//";
+let domain_api = protocol + "dev.lvtn/api/v1/";
 let config = {
     domain: {
-        fe: 'http://luanvantotnghiep.design',
+        fe: 'https://luanvantotnghiep.design',
     },
     time: {
-        user_end_time:5000,
+        user_end_time:isLocal ? 5000 : 20000,
         default_toast:2000,
+        clearLoading:5000,
     },
     constant: {
         cookie_token: 'access_token',
@@ -18,7 +21,7 @@ let config = {
     api: {
         menu: domain_api + "menu",
         movie: domain_api + "movies",
-        movie_recommend: domain_api + "movie/recommand",
+        movie_recommend: domain_api + "movie/recommend",
         movie_detail: domain_api + "movie",
         movie_filter_tags: domain_api + "movie/filter/tags",
         user_login: domain_api + "user/login",
@@ -28,16 +31,13 @@ let config = {
         get_comment: domain_api + "movie",
         user_comment: domain_api + "user/comment",
         user_end_time_episode:domain_api + "user/end_time",
-
-
     },
     title: {
-        webtitle: "ViePlay - ",
+        webtitle: "Movie star",
         livetv: "Xem trực tuyến - ",
         dvr: "Xem lại - ",
         movie: "Xem phim - ",
         search: "Tìm kiếm - ",
-        vodpage: "Kho Video",
         userpage: "Thông tin cá nhân",
         history: "Lịch sử xem phim"
     },
@@ -74,8 +74,8 @@ let config = {
         empty_avatar: "/assets/images/empty_avatar.jpg"
     },
     seo_default: {
-        title: 'Movie star',
-        description: 'Xem phim online',
+        title: 'Movie star - Phim Hay | Phim hd | Xem Phim Online Chất Lượng Cao | Phim HD vietsub hay nhất',
+        description: 'Xem phim mới miễn phí nhanh chất lượng cao. Xem Phim online Việt Sub, Thuyết minh, lồng tiếng chất lượng HD. Xem phim nhanh online chất lượng cao',
         url: '/',
         contentType: 'website',
         img: '/assets/css/img/logo.png',

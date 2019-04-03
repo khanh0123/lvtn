@@ -74,7 +74,7 @@ function user_get_status_login() {
     });
 }
 
-async function user_end_time_episode(episode_id, time_current) {
+function user_end_time_episode(episode_id, time_current) {
     return Api.user_end_time_episode(episode_id, time_current).then((res) => {
         return {
             type: ACTION_USER_END_TIME_EPISODE,

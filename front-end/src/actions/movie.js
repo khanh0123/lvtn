@@ -12,92 +12,156 @@ const ACTION_GET_MOVIE_SEARCH = 'ACTION_GET_MOVIE_SEARCH';
 
 
 
-async function get_hot_movies() {
-    let res = await Api.get_hot_movies();
-    return {
-        type: ACTION_GET_HOT_MOVIES,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_hot_movies() {
+    return Api.get_hot_movies().then((res) => {
+        
+        return {
+            type: ACTION_GET_HOT_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {        
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
-async function get_hot_series_movies() {
-    let res =  await Api.get_hot_series_movies();
-    return {
-        type: ACTION_GET_HOT_SERIES_MOVIES,
-        payload:  {
-            data:res.data.info
-        }
-    };
+function get_hot_series_movies() {
+    return Api.get_hot_series_movies().then((res) => {
+        return {
+            type: ACTION_GET_HOT_SERIES_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
 
-async function get_hot_retail_movies() {
-    let res =  await Api.get_hot_retail_movies();
-    return {
-        type: ACTION_GET_HOT_RETAIL_MOVIES,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_hot_retail_movies() {
+    return Api.get_hot_retail_movies().then((res) => {
+        return {
+            type: ACTION_GET_HOT_RETAIL_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
-async function get_detail_movie(id,slug) {
-    let res =  await Api.get_detail_movie(id,slug);
-    return {
-        id:id,
-        type: ACTION_GET_DETAIL_MOVIE,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_detail_movie(id,slug) {
+    return Api.get_detail_movie(id,slug).then((res) => {
+        return {
+            mov_id:id,
+            type: ACTION_GET_DETAIL_MOVIE,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
 
-async function get_banner_movies() {
-    let res =  await Api.get_banner_movies();    
-    return {
-        type: ACTION_GET_BANNER_MOVIES,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_banner_movies() {
+    return Api.get_banner_movies().then((res) => {
+        return {
+            type: ACTION_GET_BANNER_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
-async function get_linkplay_movie(mov_id,episode) {
-    let res =  await Api.get_linkplay_movie(mov_id,episode)
-    return {
-        mov_id:mov_id,
-        episode:episode,
-        type: ACTION_GET_LINKPLAY_MOVIE,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_linkplay_movie(mov_id,episode) {
+    return Api.get_linkplay_movie(mov_id,episode).then((res) => {
+        return {
+            mov_id:mov_id,
+            episode:episode,
+            type: ACTION_GET_LINKPLAY_MOVIE,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
-async function get_movie_filter(tags,limit,page) {
-    let res =  await Api.get_movie_filter(tags,limit,page)
-    return {
-        type: ACTION_GET_MOVIE_FILTER,
-        payload: {
-            data:res.data
-        } 
-    };
+function get_movie_filter(tags,limit,page) {
+    return Api.get_movie_filter(tags,limit,page).then((res) => {
+        return {            
+            type: ACTION_GET_MOVIE_FILTER,
+            payload: {
+                data: res.data
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
-async function get_movie_search(q,p) {
-    let res =  await Api.get_movie_search(q,p)
-    return {
-        type: ACTION_GET_MOVIE_SEARCH,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_movie_search(q,p) {
+    return Api.get_movie_search(q,p).then((res) => {        
+        return {            
+            type: ACTION_GET_MOVIE_SEARCH,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
 
-async function get_recommend_movies() {
-    let res = await Api.get_recommend_movies();
-    return {
-        type: ACTION_GET_RECOMMEND_MOVIES,
-        payload: {
-            data:res.data.info
-        } 
-    };
+function get_recommend_movies() {
+    return Api.get_recommend_movies().then((res) => {
+        return {            
+            type: ACTION_GET_RECOMMEND_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {
+        return {
+            type: 'ERROR',
+            msg: err.response.data.msg ? err.response.data.msg : ''
+        };
+    });
 }
 
 module.exports =  {

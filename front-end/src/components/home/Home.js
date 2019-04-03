@@ -6,8 +6,9 @@ import { getMovie } from "../helpers";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { MovieAction, LoadingAction } from "../../actions";
+import { MovieAction, LoadingAction, ServerAction } from "../../actions";
 import config from "../../config";
+import CreateHelmetTag from "../metaseo";
 
 class Home extends React.Component {
     constructor(props) {
@@ -36,16 +37,17 @@ class Home extends React.Component {
         getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
     componentWillReceiveProps(nextProps) {
-        // this._get_hot_movies(nextProps);
-        // this._get_hot_series_movies(nextProps);
-        // this._get_hot_retail_movies(nextProps);
 
     }
     render() {
-        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this.state;
-
+        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this._getDataRender();
+        
         return (
             <React.Fragment>
+                <CreateHelmetTag
+                    page="home"
+
+                />
                 <SliderBanner data={banner_movies} />
                 {hot_movies.length > 0 &&
                     <section className="top-rating pt-75">
@@ -182,6 +184,24 @@ class Home extends React.Component {
             </React.Fragment>
         )
     }
+    _getDataRender = () => {
+        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this.state;
+        
+        if(banner_movies.length == 0 && this.props[MovieAction.ACTION_GET_BANNER_MOVIES]){
+            banner_movies = this.props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
+        }
+        if(hot_series_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]){
+            hot_series_movies = this.props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
+        }
+        if(hot_retail_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]){
+            hot_retail_movies = this.props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
+        }
+        if(hot_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_MOVIES]){
+            hot_movies = this.props[MovieAction.ACTION_GET_HOT_MOVIES].data;
+        }
+        
+        return { hot_movies, hot_series_movies, hot_retail_movies, banner_movies };
+    }
     _get_recommand_movies = async () => {
 
     }
@@ -231,6 +251,9 @@ class Home extends React.Component {
         }
     }
 }
+
+Home.serverFetch = ServerAction.init_data_home;
+
 function mapStateToProps({ movie_results, loading_results }) {
     return Object.assign({}, movie_results, loading_results || {});
 }

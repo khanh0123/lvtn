@@ -4,6 +4,7 @@ import LoadingAction from './loading';
 import UserAction from './user';
 import CommentAction from './comment';
 import PopupAction from './popup';
+import ServerAction from "./server";
 module.exports = {
     MenuAction: MenuAction,    
     MovieAction: MovieAction,
@@ -11,4 +12,5 @@ module.exports = {
     UserAction:UserAction,
     CommentAction:CommentAction,
     PopupAction:PopupAction,
+    ServerAction:ServerAction,
 };

@@ -24,8 +24,6 @@ class PlayerMovie extends Component {
     }
 
     async componentDidMount() {
-        console.log("componentDidMount");
-
         let { data, currentTime } = this.props;
         if (data !== '') {
             data = this._initSource(data);

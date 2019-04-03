@@ -5,8 +5,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import cookie from "react-cookies";
-import "../../assets/css/loginsignup.css";
-// import { notify } from 'react-notify-toast';
+// import withStyles from 'isomorphic-style-loader/withStyles';
+// import s from "../../assets/css/loginsignup.css";
 import { toast } from 'react-toastify';
 import config from "../../config";
 

@@ -581,7 +581,7 @@
         bootsnav.hoverDropdown();
         setTimeout(function(){
             bootsnav.navbarSticky();
-        }, 500);
+        }, 100);
         
         // Toggle Bars
         $(".navbar-toggle").each(function(){

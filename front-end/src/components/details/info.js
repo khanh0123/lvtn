@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import FacebookProvider, { Share } from 'react-facebook';
 import Trailer from "../video/trailer";
-import SliderScroll from "../sliders/SliderScroll";
-import { custom_date,getMovie } from "../helpers";
-import { MovieAction,  LoadingAction } from "../../actions"
+import ScrollRight from "../others/ScrollRight";
+import { custom_date } from "../helpers";
+import { MovieAction,  LoadingAction , ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import config from "../../config";
 import Comment from "../comment";
+import CreateHelmetTag from "../metaseo";
 
 // import parseFB from "../helpers/common";
 class Info extends React.Component {
@@ -21,8 +21,6 @@ class Info extends React.Component {
             data: '',
             id: '',
             slug: '',
-            hot_series_movies: [],
-            hot_retail_movies: [],
         }
     }
 
@@ -45,8 +43,6 @@ class Info extends React.Component {
             this.props.set_loading(false);
         }
 
-        getMovie(this,this.props,'hot_series_movies',MovieAction);
-        getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
     async componentWillReceiveProps(nextProps) {
         let { id, slug } = nextProps.match.params;
@@ -72,12 +68,18 @@ class Info extends React.Component {
 
     }
 
-
+    
     render() {
-        let { data, hot_series_movies, hot_retail_movies,id } = this.state;
+        let {data,id ,url} = this._getDataRender();
 
         return data !== '' && (
             <React.Fragment>
+                <CreateHelmetTag
+                    page="info"
+                    data={data}
+                    url={url}
+
+                />
                 <div className="breadcrumbs  hidden-xs">
                     <div className="container">
                         <ul className="breadcrumb">
@@ -175,8 +177,7 @@ class Info extends React.Component {
                                         {id && <Comment mov_id={id} />}
                                     </div>
                                     <div className="col-lg-3 col-md-3 hidden-xs">
-                                        <SliderScroll title="Phim Lẻ Hot" data={hot_retail_movies} />
-                                        <SliderScroll title="Phim Bộ Hot" data={hot_series_movies} />
+                                        <ScrollRight/>
                                     </div>
                                 </div>
 
@@ -189,7 +190,16 @@ class Info extends React.Component {
 
         ) || <div />
     }
-    _action_trailer() {
+    _getDataRender = () => {        
+        let {url} = this.props.match;
+        let {id , slug} = this.props.match.params;
+        let { data } = this.state;
+        if(data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]){
+            data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
+        }
+        return {data,id , url};
+    }
+    _action_trailer = () => {
         this.setState({ is_open_trailer: !this.state.is_open_trailer }, () => {
         });
     }
@@ -207,15 +217,16 @@ class Info extends React.Component {
         return result;
     }
 }
+
+Info.serverFetch = ServerAction.init_data_page_info;
+
 function mapStateToProps({ movie_results, loading_results }) {
     return Object.assign({}, movie_results, loading_results || {});
 }
 
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
-        get_detail_movie: MovieAction.get_detail_movie,
-        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        get_hot_series_movies: MovieAction.get_hot_series_movies,
+        get_detail_movie: MovieAction.get_detail_movie,       
         set_loading: LoadingAction.set_loading,
 
 

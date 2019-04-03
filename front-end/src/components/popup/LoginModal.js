@@ -4,7 +4,6 @@ import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { FacebookProvider, LoginButton } from 'react-facebook';
 import cookie from "react-cookies";
 
 class LoginModal extends React.Component {
