@@ -143,9 +143,7 @@ class Filters extends React.Component {
         if(data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_FILTER]){
             data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].info.data;
             meta = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].meta;
-            
-        }        
-        
+        }
         let { page } = queryString.parse(this.props.location.search);
         page = !page ? 1 : parseInt(page);
         

@@ -31,7 +31,6 @@ class ModalPopup extends React.Component {
             closeButton:'btn-close-modal',
         }
         return (
-            <React.Fragment>
                 <Modal 
                     open={this.props.isOpen} 
                     onClose={this.props.onClose}
@@ -39,10 +38,8 @@ class ModalPopup extends React.Component {
                     children={this.props.children || null}
                     closeOnOverlayClick={true}
                     center
-                    
-                >
-                </Modal>
-            </React.Fragment>
+                />
+                
         );
     }
 }

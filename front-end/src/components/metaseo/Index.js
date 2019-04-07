@@ -38,14 +38,29 @@ let CreateHelmetTag = ({ page, data, url, episodeId }) => {
             )
         case 'filter':
             let title = config.title.webtitle;
-            if(data.tags){
-                 
+            if (data.tags) {
+
                 data.tags.map((tag) => {
-                    title += (" - "+ tag.name)
+                    title += (" - " + tag.name)
                 })
             } else {
                 title = config.seo_default.title;
             }
+            return (
+                <SEO
+                    title={title}
+                    description={config.seo_default.description}
+                    url={url ? url : '/'}
+                    contentType="movie"
+
+                />
+            )
+        case 'search':
+            title = `${config.title.webtitle} - ${config.title.search}`;
+            // if (data.tags) {
+            // } else {
+            //     title = config.seo_default.title;
+            // }
             return (
                 <SEO
                     title={title}

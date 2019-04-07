@@ -18,13 +18,13 @@ class VideoController extends MainAdminController
 	protected $rules = [
         'insert' => [
             'source_link' => 'required',
-            'source_name' => 'required|in:facebook,google,others',
+            'source_name' => 'required|in:facebook,google,others,fimfast',
             'max_qualify' => 'required|in:0,360,480,720,1080',
             'return_type' => 'required|in:json,view',
         ],
         'update' => [
             'source_link' => 'required',
-            'source_name' => 'required|in:facebook,google,others',
+            'source_name' => 'required|in:facebook,google,others,fimfast',
             'max_qualify' => 'required|in:0,360,480,720,1080',
             'return_type' => 'required|in:json,view',
         ]
@@ -167,6 +167,7 @@ class VideoController extends MainAdminController
                     $link_play = json_encode($link_play['sources']);
                     Video::where('id',$value->id)->update(['link_play' => $link_play]);
                     $link_play = json_decode($link_play);
+                    return $link_play
                     break;
             case 'google':
                 $url = htmlspecialchars($source_link);
@@ -206,11 +207,7 @@ class VideoController extends MainAdminController
                 if(isset($result['http_code']) || empty($result)){
                     return [];
                 }
-                // echo "<pre>";
-                // var_dump($result);
-                // echo "</pre>";
-                // die();
-                
+
                 $result = urldecode($result);
                 return $this->get_output($result,2);
             
@@ -300,10 +297,6 @@ class VideoController extends MainAdminController
                         break;
                     }
                 }
-                echo "<pre>";
-                var_dump($output);
-                echo "</pre>";
-                die();
                 
                 
 
@@ -313,5 +306,16 @@ class VideoController extends MainAdminController
         }
         return $output;
         
+    }
+
+    private function get_link_fimfast($item)
+    {
+        $data = apiCurl($item->source_link,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
+
+        if(isset($data->id)){
+            $result['sources'] = $data->sources;
+            return $result;
+        }
+        return ['sources' => []];
     }
 }

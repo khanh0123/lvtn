@@ -25,7 +25,7 @@ function get_hot_movies() {
     }).catch((err) => {        
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -41,7 +41,7 @@ function get_hot_series_movies() {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -58,7 +58,7 @@ function get_hot_retail_movies() {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -75,7 +75,7 @@ function get_detail_movie(id,slug) {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -92,7 +92,7 @@ function get_banner_movies() {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -110,7 +110,7 @@ function get_linkplay_movie(mov_id,episode) {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -126,7 +126,7 @@ function get_movie_filter(tags,limit,page) {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
@@ -142,13 +142,13 @@ function get_movie_search(q,p) {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }
 
 function get_recommend_movies() {
-    return Api.get_recommend_movies().then((res) => {
+    return Api.get_recommend_movies().then((res) => {        
         return {            
             type: ACTION_GET_RECOMMEND_MOVIES,
             payload: {
@@ -159,7 +159,7 @@ function get_recommend_movies() {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.response.data.msg ? err.response.data.msg : ''
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
         };
     });
 }

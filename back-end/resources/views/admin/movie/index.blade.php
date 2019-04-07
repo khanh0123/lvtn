@@ -49,10 +49,9 @@
                                     </select>
                                 </div>
                                 <div style="margin: 5px;width: 30%;display: inline-block">
-                                    <span>Từ khóa tìm kiếm </span>
+                                    <span>Nhập tên phim</span>
                                     <div class="form-group" style="margin: 0;padding-left: 10px">
                                         <input type="text" class="form-control" value="{{ @$data['filter']['name'] }}" name="name">
-
                                     </div>
                                 </div>
                                 <button class="btn btn-success btn-round" type="submit">Lọc<div class="ripple-container"></div></button>
@@ -75,7 +74,6 @@
                                     <th>Phim mới</th>
                                     <th>Banner</th>
                                     <th>Lần cập nhật cuối</th>
-                                    <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </thead>
@@ -90,7 +88,6 @@
                                     <th>Phim mới</th>
                                     <th>Banner</th>
                                     <th>Lần cập nhật cuối</th>
-                                    <th class="text-center">Chọn làm banner</th>
                                     <th class="text-right">Hành động</th>
                                 </tr>
                             </tfoot>
@@ -125,13 +122,6 @@
                                         </div>
                                     </td>
                                     <td>{{ customDate($value->updated_at , 'daytime') }}</td>
-                                    <td class="text-center">
-                                        <form method="post" action="{{base_url('admin/banner/add')}}" class="d-block">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" value="{{$value->id}}" name="mov_id">
-                                            <button type="submit" class="btn btn-simple btn-info btn-icon edit">Chọn</button>
-                                        </form>
-                                    </td>
                                     <td class="text-right">                                       
                                         
                                         <a href="{{ base_url('admin/movie/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
@@ -216,7 +206,7 @@
             responsive: true,
             language: {
                 search: "_INPUT_",
-                searchPlaceholder: "Tìm kiếm",
+                searchPlaceholder: "Tìm kiếm trong trang",
                 paginate:
                 {
                     previous: "Trước",

@@ -107,8 +107,10 @@ class LoginSignupModal extends React.Component {
 
                 window.location.reload();
             }
-
-
+        } else {
+            console.log("err");
+            
+            toast.warn(config.msg.miss_field);
         }
 
     }

@@ -21,11 +21,12 @@ $router->group(['prefix' => 'v1','middleware' => 'cors' ], function() use($route
     $router->get('menu' ,   ['as'   => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
     $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Api\MovieController@index']);
 
-    
-    $router->get('movie/{mov_id}/link/{episode}' , ['as' => "Api.VideoController.detail", 'uses' => 'Api\VideoController@detail']);
-    $router->get('movie/filter/tags' , ['as' => "Api.MovieController.getByTags", 'uses' => 'Api\MovieController@getByTags']);
+    $router->get('movies/filter/tags' , ['as' => "Api.MovieController.getByTags", 'uses' => 'Api\MovieController@getByTags']);
+
+    $router->get('movies/recommend' , ['as' => "Api.MovieController.recommend", 'uses' => 'Api\MovieController@recommend']);
     $router->get('movie/{id}' , ['as' => "Api.MovieController.detail", 'uses' => 'Api\MovieController@detail']);
     $router->get('movie/{mov_id}/get_comment' , ['as' => "Api.CommentController.index", 'uses' => 'Api\CommentController@index']);
+    $router->get('movie/{mov_id}/link/{episode}' , ['as' => "Api.VideoController.detail", 'uses' => 'Api\VideoController@detail']);
 
     $router->group(['prefix' => 'user'], function() use($router) {
         $router->post('login_fb' , ['as' => "Api.UserController.login_fb", 'uses' => 'Api\UserController@login_fb']);

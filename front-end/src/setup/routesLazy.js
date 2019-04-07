@@ -1,32 +1,43 @@
 import React, { lazy } from 'react';
-const HomeC = lazy(() => import('../components/Home/Home'));
-const InfoMovieC = lazy(() => import('../components/Details/Info'));
-const DetailC = lazy(() => import('../components/Details/Detail'));
-const FiltersC = lazy(() => import('../components/Filters/Filters'));
-const SearchC = lazy(() => import('../components/Filters/Search'));
-const NotFoundC = lazy(() => import('../components/Notfound/Notfound'));
+const Home = lazy(() => import('../components/Home/Home'));
+const InfoMovie = lazy(() => import('../components/Details/Info'));
+const Detail = lazy(() => import('../components/Details/Detail'));
+const Filters = lazy(() => import('../components/Filters/Filters'));
+const Search = lazy(() => import('../components/Search/Search'));
+const NotFound = lazy(() => import('../components/Notfound/Notfound'));
 
 module.exports = {
     routeslazy: [
         {
-            path:"/",
-            component:HomeC,
-        },{
-            path:"/phim/:id([0-9]+)/:slug",
-            component:InfoMovieC,
-        },{
-            path:"/phim/:id([0-9]+)/:slug/xem-phim",
-            component:DetailC,
-        },{
-            path:"/tim-kiem",
-            component:SearchC,
-        },{
-            path:"/:tag_1([a-zA-Z-]+)?/:tag_2([a-zA-Z-]+)?/:tag_3([a-zA-Z-]+)?",
-            component:FiltersC,
-        },{
-            path:"*",
-            component:NotFoundC,
+            path: "/",
+            component: Home,
+            exact: true
         },
-    ]    
+        {
+            path: "/phim/:id([0-9]+)/:slug([a-z0-9-]+)",
+            component: InfoMovie,
+            exact: true
+
+        },
+        {
+            path: "/phim/:id([0-9]+)/:slug([a-z0-9-]+)/xem-phim",
+            component: Detail,
+            exact: true
+        },
+        {
+            path: "/tim-kiem",
+            component: Search,
+            exact: true
+        },
+        {
+            path: "/:tag_1([a-z-]+)?/:tag_2([a-z-]+)?/:tag_3([a-z-]+)?",
+            component: Filters,
+            exact: false
+        }, 
+        {
+            path: "*",
+            component: NotFound,
+        }
+    ]
 
 } 

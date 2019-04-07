@@ -6,14 +6,14 @@ import { LoadingAction, UserAction } from "../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router";
-import { Route, Switch } from 'react-router-dom';
+// import { Route, Switch } from 'react-router-dom';
 
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import Loading from "./others/Loading";
 import config from "../config";
-import { routes } from "../setup/routes";
-import { ToastContainer, toast } from 'react-toastify';
+// import { routes } from "../setup/routes";
+// import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -56,24 +56,26 @@ class Layout extends React.Component {
 
     render() {
 
-        let { is_loading } = this.state;
+        let { is_loading } = this._getDataRender();
         return (
             <div className="App">
 
                 <Header />
-                <Switch>
-                    {routes.map(route => <Route key={route.path} {...route} />)}
-                </Switch>
-                
-                <Footer />
-                <div className="to-top" id="back-top"><i className="fa fa-angle-up"></i></div>
+                {this.props.children}
+                <Footer />                
                 {is_loading && <Loading />}
-                <ToastContainer autoClose={config.time.default_toast} position={toast.POSITION.TOP_RIGHT} />
-                {/* <Notifications options={{ zIndex: 9999999999, top: '50px', animationDuration: 1000 }} /> */}
-
+                {/* <ToastContainer autoClose={config.time.default_toast} position={toast.POSITION.TOP_RIGHT} /> */}
+                <div className="to-top" id="back-top"><i className="fa fa-angle-up"></i></div>
 
             </div>
         );
+    }
+    _getDataRender = () => {
+        let { is_loading } = this.state;
+        if(!is_loading && this.props[LoadingAction.ACTION_SET_LOADING] != ''){
+            is_loading = this.props[LoadingAction.ACTION_SET_LOADING];
+        }
+        return {is_loading};
     }
 
     _autoClearLoading = () => {

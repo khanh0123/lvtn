@@ -26,6 +26,7 @@ class Movie extends Model
                 "movie_genre.gen_id",
                 "genre.name as gen_name",
                 "genre.slug as gen_slug",
+                'views',
 
             ])
             ->leftJoin("category"       ,"category.id"          ,"=" , "movie.cat_id")
@@ -44,11 +45,6 @@ class Movie extends Model
         for ($i = 0; $i < count($data); $i++) {
             $result->offsetSet($i,$data[$i]);     
         }
-        
-        // echo "<pre>";
-        // var_dump($result);
-        // echo "</pre>";
-        // die();
         
         return $result;
     }
@@ -84,4 +80,30 @@ class Movie extends Model
         return $result;
     }
 
+    public function getRecommendMovies()
+    {
+        $data = DB::table($this->table)
+            ->select([
+                "movie.*",
+                "category.name as cat_name",
+                "category.slug as cat_slug",
+                "movie_country.cou_id",                        
+                "country.name as cou_name",
+                "country.slug as cou_slug",
+                "movie_genre.gen_id",
+                "genre.name as gen_name",
+                "genre.slug as gen_slug",
+                'views',
+
+            ])
+            ->leftJoin("category"       ,"category.id"          ,"=" , "movie.cat_id")
+            ->leftJoin("movie_country"  ,"movie_country.mov_id" ,"=" , "movie.id")
+            ->leftJoin("movie_genre"    ,"movie_genre.mov_id"   ,"=" , "movie.id")
+            ->leftJoin("country"        ,"country.id"           ,"=" , "movie_country.cou_id")
+            ->leftJoin("genre"          ,"genre.id"             ,"=" , "movie_genre.gen_id")
+            ->orderBy('movie.views', 'desc')
+            ->limit(20)
+            ->get();
+        return $data;
+    }
 }

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MovieAction, LoadingAction } from "../../actions"
+import { MovieAction, LoadingAction, ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import SlideItem from "../Sliders/SlideItem";
 import ScrollRight from "../others/ScrollRight";
-
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
+import CreateHelmetTag from "../metaseo";
 
 
 class Search extends React.Component {
@@ -38,7 +38,7 @@ class Search extends React.Component {
             await this.props.set_loading(false);
         } catch (error) {
             await this.props.set_loading(false);
-        }       
+        }
 
     }
     async componentWillReceiveProps(nextProps) {
@@ -59,14 +59,16 @@ class Search extends React.Component {
 
 
     render() {
-        let { data } = this.state;
-        let { page } = queryString.parse(this.props.location.search);
-        page = !page ? 1 : parseInt(page);
-
-
+        let { data, url, page } = this._getDataRender();
 
         return (
             <React.Fragment>
+                <CreateHelmetTag
+                    page="search"
+                    data={data}
+                    url={url}
+
+                />
                 <div className="breadcrumbs">
                     <div className="container">
                         <ul className="breadcrumb">
@@ -77,45 +79,56 @@ class Search extends React.Component {
                     </div>
                 </div>
                 <div className="inner-page details-page filter-page">
-                        <div className="container">
-                            <div className="row" >
+                    <div className="container">
+                        <div className="row" >
 
-                                <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
-                                    {data.length > 0 &&
-                                        (
-                                            <React.Fragment>
-                                                {data.map((item, i) => {
-                                                    return (
-                                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                                            <SlideItem item={item} />
-                                                        </div>
-                                                    )
-                                                })}
+                            <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
+                                {data.length > 0 &&
+                                    (
+                                        <React.Fragment>
+                                            {data.map((item, i) => {
+                                                return (
+                                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                                        <SlideItem item={item} />
+                                                    </div>
+                                                )
+                                            })}
 
-                                                <div className="text-center">
-                                                    <Pagination
-                                                        activePage={page}
-                                                        itemsCountPerPage={10}
-                                                        totalItemsCount={this.state.total}
-                                                        pageRangeDisplayed={5}
-                                                        onChange={this._handlePageChange}
-                                                    />
-                                                </div>
-                                            </React.Fragment>
-                                        )
-                                        ||
-                                        <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
-                                    }
+                                            <div className="text-center">
+                                                <Pagination
+                                                    activePage={page}
+                                                    itemsCountPerPage={10}
+                                                    totalItemsCount={this.state.total}
+                                                    pageRangeDisplayed={5}
+                                                    onChange={this._handlePageChange}
+                                                />
+                                            </div>
+                                        </React.Fragment>
+                                    )
+                                    ||
+                                    <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
+                                }
 
-                                </div>
-                                <div className="col-lg-3 col-md-3 hidden-xs">
-                                    <ScrollRight/>
-                                </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 hidden-xs">
+                                <ScrollRight />
                             </div>
                         </div>
+                    </div>
                 </div>
             </React.Fragment>
         )
+    }
+    _getDataRender = () => {
+        let { url } = this.props.match;
+        let { data } = this.state;
+        if (data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_SEARCH]) {
+            data = this.props[MovieAction.ACTION_GET_MOVIE_SEARCH];
+        }
+        let { page } = queryString.parse(this.props.location.search);
+        page = !page ? 1 : parseInt(page);
+
+        return { data, url, page }
     }
     _renderBreadcrumbs = () => {
         let data = [];
@@ -127,7 +140,7 @@ class Search extends React.Component {
         let p = page != '' ? page : this.state.page;
         if (keyword) {
             let data = await this.props.get_movie_search(keyword, p);
-            
+
             let res = data.payload.data;
             await this.setState({
                 data: res.data,
@@ -155,6 +168,9 @@ class Search extends React.Component {
         });
     }
 }
+
+Search.serverFetch = ServerAction.init_data_page_search;
+
 const mapStateToProps = ({ movie_results, loading_results }) => {
     return Object.assign({}, movie_results, loading_results || {});
 }
@@ -167,3 +183,4 @@ const mapDispatchToProps = (dispatch) => {
     return { ...actions, dispatch };
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Search));
+

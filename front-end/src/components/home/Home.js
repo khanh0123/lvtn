@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { MovieAction, LoadingAction, ServerAction } from "../../actions";
-import config from "../../config";
+// import config from "../../config";
 import CreateHelmetTag from "../metaseo";
 
 class Home extends React.Component {
@@ -33,6 +33,7 @@ class Home extends React.Component {
         }).catch(() => {
             this.props.set_loading(false);
         });
+        getMovie(this,this.props,'recommend_movies',MovieAction);
         getMovie(this,this.props,'hot_series_movies',MovieAction);
         getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
@@ -40,16 +41,15 @@ class Home extends React.Component {
 
     }
     render() {
-        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this._getDataRender();
+        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies , recommend_movies } = this._getDataRender();
         
         return (
             <React.Fragment>
                 <CreateHelmetTag
                     page="home"
-
                 />
                 <SliderBanner data={banner_movies} />
-                {hot_movies.length > 0 &&
+                {recommend_movies.length > 0 &&
                     <section className="top-rating pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -63,7 +63,7 @@ class Home extends React.Component {
                         <div className="Top-rating-items pt-50">
                             <div className="container">
                                 <div className="row">
-                                    <Slider data={hot_movies} />
+                                    <Slider data={recommend_movies} />
                                 </div>
                             </div>
                         </div>
@@ -185,7 +185,7 @@ class Home extends React.Component {
         )
     }
     _getDataRender = () => {
-        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies } = this.state;
+        let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies ,recommend_movies} = this.state;
         
         if(banner_movies.length == 0 && this.props[MovieAction.ACTION_GET_BANNER_MOVIES]){
             banner_movies = this.props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
@@ -200,12 +200,12 @@ class Home extends React.Component {
             hot_movies = this.props[MovieAction.ACTION_GET_HOT_MOVIES].data;
         }
         
-        return { hot_movies, hot_series_movies, hot_retail_movies, banner_movies };
+        return { hot_movies, hot_series_movies, hot_retail_movies, banner_movies ,recommend_movies};
     }
-    _get_recommand_movies = async () => {
+    _getRecommendMovies = async () => {
 
     }
-    _get_hot_movies = async (props) => {
+    _getHotMovies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
             await props.get_hot_movies().then((res) => {
                 let r = res.payload.data;
@@ -216,7 +216,7 @@ class Home extends React.Component {
             this.setState({ hot_movies: data });
         }
     }
-    _get_hot_series_movies = async (props) => {
+    _getHotSeriesMovies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
             await props.get_hot_series_movies().then((res) => {
                 let r = res.payload.data;
@@ -227,7 +227,7 @@ class Home extends React.Component {
             this.setState({ hot_series_movies: data });
         }
     }
-    _get_hot_retail_movies = async (props) => {
+    _getHotRetailMovies = async (props) => {
         if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
             await props.get_hot_retail_movies().then((res) => {
                 let r = res.payload.data;
@@ -239,7 +239,7 @@ class Home extends React.Component {
         }
     }
 
-    _get_banner_movies = async (props) => {
+    _getBannerMovies = async (props) => {
         if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
             await props.get_banner_movies().then((res) => {
                 let r = res.payload.data;
@@ -264,7 +264,7 @@ function mapDispatchToProps(dispatch) {
         get_hot_retail_movies: MovieAction.get_hot_retail_movies,
         get_hot_series_movies: MovieAction.get_hot_series_movies,
         get_banner_movies: MovieAction.get_banner_movies,
-        get_recommand_movies: MovieAction.get_recommand_movies,
+        get_recommend_movies: MovieAction.get_recommend_movies,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

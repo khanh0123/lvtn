@@ -14,7 +14,7 @@
 // header("Access-Control-Allow-Origin:*");
 
 // $router->get('/' , 'TestController@index');
-// $router->get('/' , 'TestController@test_link_drive');
+$router->get('/' , 'TestController@get_id_episode_filmfast');
 
 
 

@@ -35,7 +35,7 @@ if (!function_exists('apiCurl')) {
             $data_string = substr($data_string, 0);
             
         }     
-
+        
         $ch = curl_init();
 
         //set the url, number of POST vars, POST data
@@ -47,11 +47,16 @@ if (!function_exists('apiCurl')) {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_ENCODING,  '');
+        // $proxy = '128.0.0.3:8080';
+        // curl_setopt($ch, CURLOPT_PROXY, $proxy);
         if(isset($header['referer'])) {
+            // $proxy = '127.0.0.1:8888';
+            // curl_setopt($ch, CURLOPT_PROXY, $proxy);
             curl_setopt($ch, CURLOPT_REFERER, $header['referer']);
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['X-Requested-With: XMLHttpRequest']);
         }
         // curl_setopt($ch, CURLOPT_USERAGENT, get_server_var('HTTP_USER_AGENT'));
+        // curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7");
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36");
 
         // if($type_ip == 'v4'){
@@ -72,7 +77,7 @@ if (!function_exists('apiCurl')) {
         }
         
         //execute post
-        $result = curl_exec($ch);                       
+        $result = curl_exec($ch);                            
 
         
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -80,13 +85,13 @@ if (!function_exists('apiCurl')) {
         if ($errno = curl_errno($ch)) {
             $dataResult['http_code'] = 500;
             $dataResult['message'] = $errno;
-            return array('http_code' => 500, 'message' => '');
+            return $dataResult;
         }
         
         if ($httpcode !== 200) {
             $result = json_decode($result, true);
             $dataResult['http_code'] = $httpcode;
-            $dataResult['message'] = !empty($result['message']) ? $result['message'] : '';
+            $dataResult['message'] = !isset($result['message']) ? $result['message'] : '';
             return $dataResult;
         }
         
@@ -104,6 +109,39 @@ if (!function_exists('apiCurl')) {
     }
 
 }
+if (!function_exists('curlGetSourceView')) {
+
+    function curlGetSourceView($url) {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => "",
+            CURLOPT_HTTPHEADER => array(
+                // "Postman-Token: c2280cf5-e5bd-4c6f-b4f5-9d471edc6355",
+                "cache-control: no-cache"
+            ),
+            CURLOPT_USERAGENT => "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+      ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+          return ['error' => true];
+      } else {
+          return $response;
+      }
+    }
+}
+
 if (!function_exists('createMD5Key')) {
 
     function createMD5Key($needed = []) {

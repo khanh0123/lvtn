@@ -1,4 +1,5 @@
 import MovieAction from "./movie";
+import MenuAction from "./menu";
 import queryString from 'query-string';
 
 const init_data_home = (obj) => {    
@@ -11,9 +12,9 @@ const init_data_home = (obj) => {
             MovieAction.get_hot_movies().then(res => {                
                 obj.store.dispatch(res)
             }),
-            // MovieAction.get_hot_series_movies().then(res => {                
-            //     obj.store.dispatch(res)
-            // })
+            MenuAction.get_menu().then(res => {                
+                obj.store.dispatch(res)
+            })
         ])     
     }
 }
@@ -71,10 +72,32 @@ const init_data_page_filter = (obj) => {
     }
 }
 
+const init_data_page_search = (obj) => {            
+    
+    if (obj) {   
+        
+        let { fullPath } = obj.request;
+        let regex = /.(\?.*)$/;
+        let result_test = regex.exec(fullPath);
+        let search = '';
+        if(result_test && result_test.length > 1) search = result_test[1];
+        
+        let { page , q } = queryString.parse(search);        
+        page = !page ? 1 : parseInt(page);
+        
+        return q !== '' ? Promise.all([
+            MovieAction.get_movie_search(q,page).then(res => {                
+                obj.store.dispatch(res)
+            }),
+            
+        ]) : null;    
+    }
+}
 
 module.exports = {
     init_data_home,
     init_data_page_info,
     init_data_page_detail,
     init_data_page_filter,
+    init_data_page_search,
 };

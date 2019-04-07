@@ -1024,7 +1024,7 @@ a.btn.btn-button {
 }
 @media only screen and (min-width: 768px){
     .movie-item-contents.gradient>img {
-        min-height: 32em;
+        min-height: 35em;
     }
 
     .filter-page .movie-item-contents>img {

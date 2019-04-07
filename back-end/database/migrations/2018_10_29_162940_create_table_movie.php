@@ -22,6 +22,7 @@ class CreateTableMovie extends Migration
             $table->tinyInteger('is_new')->default(0);
             $table->tinyInteger('is_banner')->default(0);
             $table->integer('ad_id')->unsigned()->index();
+            $table->double('views')->default(0);
             $table->string('name');
             $table->string('slug');
             $table->text('images')->nullable();

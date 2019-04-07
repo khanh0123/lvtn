@@ -57,11 +57,11 @@ function custom_date(timestamp, format) {
 
     return format.replace("day", day).replace("hh", padLeft(hours)).replace("ii", padLeft(minutes)).replace("dd", padLeft(dd)).replace("mm", padLeft(mm)).replace("yyyy", yyyy);
 }
-const getMovie = async (_this, props, type, MovieAction) => {
+const getMovie = (_this, props, type, MovieAction) => {
     switch (type) {
         case 'banner_movies':
             if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
-                await props.get_banner_movies().then((res) => {
+                return props.get_banner_movies().then((res) => {
                     let r = res.payload.data;
                     _this.setState({ banner_movies: r.data });
                 });
@@ -70,13 +70,22 @@ const getMovie = async (_this, props, type, MovieAction) => {
                 _this.setState({ banner_movies: data });
             }
             break;
-        case 'recommend_movies':
+        case 'recommend_movies':        
+            if (!props[MovieAction.ACTION_GET_RECOMMEND_MOVIES]) {
+                return props.get_recommend_movies().then((res) => {
+                    let data = res.payload.data;
+                    _this.setState({ recommend_movies: data });
+                });
+            } else {
+                let data = props[MovieAction.ACTION_GET_RECOMMEND_MOVIES];
+                _this.setState({ recommend_movies: data });
+            }
             break;
         case 'hot_movies':
-        
+
             if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
-                
-                await props.get_hot_movies().then((res) => {
+
+                return props.get_hot_movies().then((res) => {
                     let r = res.payload.data;
                     _this.setState({ hot_movies: r.data });
                 });
@@ -87,7 +96,7 @@ const getMovie = async (_this, props, type, MovieAction) => {
             break;
         case 'hot_series_movies':
             if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-                await props.get_hot_series_movies().then((res) => {
+                return props.get_hot_series_movies().then((res) => {
                     let r = res.payload.data;
                     _this.setState({ hot_series_movies: r.data });
                 });
@@ -98,7 +107,7 @@ const getMovie = async (_this, props, type, MovieAction) => {
             break;
         case 'hot_retail_movies':
             if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-                await props.get_hot_retail_movies().then((res) => {
+                return props.get_hot_retail_movies().then((res) => {
                     let r = res.payload.data;
                     _this.setState({ hot_retail_movies: r.data });
                 });

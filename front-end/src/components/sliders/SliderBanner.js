@@ -20,6 +20,7 @@ class SliderBanner extends React.Component {
 
     };
     animateSlide = () => {
+        if(typeof window == 'undefined') return;
         let arrList = document.querySelectorAll('#bootstrap-touch-slider .item');
         for (let i = 0; i < arrList.length; i++) {
             let needed = arrList[i].querySelectorAll('.animate');

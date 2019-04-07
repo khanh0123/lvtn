@@ -140,7 +140,7 @@
                                                         <td class="text-center">{{ $value['video_id'] }}</td>
                                                         <td>{{ $value['source_name'] ? $value['source_name'] : '' }}</td>
                                                         <td>{{ $value['source_link'] ? $value['source_link'] : '' }}</td>
-                                                        <td>{{ $value['max_qualify'] ? $value['max_qualify'] : 'Chưa rõ' }}</td>
+                                                        <td>{{ @$value['max_qualify'] ? @$value['max_qualify'] : 'Chưa rõ' }}</td>
 
                                                         <td class="td-actions text-right">
                                                             <button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">
@@ -251,6 +251,7 @@
                                 <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_from">
                                     <option data-tokens="facebook" value="facebook">Facebook</option>
                                     <option data-tokens="google" value="google">Google</option>
+                                    <option data-tokens="fimfast" value="google">Fimfast</option>
                                     <option data-tokens="others" value="others" selected>Khác</option>
                                 </select>
 
@@ -265,16 +266,6 @@
                                     <option data-tokens="720" value="720">720P</option>
                                     <option data-tokens="1080" value="1080">1080P</option>
                                     <option data-tokens="0" value="0" selected>Chưa rõ</option>
-                                </select>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-3 label-on-left">Phương thức phát</label>
-                            <div class="col-sm-8">
-                                <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_method">
-                                    <option data-tokens="live" value="live" selected>Trực tiếp</option>
-                                    <option data-tokens="graph" value="graph">Sử dụng graph API facebook</option>
                                 </select>
 
                             </div>

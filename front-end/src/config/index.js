@@ -21,9 +21,9 @@ let config = {
     api: {
         menu: domain_api + "menu",
         movie: domain_api + "movies",
-        movie_recommend: domain_api + "movie/recommend",
+        movie_recommend: domain_api + "movies/recommend",
         movie_detail: domain_api + "movie",
-        movie_filter_tags: domain_api + "movie/filter/tags",
+        movie_filter_tags: domain_api + "movies/filter/tags",
         user_login: domain_api + "user/login",
         user_login_fb: domain_api + "user/login_fb",
         user_register: domain_api + "user/register",
@@ -34,10 +34,8 @@ let config = {
     },
     title: {
         webtitle: "Movie star",
-        livetv: "Xem trực tuyến - ",
-        dvr: "Xem lại - ",
         movie: "Xem phim - ",
-        search: "Tìm kiếm - ",
+        search: "Tìm kiếm",
         userpage: "Thông tin cá nhân",
         history: "Lịch sử xem phim"
     },

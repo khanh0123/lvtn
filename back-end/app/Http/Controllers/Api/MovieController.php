@@ -153,6 +153,22 @@ class MovieController extends Controller
 
     }
 
+    public function recommend(Request $request)
+    {
+        if($request->header("Authorization")){
+            $user = $this->getUserFromAccessToken($request->header("Authorization"));
+        }
+        $data['info'] = $this->model->getRecommendMovies();
+        $data['info']   = formatResult($data['info'],[
+            'genre'   => ['gen_id','gen_name','gen_slug'] ,
+            'country' => ['cou_id' , 'cou_name' , 'cou_slug']
+        ]);
+        foreach ($data['info'] as $key => $value) {
+            $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+        }
+        return $this->template_api($data);
+    }
+
 
 
 

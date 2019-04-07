@@ -18,14 +18,17 @@ class Menu extends React.Component {
 
     }
     async componentDidMount(){
+        if(typeof window == 'undefined') return;
+
         let res = await this.props.get_menu();
         let menu = res.payload.data;
         this.setState({ data_menu: menu });
+        
         document.querySelector('.wrap-sticky').style.height = '5em';
     }
     
     render() {
-        let { data_menu } = this.state;
+        let { data_menu } = this._getDataRender();
         return (
             <nav className="navbar navbar-default bootsnav navbar-sticky">
                 <div className="container">
@@ -93,6 +96,13 @@ class Menu extends React.Component {
             </nav>
         );
     }
+    _getDataRender = () => {
+        let { data_menu } = this.state
+        if(data_menu.length == 0 && this.props[MenuAction.ACTION_GET_MENU]){
+            data_menu = this.props[MenuAction.ACTION_GET_MENU];
+        }
+        return {data_menu}
+    }
     _renderMenuitem(item) {
         return (
             item.sub_menu.map((mnu, i) => {
@@ -102,6 +112,7 @@ class Menu extends React.Component {
         );
     }
     _goSearchPage() {
+        if(typeof window == 'undefined') return;
         let search_box = document.getElementById("search_keyword");
         if (search_box) {
             let keyword = search_box.value;

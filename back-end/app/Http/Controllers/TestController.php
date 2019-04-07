@@ -499,17 +499,20 @@ class TestController extends Controller
 
 	public function get_id_episode_filmfast()
 	{
-		$path = storage_path() . "/jsons/data_split/phimle15.json"; 
+		$path = storage_path() . "/jsons/phimle1.json"; 
         $data = json_decode(file_get_contents($path),true);
 
+        // die;
+        die(file_get_contents($path));
+        
         // $data = array_reverse($data);
 
         $num = 0;
-        foreach ($data['data'] as $key => $value) {
-        	if($num > 200) break;
+        foreach ($data as $key => $value) {
+        	if($num > 200 ) break;
         	if(isset($value['episode_id']) && isset($value['country'])) continue;
         	$url = 'https://fimfast.com/'.$value['slug'];
-        	$content = apiCurl($url,'GET');        	
+        	$content = curlGetSourceView($url);      	
         	
         	if(!is_string($content)) break;
         	$reg = "/data-episode-id=\"([0-9]+)\"/";
@@ -531,18 +534,21 @@ class TestController extends Controller
         		];
         		$data[$key]['country'] = $country;
         	}
-        	sleep(10);
+        	sleep(5);
         }
 
-
+        
+        
        
         
-        $data = array_reverse($data);
-        $data = json_encode(array_reverse($data),JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
-        $fp = fopen(storage_path() . "/jsons/data_split/phimle15.json", 'w');
+        // $data = array_reverse($data);
+        $data = json_encode($data,JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
+        $fp = fopen(storage_path() . "/jsons/phimle1.json", 'w');
         fwrite($fp, $data);
         fclose($fp);
-        echo json_encode(array_reverse(json_decode($data,true)),JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS); 
+
+        echo "num success:".$num;
+        // echo json_encode(array_reverse(json_decode($data,true)),JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
 	}
 
 	

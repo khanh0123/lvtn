@@ -26,9 +26,9 @@ class EpisodeController extends MainAdminController
             
         ],
         'update' => [
-            'title'            => 'required',           
-            'video_id'         => 'required|array',
-            'video_id.*'       => 'required|exists:video,id',    
+            'title'            => 'required',
+            'video_id'         => 'array',
+            'video_id.*'       => 'exists:video,id',
             'images'           => 'array',
             'images.*'         => 'image|mimes:jpeg,jpg,bmp,png|max:10000|nullable',
             'listidimages_old' => 'array',
@@ -234,18 +234,17 @@ class EpisodeController extends MainAdminController
             $result = '';
         }
         $filter                        = $this->getFilter($request);
-        $filter['conditions'] = ['and' => [],'or' => []];
+        // $filter['conditions'];
         $filter['conditions']['and'][] = ['episode.id', '=' , $id];
+        
         $items = $this->model->getById($filter,$request);
-        // echo "<pre>";
-        // var_dump($filter);
-        // echo "</pre>";
-        // die();
         
         $items = formatResult($items,[
             'videos' => ['video_id','source_link','source_name','max_qualify','video_created_at','video_updated_at'] ,
         ]);
         $item = $items[0];
+
+        
         $item->images = !empty($item->images) ? json_decode($item->images) : [];
         
         $data['info']  = $item;
