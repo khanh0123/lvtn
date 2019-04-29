@@ -6,9 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot --config config/webpack.config.js",
     "build": "webpack --mode production --config config/webpack.prod.config.js",
-    "ssr": "npm-run-all --parallel server client",
-    "server": "nodemon debug server/index.js",
-    "client": "webpack --watch --progress --config config/webpack.server.config.js"
+    "ssr": "npm-run-all --parallel ssr-server ssr-client",
+    "ssr-server": "nodemon debug server/index.js",
+    "ssr-client": "webpack --watch --progress --config config/webpack.server.config.js"
   },
   "keywords": [],
   "author": "",

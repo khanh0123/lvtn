@@ -34,7 +34,7 @@ class Filters extends React.Component {
     async componentDidMount() {
         let tags = this._getTagsFromRoute(this.props);
         console.log(this.props.location.search);
-        
+
         let { page } = queryString.parse(this.props.location.search);
         if (!page) page = 1;
         await this.setState({ tags: tags, page: page });
@@ -70,8 +70,8 @@ class Filters extends React.Component {
 
 
     render() {
-        let { data ,meta, tags ,page , url } = this._getDataRender();
-        
+        let { data, meta, tags, page, url } = this._getDataRender();
+
         return (
             <React.Fragment>
                 <CreateHelmetTag
@@ -85,7 +85,7 @@ class Filters extends React.Component {
 
                         <ul className="breadcrumb">
                             <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
-                            {this._renderBreadcrumbs(meta,tags)}
+                            {this._renderBreadcrumbs(meta, tags)}
                         </ul>
                     </div>
                 </div>
@@ -97,7 +97,7 @@ class Filters extends React.Component {
                             <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
                                 {data.length > 0 &&
                                     (
-                                        <React.Fragment>
+                                        <div className="row">
                                             {data.map((item, i) => {
                                                 return (
                                                     <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
@@ -105,26 +105,31 @@ class Filters extends React.Component {
                                                     </div>
                                                 )
                                             })}
-
-                                            <div className="text-center">
-                                                <Pagination
-                                                    activePage={page}
-                                                    itemsCountPerPage={10}
-                                                    totalItemsCount={this.state.total}
-                                                    pageRangeDisplayed={5}
-                                                    onChange={this._handlePageChange}
-                                                />
-                                            </div>
-                                        </React.Fragment>
+                                        </div>
                                     )
                                     ||
                                     <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
                                 }
+                                {data.length > 0 && this.state.total / 10 > 1 &&
+                                    <div className="row">
+                                        <div className="text-center">
+                                            <Pagination
+                                                activePage={page}
+                                                itemsCountPerPage={10}
+                                                totalItemsCount={this.state.total}
+                                                pageRangeDisplayed={5}
+                                                onChange={this._handlePageChange}
+                                            />
+                                        </div>
+                                    </div>
+                                }
 
                             </div>
-                            <div className="col-lg-3 col-md-3 hidden-xs">
+                            <div className="col-lg-3 col-md-3 ">
                                 <ScrollRight />
                             </div>
+
+
                         </div>
 
 
@@ -136,21 +141,21 @@ class Filters extends React.Component {
         )
     }
 
-    _getDataRender = () => {        
-        let {url} = this.props.match;
-        let { data , meta } = this.state;
+    _getDataRender = () => {
+        let { url } = this.props.match;
+        let { data, meta } = this.state;
         let tags = this._getTagsFromRoute(this.props);
-        if(data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_FILTER]){
+        if (data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_FILTER]) {
             data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].info.data;
             meta = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].meta;
         }
         let { page } = queryString.parse(this.props.location.search);
         page = !page ? 1 : parseInt(page);
-        
-        return { data , meta  , tags , page,url };
+
+        return { data, meta, tags, page, url };
     }
-    _renderBreadcrumbs = (meta,tags) => {
-        
+    _renderBreadcrumbs = (meta, tags) => {
+
         let tags_info = meta.tags ? meta.tags : [];
         let data = [];
         for (let i = 0; i < tags.length; i++) {

@@ -13,8 +13,8 @@
 
 // header("Access-Control-Allow-Origin:*");
 
-// $router->get('/' , 'TestController@index');
-$router->get('/' , 'TestController@get_id_episode_filmfast');
+// $router->get('/' , 'TestController@phimbo');
+// $router->get('/' , 'TestController@get_id_episode_filmfast');
 
 
 

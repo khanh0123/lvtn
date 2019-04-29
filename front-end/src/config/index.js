@@ -1,7 +1,7 @@
 
 let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
 let protocol = typeof window == 'undefined' ? 'http://' : "//";
-let domain_api = protocol + "dev.lvtn/api/v1/";
+let domain_api = protocol + "api.viettelbaolam.com/api/v1/";
 let config = {
     domain: {
         fe: 'https://luanvantotnghiep.design',
@@ -17,7 +17,6 @@ let config = {
         platform: "web",
         version: "1.0",
     },
-    app_config: domain_api + "cas/public/getconfig",
     api: {
         menu: domain_api + "menu",
         movie: domain_api + "movies",
@@ -81,6 +80,14 @@ let config = {
         fb_app_id: '432269870590246',
         robots: 'index',
     },
+    path: {
+        home:"/",
+        info:"/phim/:id([0-9]+)/:slug([a-z0-9-]+)",
+        detail:"/phim/:id([0-9]+)/:slug([a-z0-9-]+):tap(\/tap-)?:episode([0-9]+)?/xem-phim",
+        detail_episode:"/phim/:id([0-9]+)/:slug([a-z0-9-]+)/tap-:episode([0-9]+)?/xem-phim",
+        search:"/tim-kiem",
+        filter:"/:tag_1([a-z-]+)/:tag_2([a-z-]+)?/:tag_3([a-z-]+)?",
+    }
 };
 
 module.exports = config;

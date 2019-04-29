@@ -31,15 +31,17 @@ class MovieController extends Controller
         'created_at'   => 'movie.created_at',
         'updated_at'   => 'movie.updated_at',
         'cat_id'       => 'movie.cat_id',
+        'slug'         => 'movie.slug',
         'cat_slug'     => 'category.slug',
         'genre_id'     => 'genre.id',
         'cou_id'       => 'country.id',
-        'slug'         => 'movie.slug'
+        
 
         
     ];
     protected $columns_search = ['name','slug'];
-    protected $columns_search_multi = ['cat_id'];
+    protected $columns_search_multi = ['gen_id'];
+    protected $multiple_filter_or = [];
 
 
     
@@ -98,9 +100,10 @@ class MovieController extends Controller
             $limit                = (int)$request->get("limit");
             $filter['limit']      = ($limit < 1 || $limit > 100)? $this->limit : $limit;
             $conditions = [
-                'and' => [],
-                'or' => [],
-                'multi' => [],
+                'and'       => [],
+                'or'        => [],
+                'multi'     => [],
+                'filter_or' => [],
             ];
 
             //get tags
@@ -109,15 +112,22 @@ class MovieController extends Controller
                 $slug = create_slug($tags[$i]);
                 $tag_info = $this->check_exist_slug($slug);
 
-                if(!empty($tag_info)){
-                    $info_tags[] = $tag_info;
+                if(isset($tag_info->id)){
+                    $info_tags[] = $tag_info;                    
+                    
                     switch ($tag_info->getTable()) {
                         case 'category':
                             $conditions['and'][] = ['category.id','=',$tag_info->id];
                             break;
                         case 'genre':
+                                                        
                             if(empty($conditions['multi']['genre.id'])) $conditions['multi']['genre.id'] = [];
                             $conditions['multi']['genre.id'][] = $tag_info->id;
+                            break;
+                        case 'country':
+                                                        
+                            if(empty($conditions['multi']['country.id'])) $conditions['multi']['country.id'] = [];
+                            $conditions['multi']['country.id'][] = $tag_info->id;
                             break;
                         default:
                             break;
@@ -126,10 +136,12 @@ class MovieController extends Controller
                 }
                 
             }
+            
             if(count($info_tags) == 0) $data= ['error' => true , 'msg' => 'tags is required'];
             else {
                 
                 $filter['conditions'] = $conditions;
+                
                 $data['info']   = $this->model->get_page($filter , $request);
                 $data['info']   = formatResult($data['info'],[
                     'genre'         => ['gen_id','gen_name','gen_slug'] ,

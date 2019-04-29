@@ -101,10 +101,10 @@ class PlayerMovie extends Component {
     }
 
     _initSource = (data) => {
-        if (data && data.pt) {
-            data.pt[0]['is_play'] = true;
-            for (let i = 1; i < data.pt.length; i++) {
-                data.pt[i]['is_play'] = false;
+        if (data && data.pt && data.pt.length > 0) {
+            // data.pt[0]['is_play'] = true;
+            for (let i = 0; i < data.pt.length; i++) {
+                data.pt[i]['is_play'] = data.pt[i].quality == "720p" ? true : false;
             }
         }
         return data;

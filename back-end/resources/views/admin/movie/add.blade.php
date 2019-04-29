@@ -56,7 +56,17 @@
                                                         <span class="material-input"></span>
                                                     </div>
                                                 </div>
-                                            </div>                                            
+                                            </div>      
+                                            <div class="row">
+                                                <label class="col-sm-4 label-on-left">Trailer</label>
+                                                <div class="col-sm-8">
+                                                    <div class="form-group label-floating is-empty">
+                                                        <label class="control-label"></label>
+                                                        <input type="text" class="form-control" name="trailer" value="">
+                                                        <span class="material-input"></span>
+                                                    </div>
+                                                </div>
+                                            </div>                                          
 
                                         </div>
                                         <!-- end col 6 -->

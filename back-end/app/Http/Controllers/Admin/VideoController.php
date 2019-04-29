@@ -72,10 +72,11 @@ class VideoController extends MainAdminController
         $item->duration    = $req->get("duration");
 
         //get link play video
-        $link_play = $this->getLink($item->source_link,$item->source_name);
-        $link_play = !empty($link_play) ? json_encode($link_play) : json_encode([]);
+        // $link_play = $this->getLink($item->source_link,$item->source_name);
+        // $link_play = !empty($link_play) ? json_encode($link_play) : '';
         
-        $item->link_play = $link_play;
+        $item->more_info = json_encode($this->getMoreInfo($item->source_link,$item->source_name));
+        $item->link_play = '';
         
 
         
@@ -94,7 +95,7 @@ class VideoController extends MainAdminController
             $result = $this->setItem('insert',$request, $item);
             if($result['type'] == 'success'){                
                 $item->save();
-                $result['message'] = 'Thêm dữ liệu thành công';
+                $result['msg'] = 'Thêm dữ liệu thành công';
             }
             $data['info'] = $item;
         } else {
@@ -116,27 +117,7 @@ class VideoController extends MainAdminController
         
         
     }
-    public function refresh(Request $request)
-    {
-        $all_videos = Video::orderBy('id','desc')                       
-                       ->where('source_name' , 'google')
-                       ->orWhere('source_name' , 'facebook')
-                       ->get();
-        if(count($all_videos) > 0){
-            foreach ($all_videos as $value) {
-                $link_play = $this->getLink($value->source_link,$value->source_name);
-                $link_play = !empty($link_play) ? $link_play : [];
-                $link_play = json_encode($link_play);
-                Video::where('id',$value->id)->update(['link_play' => $link_play ]);
-                // sleep(5);
-            }
-            echo "success";
-            exit;
-        }
-
-        echo "empty source";
-        
-    }
+    
     private function getLink($source_link , $name)
     {
         
@@ -163,12 +144,12 @@ class VideoController extends MainAdminController
                 }
                 break;
             case 'fimfast':
-                    $link_play = $this->get_link_fimfast($value);
-                    $link_play = json_encode($link_play['sources']);
-                    Video::where('id',$value->id)->update(['link_play' => $link_play]);
-                    $link_play = json_decode($link_play);
-                    return $link_play
-                    break;
+                $link_play = $this->get_link_fimfast($value);
+                $link_play = json_encode($link_play['sources']);
+                Video::where('id',$value->id)->update(['link_play' => $link_play]);
+                $link_play = json_decode($link_play);
+                return $link_play;
+                break;
             case 'google':
                 $url = htmlspecialchars($source_link);
                 $support_domain = 'drive.google.com';
@@ -308,14 +289,78 @@ class VideoController extends MainAdminController
         
     }
 
-    private function get_link_fimfast($item)
-    {
-        $data = apiCurl($item->source_link,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
+    // private function get_link_fimfast($item)
+    // {
+    //     $data = apiCurl($item->source_link,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
 
-        if(isset($data->id)){
-            $result['sources'] = $data->sources;
-            return $result;
+    //     if(isset($data->id)){
+    //         $result['sources'] = $data->sources;
+    //         return $result;
+    //     }
+    //     return ['sources' => []];
+    // }
+
+    private function getMoreInfo($source_link,$source_name)
+    {
+
+        switch ($source_name) {
+            case 'fimfast':
+                $pat_case = "/.*.tap-([0-9]+)/";
+                $matches = [];
+                if(preg_match($pat_case, $source_link , $matches)){
+                    $case = $matches[1];
+                } else {
+                    $case = 0;
+                }
+
+
+                $source_view = curlGetSourceView($source_link);
+                $pat_id = '/data-id="([0-9]+)"/';
+                $matches = [];
+                if(preg_match($pat_id, $source_view , $matches)){
+                    $id = $matches[1];
+                    $url_api_episode = "https://fimfast.com/api/v2/films/".$id."/episodes?sort=name";
+                    $header['referer'] = $source_link;
+                    $dt = apiCurl($url_api_episode,'GET',[],'array','v4',$header);
+                    if(isset($dt->data)){
+
+                        switch ($case) {
+                            case 0:
+                                //phim lẻ
+                                $more = [
+                                    'link_api' => 'https://fimfast.com/api/v2/films/'.$id.'/episodes/'.$dt->data[0]->id,
+                                    'X-Requested-With' => 'XMLHttpRequest',
+                                    'referer' => $source_link,
+                                ];
+                                return $more;
+                            
+                            default:
+                                foreach ($dt->data as $episode) {
+                                    if((int)$episode->name != (int)$case)continue;
+                                    $more = [
+                                        'link_api' => 'https://fimfast.com/api/v2/films/'.$id.'/episodes/'.$episode->id,
+                                        'X-Requested-With' => 'XMLHttpRequest',
+                                        'referer' => $source_link,
+                                    ];
+                                    return $more;
+
+                                }
+                                $more = [
+                                    'link_api' => 'https://fimfast.com/api/v2/films/'.$id.'/episodes/'.$dt->data[0]->id,
+                                    'X-Requested-With' => 'XMLHttpRequest',
+                                    'referer' => $source_link,
+                                ];
+                                return $more;
+                        }
+                        
+                        
+                    }
+                }
+            
+            default:
+                return null;
+                
         }
-        return ['sources' => []];
+        return null;
     }
 }

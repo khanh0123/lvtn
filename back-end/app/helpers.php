@@ -57,8 +57,8 @@ if (!function_exists('apiCurl')) {
         }
         // curl_setopt($ch, CURLOPT_USERAGENT, get_server_var('HTTP_USER_AGENT'));
         // curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.7) Gecko/20070914 Firefox/2.0.0.7");
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36");
-
+        // curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.69 Safari/537.36");
+        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
         // if($type_ip == 'v4'){
         //     curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         // } else {
@@ -131,6 +131,7 @@ if (!function_exists('curlGetSourceView')) {
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
+        
 
         curl_close($curl);
 
@@ -406,7 +407,7 @@ if (!function_exists('addConditionsToQuery')) {
                 }
             });
         }
-        if( count($conditions['multi']) > 0 ){
+        if( isset($conditions['multi']) && count($conditions['multi']) > 0 ){
             foreach ($conditions['multi'] as $key => $value) {
                 if(count($value) > 0){
                     $result = $result->whereIn($key,$value);
@@ -417,6 +418,19 @@ if (!function_exists('addConditionsToQuery')) {
                 
             }
             
+        }
+        if( isset($conditions['filter_or']) && count($conditions['filter_or']) > 0 ){
+
+
+            for ($i = 0; $i < count($conditions['filter_or']); $i++) {
+                $result = $result->where(function($query) use($conditions , $i) {
+                    $query->where([$conditions['filter_or'][$i][0]]);
+                    for ($j = 1; $j < count($conditions['filter_or'][$i]); $j++) {
+                        $query->orWhere([$conditions['filter_or'][$i][$j]]);
+                    }
+                });
+            }
+
         }
         return $result;
     }

@@ -1,4 +1,5 @@
 import React, { lazy } from 'react';
+import config from "../config";
 const Home = lazy(() => import('../components/Home/Home'));
 const InfoMovie = lazy(() => import('../components/Details/Info'));
 const Detail = lazy(() => import('../components/Details/Detail'));
@@ -9,30 +10,35 @@ const NotFound = lazy(() => import('../components/Notfound/Notfound'));
 module.exports = {
     routeslazy: [
         {
-            path: "/",
+            path: config.path.home,
             component: Home,
-            exact: true
+            exact: true,
+            name:'home',
         },
         {
-            path: "/phim/:id([0-9]+)/:slug([a-z0-9-]+)",
+            path: config.path.info,
             component: InfoMovie,
-            exact: true
+            exact: true,
+            name:'info',
 
         },
         {
-            path: "/phim/:id([0-9]+)/:slug([a-z0-9-]+)/xem-phim",
+            path: config.path.detail,
             component: Detail,
-            exact: true
+            exact: true,
+            name:'detail',
         },
         {
-            path: "/tim-kiem",
+            path: config.path.search,
             component: Search,
-            exact: true
+            exact: true,
+            name:'search',
         },
         {
-            path: "/:tag_1([a-z-]+)?/:tag_2([a-z-]+)?/:tag_3([a-z-]+)?",
+            path: config.path.filter,
             component: Filters,
-            exact: false
+            exact: true,
+            name:'filter',
         }, 
         {
             path: "*",

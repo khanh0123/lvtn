@@ -94,7 +94,7 @@ class VideoController extends Controller
                     }
                     break;
                 case 'fimfast':
-                    $need_update = time()-strtotime($value->updated_at) > 21000; //6hours
+                    $need_update = time()-strtotime($value->updated_at) > 10500; //3hours
                     if(empty($link_play) || $need_update ){
                         $link_play = $this->get_link_fimfast($value);
                         $link_play = json_encode($link_play['sources']);
@@ -124,7 +124,7 @@ class VideoController extends Controller
 
     private function get_link_fimfast($item)
     {
-        $data = apiCurl($item->source_link,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
+        $data = apiCurl($item->more_info->link_api,'GET',[],'json','v4',['referer' => $item->more_info->referer]);
 
         if(isset($data->id)){
             $result['sources'] = $data->sources;

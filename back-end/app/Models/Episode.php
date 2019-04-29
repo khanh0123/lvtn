@@ -22,7 +22,7 @@ class Episode extends Model
         $list_epi_id = array_column($result->items(), "id");
 
         $data = DB::table($this->table)
-                    ->select(
+                    ->select([
                         'episode.*',
                         'episode_video.video_id',
                         'video.source_link',
@@ -30,7 +30,7 @@ class Episode extends Model
                         'video.max_qualify',
                         'video.created_at as video_created_at',
                         'video.updated_at as video_updated_at',
-                    )
+                    ])
                     ->leftJoin('episode_video' , 'episode_video.epi_id' , '=' , 'episode.id')
                     ->leftJoin('video' , 'episode_video.video_id' , '=' , 'video.id')
                     ->orderBy($filter['orderBy'], $filter['sort'])
@@ -50,7 +50,7 @@ class Episode extends Model
     public function getById($filter = [] , $req = '')
     {
         $data = DB::table($this->table)
-                    ->select(
+                    ->select([
                         'episode.*',
                         'episode_video.video_id',
                         'video.source_link',
@@ -58,7 +58,7 @@ class Episode extends Model
                         'video.max_qualify',
                         'video.created_at as video_created_at',
                         'video.updated_at as video_updated_at',
-                    )
+                    ])
                     ->leftJoin('episode_video' , 'episode_video.epi_id' , '=' , 'episode.id')
                     ->leftJoin('video' , 'episode_video.video_id' , '=' , 'video.id')
                     ->orderBy($filter['orderBy'], $filter['sort']);

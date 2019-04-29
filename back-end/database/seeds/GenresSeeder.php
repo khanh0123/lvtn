@@ -155,13 +155,18 @@ class GenresSeeder extends Seeder
                     'name' => 'Hài tết',
                     'slug' => create_slug('Hài tết')
                 ],
+                [
+                    'id' => 'gen029',
+                    'name' => 'TV Show',
+                    'slug' => create_slug('TV Show')
+                ],
 
     		]);
 
     		DB::table('max_id')->insert([
     			[
     				'table_name' => 'genre',
-    				'max_id' => 'gen028'
+    				'max_id' => 'gen029'
     			],
     		]);
     	}

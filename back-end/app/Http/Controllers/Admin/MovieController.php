@@ -105,6 +105,7 @@ class MovieController extends MainAdminController
         $item->epi_num      = (int)$req->input('epi_num', 1);
         $item->short_des    = $req->input('short_des', '');
         $item->long_des     = $req->input('long_des', '');
+        $item->trailer      = $req->input('trailer', '');
         $item->release_date = strtotime($req->input('release_date',date("Y-m-d")));
         $item->ad_id        = $req->authUser->id;
         $item->cat_id       = $req->input('cat_id');
@@ -127,12 +128,14 @@ class MovieController extends MainAdminController
             $id = generate_id();
             $images['poster'] = [
                 'id' => $id,
-                'path' => '/uploaded/' . $name
+                'path' => '/uploaded/' . $name,
+                'url' => url('uploaded/' . $name),
             ];
             Image::make(public_path().'/uploaded/' . $name)->resize(600, 390)->save(public_path('/uploaded/thumbnail/' . $name));
             $images['thumbnail'] = [
                 'id' => $id,
-                'path' => '/uploaded/thumbnail/' . $name
+                'path' => '/uploaded/thumbnail/' . $name,
+                'url' => url('uploaded/thumbnail/' . $name),
             ];
         }
         

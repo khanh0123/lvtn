@@ -16,6 +16,7 @@ class CreateTableEpisode extends Migration
         Schema::create('episode', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('mov_id')->unsigned()->index();
+            $table->double('views')->default(0);
             $table->string('slug');
             $table->string('title');
             $table->integer('episode');

@@ -30,6 +30,83 @@ class TestController extends Controller
 		}
 	}
 
+	public function phimbo()
+	{
+		$path = storage_path() . "/jsons/phimbo_fimfast.json";
+		$data = json_decode(file_get_contents($path),true);
+		
+        // die;
+        // die(file_get_contents($path));
+        
+        // $data = array_reverse($data);
+        return response()->json($data);
+
+        $num = 0;
+        foreach ($data as $key => $value) {
+        	if($num > 100 ) break;
+        	if(isset($value['list_episode']) && isset($value['country']) ) continue;
+        	// $num++;
+        	// continue;
+
+        	//get country
+        	$url = 'https://fimfast.com/'.$value['slug'];
+        	$content = curlGetSourceView($url);      	
+        	
+        	if(!is_string($content)) {
+        		echo "looix";
+        		
+        		break;
+        	};        	
+        	$reg_country = '/Quốc gia:.*(\r\n|\r|\n).*<a href="\/([a-z-]+)" target="_blank">(.*)<\/a>/';
+        	$matches_country = [];
+
+        	if(preg_match($reg_country, $content , $matches_country)){
+        		$data[$key]['country'] = [];
+        		$country = [
+        			'data' => [
+        				'slug' => $matches_country[2],
+        				'name' => $matches_country[3],
+        			]
+        		];
+        		$data[$key]['country'] = $country;
+        	}
+
+        	//get episode
+        	$url_api_episode = "https://fimfast.com/api/v2/films/".$value['id']."/episodes?sort=name";
+        	$header['referer'] = $url;
+        	$dt = apiCurl($url_api_episode,'GET',[],'array','v4',$header);
+        	if(isset($dt->data)){
+        		
+        		$data_episode = [];
+        		foreach ($dt->data as $episode) {
+        			$data_episode[] = [
+						'episode_id' => $episode->id,
+						'episode'    => $episode->name,
+						'slug'       => $episode->slug,
+						'referer'    => 'https://fimfast.com'.$episode->link,
+						'views'      => $episode->views,
+						'duration'   => $episode->duration,
+        			];
+        		}
+        		$data[$key]['list_episode'] = $data_episode;
+        		$num++;
+        	}
+
+        	sleep(5);
+        }
+        
+        
+        
+       
+        
+        // $data = array_reverse($data);
+        $data = json_encode($data,JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS);
+        $fp = fopen(storage_path() . "/jsons/phimbo_fimfast.json", 'w');
+        fwrite($fp, $data);
+        fclose($fp);
+
+        echo "num success:".$num;
+	}
 
 
 	public function test_link_drive(Request $request)

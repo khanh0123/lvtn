@@ -162,9 +162,10 @@ class Controller extends BaseController
      */
     protected function getConditionByRequest($req,$columns,$table = ''){
         $conditions = [
-            'and'   => [],
-            'or'    => [],
-            'multi' => [],
+            'and'       => [],
+            'or'        => [],
+            'multi'     => [],
+            'filter_or' => [],
         ];
         foreach ($columns as $key => $value) {
             if( $req->get($key) !== null ){
@@ -176,22 +177,32 @@ class Controller extends BaseController
                 }
 
                 if(!in_array($key, $this->columns_search)){
-                    
+
                     //multiple value filter
-                    if(in_array($key, $this->columns_search_multi)){
-                        
+                    if(in_array($key, $this->columns_search_multi) && !empty($this->columns_filter[$key]) && is_string($req->input($key))){
                         $arr_val = explode(",", $req->input($key));
                         
                         if(count($arr_val) > 0) {
-                            $conditions['multi'][$key] = $arr_val;
+                            $conditions['multi'][$this->columns_filter[$key]] = $arr_val;
                         }
                         
 
+                    } else if( !empty($this->multiple_filter_or) && in_array($key, $this->multiple_filter_or) && is_string($req->input($key) )){ 
+                        //multi search using OR
+                        $arr_val = explode(",", $req->input($key));
+                        if(count($arr_val) > 0){
+                            $filter_or = [];
+                            for ($i = 0; $i < count($arr_val); $i++) {
+                                $filter_or[] = [$value, '=' ,(int)$arr_val[$i]];
+                            }
+                            $conditions['filter_or'][] = $filter_or;
+                        }
                     } else {
                         $conditions['and'][] = [$value, '=' ,$req->input($key)];
+
                     }
                 } else {
-                    $conditions['or'][] = [$value, 'like' ,"%".$req->input($key)."%"];
+                    $conditions['and'][] = [$value, 'like' ,"%".$req->input($key)."%"];
                 }
                 
             }

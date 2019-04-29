@@ -205,7 +205,7 @@
                                 <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_from">
                                     <option data-tokens="facebook" value="facebook">Facebook</option>
                                     <option data-tokens="google" value="google">Google</option>
-                                    <option data-tokens="fimfast" value="google">Fimfast</option>
+                                    <option data-tokens="fimfast" value="fimfast">Fimfast</option>
                                     <option data-tokens="others" value="others" selected>Khác</option>
                                 </select>
 
