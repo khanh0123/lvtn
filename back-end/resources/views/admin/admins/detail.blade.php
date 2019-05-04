@@ -94,9 +94,9 @@
                                 <a class="btn using-tooltip" href="{{base_url('admin/user')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
                                 
                                 @if ($data['info']['status'] === 1)
-                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/user/lock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Khóa user này?"><i class="material-icons">lock</i>Khóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-danger using-tooltip" href="{{ base_url('admin/admins/lock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Khóa tài khoản này?"><i class="material-icons">lock</i>Khóa<div class="ripple-container"></div></a>
                                 @else
-                                <a class="btn btn-success using-tooltip" href="{{base_url('admin/user/unlock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Mở khóa user này?"><i class="material-icons">lock_open</i>Mở Khóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-success using-tooltip" href="{{base_url('admin/admins/unlock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Mở khóa user này?"><i class="material-icons">lock_open</i>Mở Khóa<div class="ripple-container"></div></a>
                                 @endif
                             </div>
                         </div>

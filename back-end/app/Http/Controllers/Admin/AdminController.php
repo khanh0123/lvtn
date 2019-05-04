@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 class AdminController extends MainAdminController
 {   
     protected $model;
-    protected $view_folder = 'admin/user/';
+    protected $view_folder = 'admin/admins/';
     protected $rules = [
         'insert' => [
             'email'      => 'required|email',
@@ -293,14 +293,14 @@ class AdminController extends MainAdminController
             abort(404);
         }
         if((int)$request->authUser->id === (int)$id){
-            return Redirect("/admin/user/detail/$id")
+            return Redirect("/admin/admins/detail/$id")
                 ->withMessage(['type' => 'error','msg' => 'Không thể khóa tài khoản này']);
         }
         
         $user->status = 0;
         $user->save();
         Sessions::where('user_id',$id)->delete();
-        return Redirect("/admin/user/detail/$id")
+        return Redirect("/admin/admins/detail/$id")
                 ->withMessage(['type' => 'success','msg' => 'Khóa tài khoản thành công']);
 
     }
@@ -312,7 +312,7 @@ class AdminController extends MainAdminController
         }
         $user->status = 1;
         $user->save();
-        return redirect("/admin/user/detail/$id")
+        return redirect("/admin/admins/detail/$id")
                 ->withMessage(['type' => 'success','msg' => 'Mở khóa tài khoản thành công']);
     }
     public function logout(Request $request)

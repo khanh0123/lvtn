@@ -126,17 +126,29 @@ class UserController extends Controller
         }
         $email    = $request->email;
         $password = $request->password;
-        $result   = $this->model::where([['email' , $email] , ['password' , encode_password($password)]])->first();
+        $result   = $this->model::where([
+            ['email' , $email] , 
+            ['password' , encode_password($password)] ,
+        ])->first();
         if(isset($result->id)){
+            if((int)$result->status === -1){
+                $response =  [
+                    'msg'   => 'Tài khoản đã bị khóa. Vui lòng liên hệ với quản trị viên',
+                    'error' => true
+                ];
+
+            } else {
+                $token = $this->generate_access_token($request,$result);
+                unset($result->password);
+                unset($result->created_at);
+                unset($result->updated_at);
+                $response =  [
+                    'info'         => $result,
+                    'access_token' => $token
+                ];
+            }
             
-            $token = $this->generate_access_token($request,$result);
-            unset($result->password);
-            unset($result->created_at);
-            unset($result->updated_at);
-            $response =  [
-                'info'         => $result,
-                'access_token' => $token
-            ];
+            
             
         } else {
             $response =  [
@@ -192,15 +204,22 @@ class UserController extends Controller
             if(!isset($response['error'])){
                 //define time expire of token
                 
-                $token = $this->generate_access_token($request,$this->model);
+                if((int)$this->model->status === -1){
+                    $response =  [
+                        'msg'   => 'Tài khoản đã bị khóa. Vui lòng liên hệ với quản trị viên',
+                        'error' => true
+                    ];
 
-                unset($this->model->password);
-                unset($this->model->created_at);
-                unset($this->model->updated_at);
-                $response =  [
-                    'info'         => $this->model,
-                    'access_token' => $token
-                ];
+                } else {
+                    $token = $this->generate_access_token($request,$this->model);
+                    unset($this->model->password);
+                    unset($this->model->created_at);
+                    unset($this->model->updated_at);
+                    $response =  [
+                        'info'         => $this->model,
+                        'access_token' => $token
+                    ];
+                }
 
             } else {
                 $response =  ['error' => true,'msg'  => 'login failed'];

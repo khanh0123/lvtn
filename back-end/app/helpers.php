@@ -391,6 +391,19 @@ if (!function_exists('getIdFromLinkFb')) {
         return false;
     }
 }
+function getStatus($status = 1)
+{
+    switch ($status) {
+        case 1:
+            return 'Hiển thị';
+        case -1:
+            return 'Xóa';
+        case 2:
+            return 'Khóa bình luận';
+        default:            
+            return 'Ẩn';        
+    }
+}
 
 if (!function_exists('addConditionsToQuery')) {
     function addConditionsToQuery($conditions , $result){

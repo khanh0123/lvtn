@@ -1,11 +1,11 @@
 @extends('admin/layout' , ['message' => !empty($message) ? $message : []])
-@section('title', 'Chi tiết banner')
+@section('title', 'Chi tiết tập phim')
 @section('main')
 <div class="container-fluid">
     <div class="alert alert-light" role="alert">
-        <strong class="">Chi tiết banner {{ $dataMovie->name }}</strong>
+        <strong class="">Chi tiết tập phim {{ $data['movie']->name }}</strong>
     </div>
-    <form action="" method="post" enctype="multipart/form-data">
+    <form action="" method="post" enctype="multipart/form-data" id="detail-episode">
         {{ csrf_field() }}
         <div class="row">
 
@@ -46,7 +46,7 @@
                                                 <div class="col-sm-8">
                                                     <div class="form-group label-floating is-empty">
                                                         <label class="control-label"></label>
-                                                        <input type="text" class="form-control" name="title" value="{{ $data->title }}" required data-name="Tiêu đề tập">
+                                                        <input type="text" class="form-control" name="title" value="{{ $data['info']->title }}" required data-name="Tiêu đề tập">
                                                         <span class="material-input"></span>
                                                     </div>
                                                 </div>
@@ -56,9 +56,9 @@
                                                 <label class="col-sm-4 label-on-left">Chọn tập  <small style="color:red">*</small></label>
                                                 <div class="col-sm-8">
                                                     <select data-container="body" class="selectpicker" data-live-search="true" data-size="10" data-style="btn-info" name="episode" required data-name="Tập phim">
-                                                        @for($i = 1 ; $i <= $dataMovie->epi_num; $i++)
-                                                        @if($i === $data->episode || !in_array($i , $dataEpisodesCreated))
-                                                        <option data-tokens="{{$i}}" value="{{$i}}" {{ $i === $data->episode ? 'selected' : '' }}>Tập {{$i}}</option>
+                                                        @for($i = 1 ; $i <= $data['movie']->epi_num; $i++)
+                                                        @if($i === $data['info']->episode || !in_array($i , $data['more']))
+                                                        <option data-tokens="{{$i}}" value="{{$i}}" {{ $i === $data['info']->episode ? 'selected' : '' }}>Tập {{$i}}</option>
                                                         @endif
                                                         @endfor
                                                     </select>
@@ -76,7 +76,7 @@
                             </div>
                             <!-- end info -->
                             <div class="tab-pane" id="images">
-                                @foreach($data->images as $value)
+                                @foreach($data['info']->images as $value)
                                 <div class="col-md-4 col-sm-4 div-image-old">
                                     <input type="hidden" value="{{ $value->id }}" name="listidimages_old[]">
                                     <div class="fileinput text-center fileinput-exists" data-provides="fileinput">
@@ -126,23 +126,22 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">#</th>
+                                                        <th class="text-center">ID</th>
                                                         <th>Nguồn</th>
                                                         <th>Link</th>
                                                         <th>Chất lượng</th>
-                                                        <th>Phương thức phát</th>
                                                         <th class="text-right">Xóa</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($data->link_play as $value)
+                                                    @foreach($data['info']->videos as $value)
                                                     <tr>
-                                                        <input type="hidden" name="link_play_old[]" value="{{ $value->id }}" />
-                                                        <td class="text-center">#</td>
-                                                        <td>{{ $value->from ? $value->from : '' }}</td>
-                                                        <td>{{ $value->source ? $value->source : '' }}</td>
-                                                        <td>{{ $value->qualify ? $value->qualify : 'Chưa rõ' }}</td>
-                                                        <td>{{ $value->method == 'live' ? 'Trực tiếp' : 'Graph Api' }}</td>
+                                                        <input type="hidden" name="video_id[]" value="{{ $value['video_id'] }}" />
+                                                        <td class="text-center">{{ $value['video_id'] }}</td>
+                                                        <td>{{ $value['source_name'] ? $value['source_name'] : '' }}</td>
+                                                        <td>{{ $value['source_link'] ? $value['source_link'] : '' }}</td>
+                                                        <td>{{ @$value['max_qualify'] ? @$value['max_qualify'] : 'Chưa rõ' }}</td>
+
                                                         <td class="td-actions text-right">
                                                             <button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">
                                                                 <i class="material-icons">close</i>
@@ -180,7 +179,7 @@
                                     <div class="col-sm-11 col-sm-offset-1">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Slug</label>
-                                            <input type="text" class="form-control" name="slug" value="{{ $data->slug }}">
+                                            <input type="text" class="form-control" name="slug" value="{{ $data['info']->slug }}">
                                         </div>
                                     </div>
 
@@ -213,11 +212,11 @@
                                 @endif
 
                                 @if(session()->get('permission')->canUpdate)
-                                    <a href="{{ base_url("admin/movie/$dataMovie->id/episode/del/$data->id") }}" class="btn btn-danger using-tooltip" data-toggle="tooltip" data-placement="top" title="Xóa tập này"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                    <a href="{{ base_url("admin/movie/".$data['movie']->id."/episode/del/".$data['info']->id) }}" class="btn btn-danger using-tooltip" data-toggle="tooltip" data-placement="top" title="Xóa tập này"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
                                 @endif
                                 <button type="reset" class="btn btn-default using-tooltip"  data-toggle="tooltip" data-placement="top" title="Làm mới form này"><i class="material-icons">close</i>Làm mới<div class="ripple-container"></div></button>
 
-                                <a href="{{ base_url("admin/movie/$dataMovie->id/episode") }}" class="btn btn-success using-tooltip" data-toggle="tooltip" data-placement="top" title="Quản Lý Tập Phim"><i class="material-icons">playlist_add</i>Quản Lý Tập<div class="ripple-container"></div></a>
+                                <a href="{{ base_url("admin/movie/".$data['movie']->id."/episode") }}" class="btn btn-success using-tooltip" data-toggle="tooltip" data-placement="top" title="Quản Lý Tập Phim"><i class="material-icons">playlist_add</i>Quản Lý Tập<div class="ripple-container"></div></a>
                             </div>
                         </div>
                     </div>
@@ -252,6 +251,7 @@
                                 <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_from">
                                     <option data-tokens="facebook" value="facebook">Facebook</option>
                                     <option data-tokens="google" value="google">Google</option>
+                                    <option data-tokens="fimfast" value="fimfast">Fimfast</option>
                                     <option data-tokens="others" value="others" selected>Khác</option>
                                 </select>
 
@@ -266,16 +266,6 @@
                                     <option data-tokens="720" value="720">720P</option>
                                     <option data-tokens="1080" value="1080">1080P</option>
                                     <option data-tokens="0" value="0" selected>Chưa rõ</option>
-                                </select>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-3 label-on-left">Phương thức phát</label>
-                            <div class="col-sm-8">
-                                <select data-container="body" class="selectpicker" data-size="5" data-style="btn-info" name="link_method">
-                                    <option data-tokens="live" value="live" selected>Trực tiếp</option>
-                                    <option data-tokens="graph" value="graph">Sử dụng graph API facebook</option>
                                 </select>
 
                             </div>
@@ -325,8 +315,8 @@
             
         });
         function validateEpisode(){
-            var input = $('input[required]');
-            var select = $('select[required]');
+            var input = $('#detail-episode  input[required]');
+            var select = $('#detail-episode  select[required]');
             for(var k = 0; k < input.length; k++){
                 if($(input[k]).val() == ''){
                     var name = $(input[k]).data('name');
@@ -347,10 +337,9 @@
             var link_source = $('input[name="link_source"]').val();
             var link_from = $('select[name="link_from"]').val();
             var link_quality = $('select[name="link_quality"]').val();
-            var link_method = $('select[name="link_method"]').val();
-            var reg_link = /http(s)?:\/\/([\w\W]+).([a-zA-Z0-9])$/;
+            var reg_link = /http(s)?:\/\/([\w\W]+)?.([a-zA-Z0-9])\/?$/;
             if(link_source == 'facebook'){
-                reg_link = /http(s)?:\/\/([\w\W]+)$)/;
+                // reg_link = /(?:https?:\/\/)?(?:www.|web.|m.)?facebook.com\/(?:video.php\?v=\d+|photo.php\?v=\d+|\?v=\d+)|\S+\/videos\/((\S+)\/(\d+)|(\d+))\/?$/;
             }
             if(!link_source || !reg_link.test(link_source)){
                 showNotification('warning' , `Link không hợp lệ` , 3000);
@@ -367,32 +356,50 @@
                 return false;
             }
 
-            if(!link_method || (link_method !== 'live' && link_method !== 'graph')){
-                showNotification('warning' , `Hãy chọn phương thức phát` , 3000);
-                return false;
-            }
 
-            var link_play = JSON.stringify({
-                source:link_source,
-                from:link_from,
-                qualify:parseInt(link_quality),
-                method:link_method
+            $.ajax({
+                url: base_url+"admin/video/add",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    _token: $("input[name='_token']").val(),
+                    return_type: 'json',
+                    source_link: link_source,
+                    source_name: link_from,
+                    max_qualify: link_quality,
+                    // duration: 'json',
+                },
+            })
+            .done(function(res) {
+                if(res && res.info){
+                    var tr = '<tr>' + 
+                    `<input type="hidden" name="video_id[]" value='`+res.info.id+`' />` +
+                    '<td class="text-center">'+ res.info.id +'</td>' +
+                    '<td>'+ link_from +'</td>' +
+                    '<td>'+ link_source +'</td>' +
+                    '<td>'+ parseInt(link_quality) +'</td>' +
+                    '<td class="td-actions text-right">' +
+                    '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
+                    '<i class="material-icons">close</i>' +
+                    '</button>' +
+                    '</td>' +
+                    '</tr>';
+                    $('#links table tbody').append(tr);
+                }
+            })
+            .fail(function(res) {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
             });
-            var tr = '<tr>' + 
-            `<input type="hidden" name="link_play[]" value='`+link_play+`' />` +
-            '<td class="text-center">#</td>' +
-            '<td>'+ link_from +'</td>' +
-            '<td>'+ link_source +'</td>' +
-            '<td>'+ parseInt(link_quality) +'</td>' +
-            '<td>'+ link_method +'</td>' +
-            '<td class="td-actions text-right">' +
-            '<button type="button" rel="tooltip" class="btn btn-danger" data-original-title="" title="" onClick="return removeLink(this);">' +
-            '<i class="material-icons">close</i>' +
-            '</button>' +
-            '</td>' +
-            '</tr>';
 
-            $('#links table tbody').append(tr);
+            $('#modalAddLink').modal('toggle');
+
+            
+            
+
+            
 
             return false;
 

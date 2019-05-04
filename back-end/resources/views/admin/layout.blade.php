@@ -162,9 +162,9 @@
                             </li>
                             <!-- <li class="separator hidden-lg hidden-md"></li> -->
                         </ul>
-                        <form class="navbar-form navbar-right" role="search">
+                        <form action="{{route('Admin.MovieController.index')}}" method="get" class="navbar-form navbar-right" role="search">
                             <div class="form-group form-search is-empty">
-                                <input type="text" class="form-control" placeholder="Tìm kiếm">
+                                <input type="text" class="form-control" name="name" placeholder="Tìm kiếm">
                                 <span class="material-input"></span>
                             </div>
                             <button type="submit" class="btn btn-white btn-round btn-just-icon">

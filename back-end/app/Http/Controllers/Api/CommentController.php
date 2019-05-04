@@ -33,7 +33,6 @@ class CommentController extends Controller
     
 
     public function setItem($type , $req , &$item){
-
     	$validator = Validator::make($req->all(), $this->rules[$type]);
     	if ($validator->fails()) {
     		return [
@@ -90,30 +89,38 @@ class CommentController extends Controller
     	return $this->template_api($result);
     }
     public function store(Request $request)
-    {
-    	$result = $this->setItem('insert',$request, $this->model);
-    	if(!isset($result['error'])){
+    {   
+        if((int)$request->authUser->status !== 1){
+            $result = [
+                'error' => true,
+                'msg' => 'Chức năng bình luận đã bị khóa. Vui lòng liên hệ quản trị viên'
+            ];
+        } else {
+            $result = $this->setItem('insert',$request, $this->model);
+            if(!isset($result['error'])){
 
-    		if($this->model->save()){
-    			$result = [
-    				'success' => true,
-    				'info' => [
-                        'id'         => $this->model->id,
-                        'content'    => $this->model->content,
-                        'user_id'    => $request->authUser->id,
-                        'status'     => 1,
-                        'created_at' => (string)$this->model->created_at,
-                        'updated_at' => (string)$this->model->updated_at,
-                        'reply_id'   => (int)$this->model->reply_id,
-                        'avatar'     => $request->authUser->avatar,
-                        'name'       => $request->authUser->name,
-                        'reply'      => [],
-    				],
-    			];
-    		} else {
-    			$result = ['error' => true,'code' => 500];
-    		}
-    	}
+                if($this->model->save()){
+                    $result = [
+                        'success' => true,
+                        'info' => [
+                            'id'         => $this->model->id,
+                            'content'    => $this->model->content,
+                            'user_id'    => $request->authUser->id,
+                            'status'     => 1,
+                            'created_at' => (string)$this->model->created_at,
+                            'updated_at' => (string)$this->model->updated_at,
+                            'reply_id'   => (int)$this->model->reply_id,
+                            'avatar'     => $request->authUser->avatar,
+                            'name'       => $request->authUser->name,
+                            'reply'      => [],
+                        ],
+                    ];
+                } else {
+                    $result = ['error' => true,'code' => 500];
+                }
+            }
+        }
+    	
 
     	return $this->template_api($result);
     }

@@ -64,4 +64,24 @@ class Comment extends Model
         
         return $result;
     }
+
+    public function getByMovie($filter = [] , $req = '')
+    {
+        $result     = $this->getListId($filter , $req);
+        $list_cmt_id = array_column($result->items(), "id");
+
+        $data = DB::table($this->table)
+        ->select([
+            "comment.*",
+            "user.name",
+            "user.avatar",
+        ])
+        ->leftJoin("user", "user.id" , "=" , "comment.user_id")
+        ->orderBy($filter['orderBy'], $filter['sort'])
+        ->whereIn('comment.id',$list_cmt_id);
+        $data = $data->get();
+
+        return new \Illuminate\Pagination\LengthAwarePaginator($data,$result->total(),$result->perPage(),$result->currentPage(),['path' => $req->url(), 'query' => $req->all()]);
+        
+    }
 }

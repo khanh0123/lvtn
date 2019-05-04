@@ -1,7 +1,7 @@
 
 let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
 let protocol = typeof window == 'undefined' ? 'http://' : "//";
-let domain_api = protocol + "api.viettelbaolam.com/api/v1/";
+let domain_api = protocol + (isLocal ? "dev.lvtn/api/v1/" : "api.viettelbaolam.com/api/v1/");
 let config = {
     domain: {
         fe: 'https://luanvantotnghiep.design',
