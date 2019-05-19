@@ -30,18 +30,6 @@ class Header extends React.Component {
         });
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     console.log(nextProps);
-
-    //     // if (this.props[UserAction.ACTION_GET_STATUS_LOGIN] != nextProps[UserAction.ACTION_GET_STATUS_LOGIN] || this.props[UserAction.ACTION_USER_LOGIN_FB] != nextProps[UserAction.ACTION_USER_LOGIN_FB] || this.props[UserAction.ACTION_USER_LOGIN] != nextProps[UserAction.ACTION_USER_LOGIN]) {
-
-
-    //     // }
-    //     let user = nextProps[UserAction.ACTION_GET_STATUS_LOGIN] || nextProps[UserAction.ACTION_USER_LOGIN_FB] || nextProps[UserAction.ACTION_USER_LOGIN] || undefined;
-    //     let info = user ? user.info : ''
-    //     this.setState({ data_user:info });
-
-    // }
 
     render() {
         let { is_open_popup_login, data_user } = this.state;
@@ -99,8 +87,12 @@ class Header extends React.Component {
         }
     }
 
-    _togglePopupLogin() {
-        this.setState({ is_open_popup_login: !this.state.is_open_popup_login });
+    _togglePopupLogin(status) {       
+        if(status !== true && status !== false){
+            status = !this.state.is_open_popup_login;
+        }
+         
+        this.setState({ is_open_popup_login: status });
     }
 }
 

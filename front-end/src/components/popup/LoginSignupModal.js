@@ -1,5 +1,5 @@
 import React from "react";
-import ModalPopup from "./Modal";
+// import ModalPopup from "./Modal";
 import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import cookie from "react-cookies";
 // import s from "../../assets/css/loginsignup.css";
 import { toast } from 'react-toastify';
 import config from "../../config";
+import Popup from "reactjs-popup";
 
 class LoginSignupModal extends React.Component {
 
@@ -20,13 +21,24 @@ class LoginSignupModal extends React.Component {
         this._init_();
     }
 
+    _closeModal = () => {
+        if(typeof this.props.onClose !== 'undefined'){
+            this.props.onClose(false);
+        }
+        
+    }
+
 
     render() {
         let { login_tab } = this.state;
+        let {isOpen} = this.props;
         return (
-            <ModalPopup
-                isOpen={this.props.isOpen}
-                onClose={this.props.onClose}
+            <Popup
+                open={isOpen}
+                onClose={this._closeModal}
+                closeOnDocumentClick
+                repositionOnResize={true}
+                lockScroll={true}
             >
                 <div id="loginsignup" className={!login_tab ? 'right-panel-active' : ''}>
                     <div className="form-container sign-up-container">
@@ -72,7 +84,7 @@ class LoginSignupModal extends React.Component {
                         </div>
                     </div>
                 </div>
-            </ModalPopup>
+            </Popup>
 
         )
     }
@@ -180,6 +192,7 @@ class LoginSignupModal extends React.Component {
     _init_ = () => {
         this._showTab = this._showTab.bind(this);
         this._onLoginEmail = this._onLoginEmail.bind(this);
+        this._closeModal = this._closeModal.bind(this);
         this.inputEmail = '';
         this.inputEmailRegister = '';
         this.inputPassword = '';

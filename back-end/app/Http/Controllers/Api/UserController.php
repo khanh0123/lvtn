@@ -74,7 +74,7 @@ class UserController extends Controller
             ];
         } else {
             try {
-                $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
+                $this->jwt_secret_key = env('JWT_SECRET');
                 $credentials = JWT::decode($token, $this->jwt_secret_key, ['HS256']);
 
                 //validate
@@ -83,12 +83,12 @@ class UserController extends Controller
                 //end
                 $result = $this->model::select('id','name','avatar','email')->where([
                     ['user.id','=',$credentials->id],
-                    ['user.status' , '=' , 1],
+                    ['user.status' , '!=' , -1],
                 ])->first();
                 if(empty($result)){
                     $response =  [
                         'isLogged' => false,
-                        'msg'  => 'Token is invalid'
+                        'msg'  => 'User'
                     ];
                 } else {
                     $response =  [
@@ -129,6 +129,7 @@ class UserController extends Controller
         $result   = $this->model::where([
             ['email' , $email] , 
             ['password' , encode_password($password)] ,
+            ['status' ,'!=' , -1] ,
         ])->first();
         if(isset($result->id)){
             if((int)$result->status === -1){

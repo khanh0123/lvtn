@@ -57,7 +57,7 @@ class AuthUser
         
         $result = User::where([
             ['id', '=', $credentials->id],
-            ['status', '=', 1],
+            ['status', '!=', -1],
         ])->first();
                 
 

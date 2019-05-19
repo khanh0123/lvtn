@@ -95,6 +95,7 @@ class CommentController extends Controller
                 'error' => true,
                 'msg' => 'Chức năng bình luận đã bị khóa. Vui lòng liên hệ quản trị viên'
             ];
+            return $this->template_api($result , 401);
         } else {
             $result = $this->setItem('insert',$request, $this->model);
             if(!isset($result['error'])){

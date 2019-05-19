@@ -1,6 +1,7 @@
 import React from 'react';
 // import Modal from 'react-modal';
 import Modal from 'react-responsive-modal';
+import Popup from "reactjs-popup";
 
 
 const customStyles = {
@@ -31,13 +32,17 @@ class ModalPopup extends React.Component {
             closeButton:'btn-close-modal',
         }
         return (
-                <Modal 
+                <Popup 
                     open={this.props.isOpen} 
                     onClose={this.props.onClose}
-                    classNames={classList}
+                    closeOnDocumentClick
                     children={this.props.children || null}
                     closeOnOverlayClick={true}
+                    closeOnEscape={true}
+                    repositionOnResize={true}
                     center
+                    
+                    lockScroll={true}
                 />
                 
         );

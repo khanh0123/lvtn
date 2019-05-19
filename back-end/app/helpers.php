@@ -395,7 +395,7 @@ function getStatus($status = 1)
 {
     switch ($status) {
         case 1:
-            return 'Hiển thị';
+            return 'Hoạt động';
         case -1:
             return 'Xóa';
         case 2:

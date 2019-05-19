@@ -181,9 +181,9 @@
     $(document).ready(function() {
 
         $('.menu-left-custom >li.active').removeClass('active');
-        $('#movie').parent('li').addClass('active');
-        // $('#genre .show').addClass('active');
-        $('#movie').collapse();
+        $('#users').parent('li').addClass('active');
+        $('#users .show').addClass('active');
+        $('#users').collapse();
 
         $('#datatables').DataTable({
             paging: false,
@@ -205,7 +205,7 @@
                     first: "",
                     last: ""
                 },
-                emptyTable: "Không có bình luận nào"
+                emptyTable: "Không có dữ liệu nào"
             },
             page:{
 

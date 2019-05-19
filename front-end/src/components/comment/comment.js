@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { times_ago } from "../helpers";
 import LoginSignupModal from "../popup/LoginSignupModal";
+import { toast } from 'react-toastify';
 
 class Comment extends React.Component {
 
@@ -132,13 +133,18 @@ class Comment extends React.Component {
             let { mov_id, data } = this.state;
             let content = event.target.value;
             this.props.post_comment(mov_id, content, reply_id).then(async (res) => {
-                let response = res.payload.data;
-                if (response.success) {
-                    let info = response.info;
-                    data = this._addNewCommentToData(data, reply_id, info);
-
-                    await this.setState({ data: data, limit: this.state.limit + 1 });
-                }
+                if(res.type != 'ERROR'){
+                    let response = res.payload.data;
+                    if (response.success) {
+                        let info = response.info;
+                        data = this._addNewCommentToData(data, reply_id, info);
+    
+                        await this.setState({ data: data, limit: this.state.limit + 1 });
+                    }
+                }else {
+                    return toast.error(res.msg, { autoClose: 10000 });
+                }                
+                
             })
             event.target.value = '';
         }

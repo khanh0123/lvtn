@@ -18,9 +18,9 @@ class Controller extends BaseController
         $this->req = $request;
         $this->jwt_secret_key = env('JWT_SECRET','gKnoIKZmWLX91ibxLE1fYqp3DTSUx5Z6');
     }
-    protected function template_api($data = []){
+    protected function template_api($data = [] , $statusCode = ''){
 
-        return !isset($data['error']) ? Response()->json($data , 200) : Response()->json($data , 400);
+        return !isset($data['error']) ? Response()->json($data , 200) : Response()->json($data , !empty($statusCode) ? $statusCode : 400);
     }
     protected function template_err($msg = ''){    
 

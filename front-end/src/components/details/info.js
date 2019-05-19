@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Trailer from "../video/trailer";
+import Trailer from "../popup/Trailer";
 import ScrollRight from "../others/ScrollRight";
 import { custom_date } from "../helpers";
 import { MovieAction,  LoadingAction , ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import config from "../../config";
-import Comment from "../comment";
-import CreateHelmetTag from "../metaseo";
+import config from "../../Config";
+import Comment from "../Comment";
+import CreateHelmetTag from "../Metaseo";
 
 // import parseFB from "../helpers/common";
 class Info extends React.Component {
@@ -22,6 +22,7 @@ class Info extends React.Component {
             id: '',
             slug: '',
         }
+        this._action_trailer = this._action_trailer.bind(this);
     }
 
 
@@ -140,7 +141,7 @@ class Info extends React.Component {
                                                                         <b className="btn btn-danger" onClick={this._action_trailer.bind(this)}>Xem Trailer</b>
                                                                         <Trailer
                                                                             isOpen={this.state.is_open_trailer}
-                                                                            onClose={this._action_trailer.bind(this)}
+                                                                            onClose={this._action_trailer}
                                                                             source={data.trailer}
                                                                             image={data.images.poster.url}
                                                                         />
@@ -199,9 +200,15 @@ class Info extends React.Component {
         }
         return {data,id , url};
     }
-    _action_trailer = () => {
-        this.setState({ is_open_trailer: !this.state.is_open_trailer }, () => {
-        });
+    _action_trailer = (status) => {
+        console.log(this.state.is_open_trailer);
+        
+        if(status !== true && status !== false){
+            status = !this.state.is_open_trailer;
+        }  
+        console.log(status);
+        
+        this.setState({ is_open_trailer: status });
     }
    
     _render_star = (avg) => {

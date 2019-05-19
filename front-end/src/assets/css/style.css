@@ -9,6 +9,11 @@
 /****Gobla css*****/
 *{padding: 0;margin: 0;}
 
+.popup-overlay .popup-content {
+    background: none !important;
+    border: none !important;
+}
+
 .Toastify__toast {
     box-shadow: rgba(0, 0, 0, 0.176) 0px 3px 8px !important;
     margin-bottom: 8px !important;

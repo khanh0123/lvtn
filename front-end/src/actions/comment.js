@@ -31,9 +31,11 @@ function user_comment(mov_id, content, reply_id) {
         };
 
     }).catch((err) => {
+        console.log(err);
+        
         return {
             type: 'ERROR',
-            msg: err.res.data.msg
+            msg: err.response.data.msg
         };
     });
 }
