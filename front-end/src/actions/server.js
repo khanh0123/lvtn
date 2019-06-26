@@ -6,15 +6,13 @@ const init_data_home = (obj) => {
     
     if (obj) {   
         return Promise.all([
-            MovieAction.get_banner_movies().then(res => {                
-                obj.store.dispatch(res)
-            }),
-            MovieAction.get_hot_movies().then(res => {                
+            MovieAction.get_home_movies().then(res => {
                 obj.store.dispatch(res)
             }),
             MenuAction.get_menu().then(res => {                
                 obj.store.dispatch(res)
-            })
+            }),
+            
         ])     
     }
 }

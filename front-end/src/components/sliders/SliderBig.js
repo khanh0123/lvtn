@@ -49,7 +49,7 @@ class SliderBig extends React.Component {
             <div className="container slide-big">
                 <div className="row">
                     <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <div className="movie-big" id="movie-slide">
+                        <div className="movie-big">
                             {data && data.length > 0 &&
                                 <OwlCarousel options={options} events={events}>
                                     {data.map((item,i) => {
@@ -85,11 +85,11 @@ class SliderBig extends React.Component {
                                             <div className="plylist-single-content">
                                                 <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
                                                 <div className="view-movi">
-                                                    <a href="#">{item.cat_name}</a>
+                                                    <a href="#" aria-label="link">{item.cat_name}</a>
                                                 </div>
                                                 <ul>
                                                     <li className="novie-upload-time"><a href="">{item.release_date ? custom_date(item.release_date) : 'Đang cập nhật ..'}</a></li>
-                                                    <li className="movie-time"><a href="#">{`${item.runtime} phút`}</a></li>
+                                                    <li className="movie-time"><a href="#" aria-label="link">{`${item.runtime} phút`}</a></li>
                                                 </ul>
                                             </div>
                                         </div>

@@ -1,10 +1,13 @@
 
-let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
+// let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
+let isLocal = false;
 let protocol = typeof window == 'undefined' ? 'http://' : "//";
-let domain_api = protocol + (isLocal ? "dev.lvtn/api/v1/" : "api.viettelbaolam.com/api/v1/");
+let domain_host_api = (isLocal ? "dev.lvtn/api/v1/" : "api.viettelbaolam.com/api/v1/");
+let domain_api = protocol + domain_host_api;
 let config = {
     domain: {
         fe: 'https://luanvantotnghiep.design',
+        api: domain_host_api,
     },
     time: {
         user_end_time:isLocal ? 5000 : 20000,
@@ -20,6 +23,7 @@ let config = {
     api: {
         menu: domain_api + "menu",
         movie: domain_api + "movies",
+        movie_home: domain_api + "movies/home",
         movie_recommend: domain_api + "movies/recommend",
         movie_detail: domain_api + "movie",
         movie_filter_tags: domain_api + "movies/filter/tags",

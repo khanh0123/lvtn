@@ -11,38 +11,38 @@ export default function htmlTemplate({reactDom, reduxState, helmetData, version}
             ${ helmetData && helmetData.script ? helmetData.script.toString() : ''}
             ${ helmetData && helmetData.link  ? helmetData.link.toString() : ''}
 
-            <link href="${staticDomain}/assets/images/favicon.png" rel="icon" />
+            <link href="${staticDomain}/images/favicon.png" rel="icon" />
             <!-- bootstrap css -->
-            <link href="${staticDomain}/assets/vendors/bootstrap/bootstrap.min.css" rel="stylesheet" />
-            <!-- <link href="${staticDomain}/assets/css/bootstrap-select.min.css" rel="stylesheet" /> -->
+            <link href="${staticDomain}/vendors/bootstrap/bootstrap.min.css" rel="stylesheet" />
+            <!-- <link href="${staticDomain}/css/bootstrap-select.min.css" rel="stylesheet" /> -->
             <!-- / bootstrap css -->
             <!-- owl carousel css -->
-            <link href="${staticDomain}/assets/vendors/owlcarousel/owl.carousel.css" rel="stylesheet" />
+            <link href="${staticDomain}/vendors/owlcarousel/owl.carousel.css" rel="stylesheet" />
             <!-- / owl carousel css -->
             <!--  icon css -->
-            <link href="${staticDomain}/assets/css/font-awesome.min.css" rel="stylesheet" />
-            <link href="${staticDomain}/assets/css/flaticon.css" rel="stylesheet" />
-            <link href="${staticDomain}/assets/css/icofont.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/font-awesome.min.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/flaticon.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/icofont.css" rel="stylesheet" />
             <!-- / icon css -->
             <!-- animations css -->
-            <link href="${staticDomain}/assets/vendors/animations/animate.css" rel="stylesheet" />
-            <!-- <link href="${staticDomain}/assets/vendors/video/video.popup.css" rel="stylesheet" /> -->
+            <link href="${staticDomain}/vendors/animations/animate.css" rel="stylesheet" />
+            <!-- <link href="${staticDomain}/vendors/video/video.popup.css" rel="stylesheet" /> -->
             <!-- <link href="https://vjs.zencdn.net/7.2.2/video-js.css" rel="stylesheet"> -->
             <!-- / animations css -->
             <!-- animations css -->
-            <link href="${staticDomain}/assets/vendors/navmenu/bootsnav.css" rel="stylesheet" />
+            <link href="${staticDomain}/vendors/navmenu/bootsnav.css" rel="stylesheet" />
             <!-- / animations css -->
             <!-- slider css -->
-            <link rel="stylesheet" href="${staticDomain}/assets/vendors/bootstrap-slider/bootstrap-touch-slider.css">
+            <link rel="stylesheet" href="${staticDomain}/vendors/bootstrap-slider/bootstrap-touch-slider.css">
             <!-- / slider css -->
             <!--  style css -->
-            <link href="${staticDomain}/assets/css/style.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/style.css" rel="stylesheet" />
             <!-- / style css -->
             <!--  media css -->
-            <link href="${staticDomain}/assets/css/media.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/media.css" rel="stylesheet" />
             
             <!-- / media css -->
-            <link href="${staticDomain}/assets/css/loginsignup.css" rel="stylesheet" />
+            <link href="${staticDomain}/css/loginsignup.css" rel="stylesheet" />
             <!-- / font css -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"
                 integrity="sha384-OHBBOqpYHNsIqQy8hL1U+8OXf9hH6QRxi0+EODezv82DfnZoV7qoHAZDwMwEJvSw" crossorigin="anonymous">
@@ -102,14 +102,14 @@ export default function htmlTemplate({reactDom, reduxState, helmetData, version}
                   fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));</script>
 
-              <script src="${staticDomain}/assets/js/jquery-1.12.4.min.js"></script>
-              <script src="${staticDomain}/assets/vendors/bootstrap/bootstrap.min.js"></script>
-              <!-- <script src="${staticDomain}/assets/js/bootstrap-select.js"></script> -->
-              <script src="${staticDomain}/assets/vendors/navmenu/bootsnav.js"></script>
-              <!-- <script src="${staticDomain}/assets/vendors/animations/wow.min.js"></script> -->
-              <script src="${staticDomain}/assets/vendors/owlcarousel/owl.carousel.min.js"></script>
-              <!-- <script src="${staticDomain}/assets/js/jquery.mixitup.min.js"></script> -->
-              <!-- <script src="${staticDomain}/assets/js/tab.js"></script> -->
+              <script src="${staticDomain}/js/jquery-1.12.4.min.js"></script>
+              <script src="${staticDomain}/vendors/bootstrap/bootstrap.min.js"></script>
+              <!-- <script src="${staticDomain}/js/bootstrap-select.js"></script> -->
+              <script src="${staticDomain}/vendors/navmenu/bootsnav.js"></script>
+              <!-- <script src="${staticDomain}/vendors/animations/wow.min.js"></script> -->
+              <script src="${staticDomain}/vendors/owlcarousel/owl.carousel.min.js"></script>
+              <!-- <script src="${staticDomain}/js/jquery.mixitup.min.js"></script> -->
+              <!-- <script src="${staticDomain}/js/tab.js"></script> -->
               <script src="//vjs.zencdn.net/5.12/video.js"></script>
               <script src="${staticDomain}/app.bundle.js?v=${version}" type="text/javascript"></script>
             

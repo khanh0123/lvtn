@@ -4,7 +4,7 @@ import { MovieAction, LoadingAction, ServerAction } from "../../actions";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import SlideItem from "../Sliders/SlideItem";
+import SlideItem from "../sliders/SlideItem";
 import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';

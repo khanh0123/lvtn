@@ -59,41 +59,53 @@ function custom_date(timestamp, format) {
 }
 const getMovie = (_this, props, type, MovieAction) => {
     switch (type) {
-        case 'banner_movies':
-            if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
-                return props.get_banner_movies().then((res) => {
+        case 'home_movies':
+            if (!props[MovieAction.ACTION_GET_HOME_MOVIES]) {
+                return props.get_home_movies().then((res) => {
                     let r = res.payload.data;
-                    _this.setState({ banner_movies: r.data });
+                    let {banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies} = r;
+                    _this.setState({banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies});                    
                 });
             } else {
-                let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
-                _this.setState({ banner_movies: data });
+                let {banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies} = props[MovieAction.ACTION_GET_HOME_MOVIES];
+                _this.setState({banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies});
             }
             break;
-        case 'recommend_movies':        
-            if (!props[MovieAction.ACTION_GET_RECOMMEND_MOVIES]) {
-                return props.get_recommend_movies().then((res) => {
-                    let data = res.payload.data;
-                    _this.setState({ recommend_movies: data });
-                });
-            } else {
-                let data = props[MovieAction.ACTION_GET_RECOMMEND_MOVIES];
-                _this.setState({ recommend_movies: data });
-            }
-            break;
-        case 'hot_movies':
+        // case 'banner_movies':
+        //     if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
+        //         return props.get_banner_movies().then((res) => {
+        //             let r = res.payload.data;
+        //             _this.setState({ banner_movies: r.data });
+        //         });
+        //     } else {
+        //         let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
+        //         _this.setState({ banner_movies: data });
+        //     }
+        //     break;
+        // case 'recommend_movies':
+        //     if (!props[MovieAction.ACTION_GET_RECOMMEND_MOVIES]) {
+        //         return props.get_recommend_movies().then((res) => {
+        //             let data = res.payload.data;
+        //             _this.setState({ recommend_movies: data });
+        //         });
+        //     } else {
+        //         let data = props[MovieAction.ACTION_GET_RECOMMEND_MOVIES];
+        //         _this.setState({ recommend_movies: data });
+        //     }
+        //     break;
+        // case 'hot_movies':
 
-            if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
+        //     if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
 
-                return props.get_hot_movies().then((res) => {
-                    let r = res.payload.data;
-                    _this.setState({ hot_movies: r.data });
-                });
-            } else {
-                let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
-                _this.setState({ hot_movies: data });
-            }
-            break;
+        //         return props.get_hot_movies().then((res) => {
+        //             let r = res.payload.data;
+        //             _this.setState({ hot_movies: r.data });
+        //         });
+        //     } else {
+        //         let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
+        //         _this.setState({ hot_movies: data });
+        //     }
+        //     break;
         case 'hot_series_movies':
             if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
                 return props.get_hot_series_movies().then((res) => {

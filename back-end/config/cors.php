@@ -1,6 +1,6 @@
 <?php
 
-$domain = ['http://localhost:3000','http://localhost:5000','https://luanvantotnghiep.design'];
+$domain = ['https://luanvantotnghiep.design','http://localhost:3000','http://localhost:5000'];
 return [
 
     /*

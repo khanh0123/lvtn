@@ -1,23 +1,26 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {custom_date} from "../helpers";
+import { Link } from "react-router-dom";
+import { custom_date } from "../helpers";
 import config from "../../config";
+import LazyLoad from 'react-lazy-load';
 
 class SlideItem extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
-    
+
     render() {
-        let {item,type} = this.props;
-        
-        
+        let { item, type } = this.props;
+
+
         return item && (
             <div className="item" key={item.id}>
                 <div className="movie-item-contents gradient">
                     <div className="background-opacity"></div>
-                    <img src={type == 2 ? item.images.poster.url : item.images.thumbnail.url} onError={(e)=>{e.target.onerror = null; e.target.src=config.images.empty_thumbnail}}/>
+
+                        <img src={type == 2 ? item.images.poster.url : item.images.thumbnail.url} alt={item.name} onError={(e) => { e.target.onerror = null; e.target.src = config.images.empty_thumbnail }} />
+                    
                     <div className="movie-item-content">
                         <div className="movie-item-content-top">
                             <div className="pull-left">
@@ -25,7 +28,7 @@ class SlideItem extends React.Component {
                             </div>
                             <div className="pull-right">
                                 <div className="movie-ratting">
-                                   <a href="#" ><span className="fa fa-star" />{`${item.avg_rate} /5`}</a>
+                                    <a href="#" aria-label="link" ><span className="fa fa-star" />{`${item.avg_rate} /5`}</a>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +37,7 @@ class SlideItem extends React.Component {
                         </div>
                         <div className="movie-item-content-buttom">
                             <div className="movie-item-title">
-                               <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
+                                <Link to={`/phim/${item.id}/${item.slug}`} >{item.name}</Link>
                             </div>
                             <div className="item-cat">
                                 <ul>
@@ -49,7 +52,7 @@ class SlideItem extends React.Component {
                             </div>
                             <div className="movie-item-beta">
                                 <div className="movie-details">
-                                    <Link to={`/phim/${item.id}/${item.slug}`}  className="btn btn-button button-detals blck-bg">Chi tiết</Link>
+                                    <Link to={`/phim/${item.id}/${item.slug}`} className="btn btn-button button-detals blck-bg">Chi tiết</Link>
                                 </div>
                                 {/* <div className="view-movie">
                                     <a href=""  className="blck-bg" >15k lượt xem</a>
@@ -60,21 +63,21 @@ class SlideItem extends React.Component {
                 </div>
             </div>
 
-        ) || <div/>
+        ) || <div />
     }
 
-    _renderGenre(data){        
+    _renderGenre(data) {
         let info = [];
-        if(data && data.length > 0){
+        if (data && data.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 // info+=data[i].gen_name+", ";  
                 let el = <Link key={i} to={`/${data[i].gen_slug}`}>{data[i].gen_name}</Link>
-                info.push(el);     
-                i < data.length - 1 ? info.push(<span key={i+data.length}>, </span>) : '';     
+                info.push(el);
+                i < data.length - 1 ? info.push(<span key={i + data.length}>, </span>) : '';
             }
             // info+=data[data.length-1].gen_name;
         }
-        
+
         return info;
     }
 }

@@ -104,23 +104,23 @@
                                     <td>{{ customDate($value->release_date) }}</td>
                                     <td >
 
-                                        <div class="togglebutton">
+                                        <div class="togglebutton" >
                                             <label>
-                                                <input type="checkbox" name="is_hot" value="{{$value->is_hot ? 1 : 0}}" {{$value->is_hot ? 'checked' : ''}}>
+                                                <input data-mov_id="{{$value->id}}" type="checkbox" name="is_hot" value="{{$value->is_hot ? 1 : 0}}" {{$value->is_hot ? 'checked' : ''}} >
                                             </label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="togglebutton">
                                             <label>
-                                                <input type="checkbox" name="is_new" value="{{$value->is_new ? 1 : 0}}" {{$value->is_new ? 'checked' : ''}}>
+                                                <input data-mov_id="{{$value->id}}" type="checkbox" name="is_new" value="{{$value->is_new ? 1 : 0}}" {{$value->is_new ? 'checked' : ''}}>
                                             </label>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="togglebutton">
                                             <label>
-                                                <input type="checkbox" name="is_banner" value="{{$value->is_banner ? 1 : 0}}" {{$value->is_banner ? 'checked' : ''}}>
+                                                <input data-mov_id="{{$value->id}}" type="checkbox" name="is_banner" value="{{$value->is_banner ? 1 : 0}}" {{$value->is_banner ? 'checked' : ''}}>
                                             </label>
                                         </div>
                                     </td>
@@ -227,16 +227,16 @@
         });
         $('.card .material-datatables label').addClass('form-group');
         var url = '{{url("admin/movie/switch")}}';
-        $('body .togglebutton input').on('change',function(event) {
-            if($(this).is(':checked')){
-                $(this).val(1);
-            } else {
-                $(this).val(0);
-            }
+        $('body').on('change','.togglebutton input',function(event) {
+            console.log("change")
+            
+            var value = $(this).is(':checked') ? 1 : 0;
+            $(this).val(value);
             var name = $(this).attr('name');
-            var value = $(this).val();
-            var id = $(this).parents("td").prevAll(".id_mov").html();
-            var data;
+            
+            // var id = $(this).parents("td").prevAll(".id_mov").html();
+            var id = $(this).data('mov_id');
+            var data = {};
             switch (name) {
                 case 'is_hot':
                     data = {is_hot:value};
@@ -250,8 +250,7 @@
                 default:
                     return false;
             }
-
-            if(name && parseInt(id) > 0){
+            if(parseInt(id) > 0){
                 data.id = id;
                 data._token = $('input[name="_token"]').val();
                 $.ajax({
@@ -261,10 +260,12 @@
                     data: data,
                 })
                 .done(function(res) {
-                    console.log(res);
+                    if(res.success){
+                        showNotification( 'success' , 'Thao tác thành công' , 2000);
+                    }
                 })
                 .fail(function(err) {
-                    console.log(err);
+                    showNotification( 'danger' , 'Có lỗi vui lòng thử lại' , 2000);
                 })
                 
             }

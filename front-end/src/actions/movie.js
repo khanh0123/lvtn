@@ -9,6 +9,8 @@ const ACTION_GET_DETAIL_MOVIE = 'ACTION_GET_DETAIL_MOVIE';
 const ACTION_GET_LINKPLAY_MOVIE = 'ACTION_GET_LINKPLAY_MOVIE';
 const ACTION_GET_MOVIE_FILTER = 'ACTION_GET_MOVIE_FILTER';
 const ACTION_GET_MOVIE_SEARCH = 'ACTION_GET_MOVIE_SEARCH';
+const ACTION_GET_HOME_MOVIES = 'ACTION_GET_HOME_MOVIES';
+
 
 
 
@@ -17,6 +19,24 @@ function get_hot_movies() {
         
         return {
             type: ACTION_GET_HOT_MOVIES,
+            payload: {
+                data: res.data.info
+            }
+        };
+
+    }).catch((err) => {        
+        return {
+            type: 'ERROR',
+            msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'
+        };
+    });
+}
+
+function get_home_movies() {
+    return Api.get_home_movies().then((res) => {
+        
+        return {
+            type: ACTION_GET_HOME_MOVIES,
             payload: {
                 data: res.data.info
             }
@@ -174,6 +194,7 @@ module.exports =  {
     ACTION_GET_LINKPLAY_MOVIE,
     ACTION_GET_MOVIE_FILTER,
     ACTION_GET_MOVIE_SEARCH,
+    ACTION_GET_HOME_MOVIES,
     get_hot_movies,
     get_hot_series_movies,
     get_hot_retail_movies,
@@ -182,5 +203,6 @@ module.exports =  {
     get_banner_movies,
     get_linkplay_movie,
     get_movie_filter,
-    get_movie_search
+    get_movie_search,
+    get_home_movies
 };

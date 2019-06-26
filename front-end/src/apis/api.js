@@ -35,6 +35,14 @@ class Api {
             }
         })
     }
+    static get_home_movies() {
+        const url = `${config.api.movie_home}`;
+
+        return axios({
+            method: 'get',
+            url: url,
+        })
+    }
     static get_hot_movies() {
         const url = `${config.api.movie}`;        
 

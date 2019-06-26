@@ -53,16 +53,64 @@ class MovieController extends Controller
     {
         $filter         = $this->getFilter($request);
         $data['info']   = $this->model->get_page($filter , $request);
-        $data['info']   = formatResult($data['info'],[
-            'genre'         => ['gen_id','gen_name','gen_slug'] ,
-            'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
-        ],'get');
-
-        foreach ($data['info'] as $key => $value) {
-            $data['info'][$key]->images = json_decode($data['info'][$key]->images);
-        }
+        $data['info']   = $this->formatResult($data['info'],'get');
 
         return $this->template_api($data);
+    }
+
+    public function home(Request $request )
+    {
+        $data = [];
+        $filter = ['sort' => 'desc','orderBy' => 'movie.id','limit' => 20,
+            'conditions' => [
+                'and' => [],
+                'or' => [],
+                'filter_or' => [],
+            ],
+        ];
+        //get banner
+        $filter['limit'] = 5;
+        $filter['conditions']['and'][] = ['is_banner' , 1];
+        $data['banner_movies'] = $this->model->get_page($filter , $request);
+        $data['banner_movies'] = $this->formatResult($data['banner_movies']);
+
+        //get film hot
+        $filter['limit'] = 10;
+        $filter['conditions']['and'][] = ['is_hot' , 1];
+        $data['hot_movies'] = $this->model->get_page($filter , $request);
+        $data['hot_movies'] = $this->formatResult($data['hot_movies']);
+
+        //get hot series
+        $filter['limit'] = 10;
+        $filter['conditions']['and'] = [['is_hot' , 1],['category.slug' , 'phim-bo']];
+        $data['hot_series_movies'] = $this->model->get_page($filter , $request);
+        $data['hot_series_movies'] = $this->formatResult($data['hot_series_movies']);
+
+        //get hot retail
+        $filter['limit'] = 10;
+        $filter['conditions']['and'] = [['is_hot' , 1],['category.slug' , 'phim-le']];
+        $data['hot_retail_movies'] = $this->model->get_page($filter , $request);
+        $data['hot_retail_movies'] = $this->formatResult($data['hot_retail_movies']);
+        //get recommend        
+        $data['recommend_movies'] = $this->recommend($request);
+        $data['recommend_movies'] = $this->formatResult($data['recommend_movies']);
+
+        return $this->template_api(['info' => $data]);
+        
+    }
+
+    private function formatResult($data = [] ,$type = '')
+    {
+        $data  = formatResult($data,[
+            'genre'         => ['gen_id','gen_name','gen_slug'] ,
+            'country'       => ['cou_id' , 'cou_name' , 'cou_slug']
+        ] , $type);
+
+        foreach ($data as $key => $value) {
+            $data[$key]->images = json_decode($data[$key]->images);
+        }
+
+        return $data;
     }
 
 
@@ -165,20 +213,21 @@ class MovieController extends Controller
 
     }
 
-    public function recommend(Request $request)
+    private function recommend(Request $request)
     {
         if($request->header("Authorization")){
             $user = $this->getUserFromAccessToken($request->header("Authorization"));
         }
         $data['info'] = $this->model->getRecommendMovies();
-        $data['info']   = formatResult($data['info'],[
-            'genre'   => ['gen_id','gen_name','gen_slug'] ,
-            'country' => ['cou_id' , 'cou_name' , 'cou_slug']
-        ]);
-        foreach ($data['info'] as $key => $value) {
-            $data['info'][$key]->images = json_decode($data['info'][$key]->images);
-        }
-        return $this->template_api($data);
+        // $data['info']   = formatResult($data['info'],[
+        //     'genre'   => ['gen_id','gen_name','gen_slug'] ,
+        //     'country' => ['cou_id' , 'cou_name' , 'cou_slug']
+        // ]);
+        // foreach ($data['info'] as $key => $value) {
+        //     $data['info'][$key]->images = json_decode($data['info'][$key]->images);
+        // }
+        // return $this->template_api($data);
+        return $data['info'];
     }
 
 

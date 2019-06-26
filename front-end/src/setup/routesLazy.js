@@ -1,11 +1,11 @@
 import React, { lazy } from 'react';
 import config from "../config";
-const Home = lazy(() => import('../components/Home/Home'));
-const InfoMovie = lazy(() => import('../components/Details/Info'));
-const Detail = lazy(() => import('../components/Details/Detail'));
-const Filters = lazy(() => import('../components/Filters/Filters'));
-const Search = lazy(() => import('../components/Search/Search'));
-const NotFound = lazy(() => import('../components/Notfound/Notfound'));
+const Home = lazy(() => import('../components/home/Home'));
+const InfoMovie = lazy(() => import('../components/details/Info'));
+const Detail = lazy(() => import('../components/details/Detail'));
+const Filters = lazy(() => import('../components/filters/Filters'));
+const Search = lazy(() => import('../components/search/Search'));
+const NotFound = lazy(() => import('../components/notfound/Notfound'));
 
 module.exports = {
     routeslazy: [

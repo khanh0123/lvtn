@@ -2,6 +2,8 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const InterpolateHtmlPlugin = require("interpolate-html-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
+
 
 // const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const Public_url = "/";
@@ -12,7 +14,7 @@ module.exports = {
     path: path.resolve(__dirname, "build"),
     filename: 'bundle.[hash:8].js',
     chunkFilename: '[name].[chunkhash].js',
-    publicPath: "/"
+    publicPath: Public_url
   },
   module: {
     rules: [
@@ -65,8 +67,10 @@ module.exports = {
       PUBLIC_URL: ''
     }),
     new CopyWebpackPlugin([
-      { from: 'src/assets/', to: 'assets/' }
-    ])
+      { from: 'src/assets/', to: '' }
+    ]),
+    new CompressionPlugin(),
+    
   ]
 
 };

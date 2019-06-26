@@ -65,12 +65,12 @@ class UserController extends Controller
      */
     public function get_login_status(Request $request)
     {
-        $token = $request->header("Authorization");
+        $token = $request->header("Authorization") ? $request->header("Authorization") : $request->access_token;
         if(empty($token)){
             $response =  [
                 // 'error' => true,
                 'isLogged' => false,
-                'msg'  => 'An access token is required'
+                'msg'  => 'An access token is required',
             ];
         } else {
             try {
@@ -106,7 +106,7 @@ class UserController extends Controller
                 $response =  [
                     'isLogged' => false,
                     'msg'  => 'Access Token is invalid.',
-                    // 'exception' => $e->getMessage(),
+                    'exception' => $e->getMessage(),
                 ];
             }
             

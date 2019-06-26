@@ -42,11 +42,11 @@ class LoginSignupModal extends React.Component {
             >
                 <div id="loginsignup" className={!login_tab ? 'right-panel-active' : ''}>
                     <div className="form-container sign-up-container">
-                        <form action="#">
+                        <form action="#" method="post">
                             <h1>Tạo tài khoản</h1>
                             <div className="social-container">
-                                <a href="#" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
-                                <a href="javascript:void(0)" className="social"><i className="fa fa-google-plus" /></a>
+                                <a href="#" aria-label="link" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
+                                <a href="javascript:void(0)" aria-label="link" className="social"><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng email để đăng ký</span>
                             <input type="text" placeholder="Tên hiển thị" ref={inputName => this.inputName = inputName} />
@@ -56,16 +56,16 @@ class LoginSignupModal extends React.Component {
                         </form>
                     </div>
                     <div className="form-container sign-in-container">
-                        <form action="#">
+                        <form action="#" method="post">
                             <h1>Đăng nhập</h1>
                             <div className="social-container">
-                                <a href="#" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
-                                <a href="javascript:void(0)" className="social"><i className="fa fa-google-plus" /></a>
+                                <a href="#" aria-label="link" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
+                                <a href="javascript:void(0)" aria-label="link" className="social"><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng tài khoản</span>
                             <input ref={inputEmail => this.inputEmail = inputEmail} type="email" placeholder="Email" />
                             <input ref={inputPassword => this.inputPassword = inputPassword} type="password" placeholder="Mật khẩu" />
-                            <a href="#">Quên mật khẩu?</a>
+                            <a href="#" aria-label="link">Quên mật khẩu?</a>
                             <button onClick={this._onLoginEmail}>Đăng nhập</button>
                         </form>
                     </div>

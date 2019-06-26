@@ -1,7 +1,7 @@
 import React from "react";
-import SliderBanner from "../Sliders/SliderBanner";
-import Slider from "../Sliders/Slider";
-import SliderBig from "../Sliders/SliderBig";
+import SliderBanner from "../sliders/SliderBanner";
+import Slider from "../sliders/Slider";
+import SliderBig from "../sliders/SliderBig";
 import { getMovie } from "../helpers";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,23 +19,22 @@ class Home extends React.Component {
             hot_movies: [],
             hot_series_movies: [],
             hot_retail_movies: [],
-            
-
         };
 
     }
     componentDidMount() {
         Promise.all([
-            getMovie(this,this.props,'banner_movies',MovieAction),
-            getMovie(this,this.props,'hot_movies',MovieAction),
+            getMovie(this,this.props,'home_movies',MovieAction),
+            // getMovie(this,this.props,'hot_movies',MovieAction),
+            // getMovie(this,this.props,'recommend_movies',MovieAction),
         ]).then(() => {            
             this.props.set_loading(false);
         }).catch(() => {
             this.props.set_loading(false);
         });
-        getMovie(this,this.props,'recommend_movies',MovieAction);
-        getMovie(this,this.props,'hot_series_movies',MovieAction);
-        getMovie(this,this.props,'hot_retail_movies',MovieAction);
+        
+        // getMovie(this,this.props,'hot_series_movies',MovieAction);
+        // getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
     componentWillReceiveProps(nextProps) {
 
@@ -48,8 +47,9 @@ class Home extends React.Component {
                 <CreateHelmetTag
                     page="home"
                 />
-                <SliderBanner data={banner_movies} />
-                {recommend_movies.length > 0 &&
+                {banner_movies && <SliderBanner data={banner_movies} />}
+                
+                {recommend_movies && recommend_movies.length > 0 &&
                     <section className="top-rating pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -69,7 +69,7 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-                {hot_movies.length > 0 &&
+                {hot_movies && hot_movies.length > 0 &&
                     <section className="top-rating pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -89,7 +89,7 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-                {hot_series_movies.length > 0 &&
+                {hot_series_movies && hot_series_movies.length > 0 &&
                     <section className="new-movie pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -104,7 +104,7 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-                {hot_retail_movies.length > 0 &&
+                {hot_retail_movies && hot_retail_movies.length > 0 &&
                     <section className="new-movie pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -187,69 +187,72 @@ class Home extends React.Component {
     _getDataRender = () => {
         let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies ,recommend_movies} = this.state;
         
-        if(banner_movies.length == 0 && this.props[MovieAction.ACTION_GET_BANNER_MOVIES]){
-            banner_movies = this.props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
+        if(banner_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOME_MOVIES]){
+            banner_movies = this.props[MovieAction.ACTION_GET_HOME_MOVIES].banner_movies;
         }
-        if(hot_series_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]){
-            hot_series_movies = this.props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
+        if(recommend_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOME_MOVIES]){
+            recommend_movies = this.props[MovieAction.ACTION_GET_HOME_MOVIES].recommend_movies;
         }
-        if(hot_retail_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]){
-            hot_retail_movies = this.props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
+        if(hot_series_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOME_MOVIES]){
+            hot_series_movies = this.props[MovieAction.ACTION_GET_HOME_MOVIES].hot_series_movies;
         }
-        if(hot_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOT_MOVIES]){
-            hot_movies = this.props[MovieAction.ACTION_GET_HOT_MOVIES].data;
+        if(hot_retail_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOME_MOVIES]){
+            hot_retail_movies = this.props[MovieAction.ACTION_GET_HOME_MOVIES].hot_retail_movies;
+        }
+        if(hot_movies.length == 0 && this.props[MovieAction.ACTION_GET_HOME_MOVIES]){
+            hot_movies = this.props[MovieAction.ACTION_GET_HOME_MOVIES].hot_movies;
         }
         
         return { hot_movies, hot_series_movies, hot_retail_movies, banner_movies ,recommend_movies};
     }
-    _getRecommendMovies = async () => {
+    // _getRecommendMovies = async () => {
 
-    }
-    _getHotMovies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
-            await props.get_hot_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
-            this.setState({ hot_movies: data });
-        }
-    }
-    _getHotSeriesMovies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-            await props.get_hot_series_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_series_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
-            this.setState({ hot_series_movies: data });
-        }
-    }
-    _getHotRetailMovies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-            await props.get_hot_retail_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ hot_retail_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
-            this.setState({ hot_retail_movies: data });
-        }
-    }
+    // }
+    // _getHotMovies = async (props) => {
+    //     if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
+    //         await props.get_hot_movies().then((res) => {
+    //             let r = res.payload.data;
+    //             this.setState({ hot_movies: r.data });
+    //         });
+    //     } else {
+    //         let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
+    //         this.setState({ hot_movies: data });
+    //     }
+    // }
+    // _getHotSeriesMovies = async (props) => {
+    //     if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
+    //         await props.get_hot_series_movies().then((res) => {
+    //             let r = res.payload.data;
+    //             this.setState({ hot_series_movies: r.data });
+    //         });
+    //     } else {
+    //         let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
+    //         this.setState({ hot_series_movies: data });
+    //     }
+    // }
+    // _getHotRetailMovies = async (props) => {
+    //     if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
+    //         await props.get_hot_retail_movies().then((res) => {
+    //             let r = res.payload.data;
+    //             this.setState({ hot_retail_movies: r.data });
+    //         });
+    //     } else {
+    //         let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
+    //         this.setState({ hot_retail_movies: data });
+    //     }
+    // }
 
-    _getBannerMovies = async (props) => {
-        if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
-            await props.get_banner_movies().then((res) => {
-                let r = res.payload.data;
-                this.setState({ banner_movies: r.data });
-            });
-        } else {
-            let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
-            this.setState({ banner_movies: data });
-        }
-    }
+    // _getBannerMovies = async (props) => {
+    //     if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
+    //         await props.get_banner_movies().then((res) => {
+    //             let r = res.payload.data;
+    //             this.setState({ banner_movies: r.data });
+    //         });
+    //     } else {
+    //         let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
+    //         this.setState({ banner_movies: data });
+    //     }
+    // }
 }
 
 Home.serverFetch = ServerAction.init_data_home;
@@ -260,11 +263,12 @@ function mapStateToProps({ movie_results, loading_results }) {
 
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
-        get_hot_movies: MovieAction.get_hot_movies,
-        get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        get_hot_series_movies: MovieAction.get_hot_series_movies,
-        get_banner_movies: MovieAction.get_banner_movies,
-        get_recommend_movies: MovieAction.get_recommend_movies,
+        // get_hot_movies: MovieAction.get_hot_movies,
+        // get_hot_retail_movies: MovieAction.get_hot_retail_movies,
+        // get_hot_series_movies: MovieAction.get_hot_series_movies,
+        // get_banner_movies: MovieAction.get_banner_movies,
+        // get_recommend_movies: MovieAction.get_recommend_movies,
+        get_home_movies: MovieAction.get_home_movies,
         set_loading: LoadingAction.set_loading,
 
     }, dispatch);

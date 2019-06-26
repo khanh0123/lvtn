@@ -42,7 +42,7 @@ class Menu extends React.Component {
                     <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12 header-logos sm-width">
                         <div className="header-logo">
                             <Link to="/">
-                                <img src='/assets/images/logo.png' alt="logo" />
+                                <img src='/images/logo.png' alt="logo" />
                             </Link>
                         </div>
                     </div>
@@ -62,7 +62,7 @@ class Menu extends React.Component {
                                 {data_menu.map((item, i) => {
                                     return (item.sub_menu.length > 1 ?
                                         <li className="dropdown" key={i}>
-                                            <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">{item.name}</a>
+                                            <a href="javascript:void(0)" aria-label="link" className="dropdown-toggle" data-toggle="dropdown">{item.name}</a>
                                             <ul className="dropdown-menu">
                                                 {this._renderMenuitem(item)}
                                             </ul>
@@ -81,14 +81,14 @@ class Menu extends React.Component {
                         <div className="header-search categorie-search-box">
 
                             <div className="newsletter-input">
-                                <input type="text" className="form-control"  placeholder="Nhập từ khóa" id="search_keyword" onKeyUp={
+                                <input type="text" className="form-control"  name="inputsearch" placeholder="Nhập từ khóa" id="search_keyword" onKeyUp={
                                     (event) => {
                                         if(event.key == "Enter"){
                                             this._goSearchPage(event.target.value);
                                         }
                                     }
                                 }/>
-                                <button className="newsletter-btn" onClick={() => this._goSearchPage()}><span className="fa fa-search"></span></button>
+                                <button name="btn-search" role="button" aria-label="alternative for screen readers" title="alternative for other users" className="newsletter-btn" onClick={() => this._goSearchPage()}><span className="fa fa-search"></span></button>
                             </div>
                         </div>
                     </div>

@@ -20,6 +20,7 @@ $router->group(['prefix' => 'v1','middleware' => 'cors' ], function() use($route
 
     $router->get('menu' ,   ['as'   => "Api.MenuController.index", 'uses' => 'Api\MenuController@index']);
     $router->get('movies' , ['as' => "Api.MovieController.index", 'uses' => 'Api\MovieController@index']);
+    $router->get('movies/home' , ['as' => "Api.MovieController.home", 'uses' => 'Api\MovieController@home']);
 
     $router->get('movies/filter/tags' , ['as' => "Api.MovieController.getByTags", 'uses' => 'Api\MovieController@getByTags']);
 

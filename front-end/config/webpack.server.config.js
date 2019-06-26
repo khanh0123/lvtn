@@ -19,7 +19,7 @@ const plugins = [
     }),
     new CopyWebpackPlugin([{
         from: '../src/assets/',
-        to: '../dist/assets/',
+        to: '../dist/',
         transform: function (fileContent, path) {
             if (!is_minimize) {
                 console.log(`Running copy assets folders with minimize ...`);
@@ -47,6 +47,12 @@ const plugins = [
 
         }
     }]),
+    // new CopyWebpackPlugin([
+    //     { from: 'src/assets/sw.js', to: '../dist/sw.js' }
+    // ]),
+    // new CopyWebpackPlugin([
+    //     { from: 'src/assets/manifest.json', to: '../dist/manifest.json' }
+    // ]),
     new HtmlWebpackPlugin({
         inject: true,
         template: path.join(__dirname, '../public/index.html'),

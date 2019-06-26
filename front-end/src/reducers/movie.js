@@ -4,6 +4,7 @@ export default function (state = {}, action) {
     let result = {...state};
     switch (action.type) {
         case MovieAction.ACTION_GET_HOT_MOVIES:
+        case MovieAction.ACTION_GET_HOME_MOVIES:
         case MovieAction.ACTION_GET_HOT_SERIES_MOVIES:
         case MovieAction.ACTION_GET_HOT_RETAIL_MOVIES:
         case MovieAction.ACTION_GET_MOVIE_FILTER:

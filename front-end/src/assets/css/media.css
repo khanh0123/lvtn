@@ -1261,6 +1261,14 @@
     }
     
     @media (min-width:320px) and (max-width:667px) {
+        .popup-overlay .popup-content {
+            background: none !important;
+            border: none !important;
+            width: 100% !important;
+        }
+        .details-content {
+            padding-top: 4em;
+        }
         .selebritie-img img {
             width: 100%;
         }
@@ -1772,9 +1780,6 @@
             font-size: 16px;
             line-height: 24px;
         }
-        .footer-bg {
-            /* padding-top: 123px; */
-        }
         .home-2 .slider-2 .slider-content {
             padding: 14% 0;
         }
@@ -1844,9 +1849,6 @@
         .top-account,
         .header-logo {
             text-align: center;
-        }
-        .Top-rating-items .movie-item-content-center {
-            /* top: 65%; */
         }
         .category-items .movie-item-content-center {
             top: 35%;

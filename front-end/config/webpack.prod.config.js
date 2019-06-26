@@ -88,7 +88,7 @@ module.exports = {
 
     new CopyWebpackPlugin([{
       from: 'src/assets/',
-      to: 'assets/[path]/[name].[ext]',
+      to: '[path]/[name].[ext]',
       transform: function (fileContent, path) {
         if (!is_minimize) {
           console.log(`Running copy assets folders with minimize ...`);
@@ -115,8 +115,9 @@ module.exports = {
         return fileContent;
 
       }
-    }])
+    }]),
   ],
+
 
   module: {
     rules: [

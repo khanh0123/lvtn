@@ -44,14 +44,14 @@ class Header extends React.Component {
                                         {
                                             data_user !== '' &&
                                             <li className="dropdown">
-                                                <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown"><span className="fa fa-lock" />Xin chào {data_user.name} <i className="fa fa-angle-down"></i></a>
+                                                <a href="javascript:void(0)" aria-label="link" className="dropdown-toggle" data-toggle="dropdown"><span className="fa fa-lock" />Xin chào {data_user.name} <i className="fa fa-angle-down"></i></a>
                                                 <ul className="dropdown-menu">
-                                                    <li><a href="javascript:void(0)" onClick={this._logout}>Đăng xuất</a></li>
+                                                    <li><a href="javascript:void(0)" aria-label="link" onClick={this._logout}>Đăng xuất</a></li>
                                                 </ul>
                                             </li>
 
                                             ||
-                                            <li onClick={this._togglePopupLogin} ><a href="javascript:void(0)"><span className="fa fa-lock" />Đăng Nhập</a></li>
+                                            <li onClick={this._togglePopupLogin} ><a href="javascript:void(0)" aria-label="link"><span className="fa fa-lock" />Đăng Nhập</a></li>
                                         }
                                     </ul>
                                 </div>
