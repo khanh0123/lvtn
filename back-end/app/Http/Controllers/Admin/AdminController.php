@@ -150,6 +150,10 @@ class AdminController extends MainAdminController
     public function login(Request $request)
     {
         if($request->session()->has('user')){
+            $rel = $request->rel;
+            if(!empty($rel)){
+                return redirect($rel);
+            }
             return redirect('/admin');
         }
         return $this->template($this->view_folder."login");

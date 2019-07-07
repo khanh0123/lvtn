@@ -1,10 +1,10 @@
 
-import Home from "../components/Home";
-import InfoMovie from "../components/Details/Info";
-import Detail from "../components/Details/Detail";
-import Filters from "../components/Filters/Filters";
-import Search from "../components/Search/Search";
-import NotFound from "../components/Notfound/";
+import Home from "../components/home";
+import InfoMovie from "../components/details/Info";
+import Detail from "../components/details/Detail";
+import Filters from "../components/filters/Filters";
+import Search from "../components/search/Search";
+import NotFound from "../components/notfound/";
 
 module.exports = {
     routes: [

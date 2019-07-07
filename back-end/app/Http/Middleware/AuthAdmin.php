@@ -14,12 +14,14 @@ class AuthAdmin
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    {   
+
         if (!session()->has('user') || !session()->has('permission') || !session()->get('permission')->canRead) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             }
-            return redirect('/admin/login');
+            $path = $request->path();
+            return redirect('/admin/login?rel='.$path);
         }
 
         $request->authUser = session()->get('user');

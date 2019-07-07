@@ -149,7 +149,7 @@ class CountriesSeeder extends Seeder
             [
                 'table_name' => 'country',
                 'max_id' => 'cou017'
-            ],
+            ]
         );
     }
 }

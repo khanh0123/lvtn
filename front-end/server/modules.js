@@ -3,7 +3,6 @@ const path = require("path");
 const staticDomain = '';
 
 const filename = path.resolve(__dirname, '../dist/template.html');
-console.log(filename);
 
 const renderHTML = ({ reactDom, reduxState, helmetData, version },callback) => {
 

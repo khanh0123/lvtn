@@ -111,7 +111,10 @@ class UserController extends Controller
             }
             
         }
-
+        $version = $this->getConfig('version');
+        if(empty($version)) $version = "1.0.0";
+        else $version = $version->value;
+        $response['version'] = $version;
         return $this->template_api($response);
     }
     public function login(Request $request)

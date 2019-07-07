@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/favicon.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}" />
+    <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>@yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -209,7 +209,7 @@
                         <script>
                             document.write(new Date().getFullYear())
                         </script>
-                        <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                        <a href="/">Creative Tim</a>, made with love for a better web
                     </p>
                 </div>
             </footer>
@@ -290,10 +290,10 @@
                 </li>
                 <li class="button-container">
                     <div class="">
-                        <a href="http://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-rose btn-block">Buy Now</a>
+                        <a href="/" target="_blank" class="btn btn-rose btn-block">Buy Now</a>
                     </div>
                     <div class="">
-                        <a href="http://www.creative-tim.com/product/material-dashboard" target="_blank" class="btn btn-info btn-block">Get Free Demo</a>
+                        <a href="/" target="_blank" class="btn btn-info btn-block">Get Free Demo</a>
                     </div>
                 </li>
                 <li class="header-title">Thank you for 95 shares!</li>

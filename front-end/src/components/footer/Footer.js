@@ -9,7 +9,7 @@ class Footer extends React.Component {
                             <div className="col-lg-3 col-md-3 col-sm-6 col-xs-12 sm-width">
                                 <div className="ft-widget">
                                     <div className="ft-content">
-                                        <img src="/assets/images/ft-about.jpg" alt="about us" />
+                                        <img src="/images/ft-about.jpg" alt="about us" />
                                         <p>
                                             Movie star - Xem phim online <br/>
                                             Địa chỉ: 180 Cao Lỗ  <br/>

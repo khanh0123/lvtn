@@ -27,6 +27,11 @@ class Controller extends BaseController
 
         return Response()->json(['error' => true,'msg' => $msg],400);
     }
+
+    protected function getConfig($config_name)
+    {
+        return DB::table("config")->where('key',$config_name)->first();
+    }
     protected function generate_access_token($request,$result){
         //info user
         $id_user = $result->id;

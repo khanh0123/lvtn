@@ -8,6 +8,7 @@ import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import config from "../../config"
 
 class Header extends React.Component {
     constructor(props) {
@@ -25,6 +26,13 @@ class Header extends React.Component {
             let data = res.payload.data;
             if (data && data.isLogged) {
                 this.setState({ data_user: data.info })
+            }
+            if(data && data.version){
+                let current_version = cookie.load()
+                cookie.save("version", data.version, {
+                    path: '/',
+                    maxAge: 600000,
+                })
             }
 
         });
@@ -78,7 +86,7 @@ class Header extends React.Component {
         )
     }
     _logout = () => {        
-        cookie.remove("access_token",{ path: '/' });
+        cookie.remove(config.constant.cookie_token,{ path: '/' });
         window.location.reload();
     }
     _handleLoginSucess(data) {

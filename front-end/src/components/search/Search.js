@@ -84,24 +84,27 @@ class Search extends React.Component {
 
                             <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
                                 {data.length > 0 &&
-                                    (
+                                    (   
                                         <React.Fragment>
-                                            {data.map((item, i) => {
-                                                return (
-                                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                                        <SlideItem item={item} />
-                                                    </div>
-                                                )
-                                            })}
-
-                                            <div className="text-center">
-                                                <Pagination
-                                                    activePage={page}
-                                                    itemsCountPerPage={10}
-                                                    totalItemsCount={this.state.total}
-                                                    pageRangeDisplayed={5}
-                                                    onChange={this._handlePageChange}
-                                                />
+                                            <div className="row">
+                                                {data.map((item, i) => {
+                                                    return (
+                                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                                            <SlideItem item={item} />
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                            <div className="row">
+                                                <div className="text-center">
+                                                    <Pagination
+                                                        activePage={page}
+                                                        itemsCountPerPage={10}
+                                                        totalItemsCount={this.state.total}
+                                                        pageRangeDisplayed={5}
+                                                        onChange={this._handlePageChange}
+                                                    />
+                                                </div>
                                             </div>
                                         </React.Fragment>
                                     )
