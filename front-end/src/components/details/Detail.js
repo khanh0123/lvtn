@@ -10,13 +10,14 @@ import { withRouter,generatePath } from 'react-router';
 import config from "../../config";
 import Comment from "../comment";
 import CreateHelmetTag from "../metaseo";
+import Loading from "../others/Loading";
 
 class Detail extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: '',
+            data: null,
             id: '',
             slug: '',
             episode: 1,
@@ -60,53 +61,64 @@ class Detail extends React.Component {
         
     }
     componentDidUpdate(prevProps, prevState) {
-        // console.log(this.state);
-        // console.log(prevState);
         
         if(prevState.episode != this.state.episode){
-            this._getLinkPlay(this.props);
+            this._getLinkPlay(this.props).then(() => {
+                this.props.set_loading(false);
+            });
+            
         }
         
       }
 
     render() {
         let { data, link_play, id, url } = this._getDataRender();
+        // data = null
         let currentTime = this._getCurrentTimeOnEpisode();
 
-        return data !== '' && (
+        return (
             <React.Fragment>
-                <CreateHelmetTag
-                    page="detail"
-                    data={data}
-                    url={url}
-                />
-                <div className="breadcrumbs">
-                    <div className="container">
-                        <ul className="breadcrumb">
-                            <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
-                            <li><Link to={`/${data.cat_slug}`}>{data.cat_name}</Link></li>
-                            {data.genre && data.genre.length > 0 &&
-                                <li><Link to={data.genre[0].gen_slug}>{data.genre[0].gen_name}</Link></li>
-                            }
-                            <li><Link to={`/phim/${data.id}/${data.slug}`}>{data.name}</Link></li>
-                            <li>Xem phim</li>
-                        </ul>
-                    </div>
-                </div>
+                {data != null && 
+                    <React.Fragment>
+                        <CreateHelmetTag
+                        page="detail"
+                        data={data}
+                        url={url}
+                        />
+                        <div className="breadcrumbs">
+                            <div className="container">
+                                <ul className="breadcrumb">
+                                    <li><Link to="/"><span className="fa fa-home" /> Trang chủ</Link></li>
+                                    <li><Link to={`/${data.cat_slug}`}>{data.cat_name}</Link></li>
+                                    {data.genre && data.genre.length > 0 &&
+                                        <li><Link to={`/${data.cat_slug}/${data.genre[0].gen_slug}`}>{data.genre[0].gen_name}</Link></li>
+                                    }
+                                    <li><Link to={`/phim/${data.id}/${data.slug}`}>{data.name}</Link></li>
+                                    <li>Xem phim</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </React.Fragment>
+            
+                }
+                
 
                 <div className="inner-page details-page">
                     <div className="container">
                         <div className="row">
+                            {link_play == null &&  <Loading type="2"/>}
+                            {link_play && 
+                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div className="details-page">
+                                        <div className="details-player" style={{ marginTop: '2em' }}>
+                                            <PlayerMovie data={link_play} thumbnail={data ? data.images.poster.url : ''} onUpdateUserEndTime={this._updateUserEndTime.bind(this)} currentTime={currentTime ? currentTime : 0} />
+                                        </div>
 
-                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div className="details-page">
-                                    <div className="details-player" style={{ marginTop: '2em' }}>
-                                        <PlayerMovie data={link_play} thumbnail={data.images.poster.url} onUpdateUserEndTime={this._updateUserEndTime.bind(this)} currentTime={currentTime} />
                                     </div>
-
                                 </div>
-                            </div>
-                            {data.epi_num && data.epi_num > 1 &&
+                            }
+                            
+                            {data && data.epi_num && data.epi_num > 1 &&
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div className="btn-toolbar episode" role="toolbar" >
                                         <div className="btn-group" role="group" aria-label="First group">
@@ -120,14 +132,18 @@ class Detail extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-lg-9 col-md-9">
-                                <div className="details-dectiontion">
-                                    <h2 className="title">Nội Dung Phim</h2>
-                                    <div dangerouslySetInnerHTML={{ __html: data.long_des }} />
-                                </div>
-                                {id && <Comment mov_id={id} />}
-
+                                
+                                {data && 
+                                    <div className="details-dectiontion">
+                                        <h2 className="title">Nội Dung Phim</h2>
+                                        <div dangerouslySetInnerHTML={{ __html: data.long_des }} />
+                                    </div> 
+                                    &&
+                                    id && <Comment mov_id={id} />
+                                }
+                                
                             </div>
-                            <div className="col-lg-3 col-md-3 hidden-xs">
+                            <div className={`col-lg-3 col-md-3 ` + (this.state.data == null ? 'hidden' : '')}>
                                 <ScrollRight />
                             </div>
                         </div>
@@ -149,9 +165,9 @@ class Detail extends React.Component {
     }
     _getDataRender = () => {
         let { url } = this.props.match;
-        let { id, slug } = this.props.match.params;
+        let { id } = this.props.match.params;
         let { data, link_play } = this.state;
-        if (data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
+        if (data && data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
             data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
         }
         return { data, id, url, link_play };

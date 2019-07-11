@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import config from "../../config"
+// import * as serviceWorker from '../../registerServiceWorker';
 
 class Header extends React.Component {
     constructor(props) {
@@ -22,17 +23,32 @@ class Header extends React.Component {
     }
 
     componentDidMount() {
-        this.props.get_status_login().then((res) => {
+        this.props.get_status_login().then(async (res) => {
             let data = res.payload.data;
             if (data && data.isLogged) {
                 this.setState({ data_user: data.info })
             }
-            if(data && data.version){
-                let current_version = cookie.load()
-                cookie.save("version", data.version, {
-                    path: '/',
-                    maxAge: 600000,
-                })
+            if(data && data.version && typeof window != 'undefined'){
+                
+                let current_version = cookie.load(config.constant.version)
+                if(current_version != data.version){
+                    
+                    this.props.clearCache(() => {
+                        cookie.save(config.constant.version, data.version, {
+                            path: '/',
+                            maxAge: 600000,
+                        })
+                        if(typeof current_version != 'undefined'){
+                            var k = confirm('Đã có cập nhật mới. Bạn có muốn refresh trình duyệt không?');
+                            if(k){
+                                window.location.reload()
+                            }
+                        }
+                        
+                    });
+                    
+                }
+                
             }
 
         });

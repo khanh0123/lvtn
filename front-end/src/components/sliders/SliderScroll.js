@@ -2,14 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { custom_date } from "../helpers";
 import config from "../../config";
-import LazyLoad from 'react-lazy-load';
+// import LazyLoad from 'react-lazy-load';
 
 class SliderScroll extends React.Component {
 
     constructor(props) {
         super(props);
     }
-
+    shouldComponentUpdate(nextProps){
+        return this.props.data != nextProps.data || this.props.title != nextProps.title;
+    }
     render() {
         let { title, data } = this.props;
         return (
@@ -34,16 +36,10 @@ class SliderScroll extends React.Component {
                             return (
                                 <div className="plylist-single" key={i}>
                                     <div className="plylist-img">
-                                        <LazyLoad
-
-                                            debounce={false}
-                                            offsetVertical={1000}
-                                        >
-                                            <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.src = config.images.empty_thumbnail
-                                            }} />
-                                        </LazyLoad>
+                                        <img src={item.images.thumbnail ? item.images.thumbnail.url : item.images.poster.url} alt={item.name} onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = config.images.empty_thumbnail
+                                        }} />
 
                                     </div>
                                     <div className="plylist-single-content">

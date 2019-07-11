@@ -16,13 +16,18 @@ import {renderHTML} from "./modules";
 import {LoadingAction} from "../src/actions/index"
 
 const minify = require('html-minifier').minify;
-const DEFAULT_PORT = parseInt(process.env.PORT, 5000) || 5000;
+const DEFAULT_PORT = process.env.PORT || 5000;
 const app = express();
 const version = require("../package.json").version;
 
 // app.use(express.static(path.resolve(__dirname, "../src/assets")));
 app.use(express.static(path.resolve(__dirname, "../dist")));
+app.get("/healthy", async (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: 'good' }));
+});
 app.get("*", async (req, res) => {
+    
     // const insertCss = (...styles) => styles.forEach(style => css.add(style._getCss()))
 
     if (req.url.indexOf('js') === -1 && req.url.indexOf('css') === -1) {
@@ -53,7 +58,7 @@ app.get("*", async (req, res) => {
         Promise.all(dataRequirements).then(() => {
 
             store.dispatch(LoadingAction.set_loading(true));
-
+            // console.log(store.dispatch(LoadingAction.set_loading(true)))
             const jsx = (
                 <ReduxProvider store={store}>
                     <StaticRouter context={context} location={req.url}>
@@ -65,7 +70,7 @@ app.get("*", async (req, res) => {
                     </StaticRouter>
                 </ReduxProvider>
             );
-
+            
             const reactDom = renderToString(jsx);
             const reduxState = store.getState();
             const helmetData = Helmet.renderStatic();
@@ -91,15 +96,26 @@ app.get("*", async (req, res) => {
 
 
         }).catch(function (err) {
+            console.log(err);
+            
             const jsx = (
-                <NotFound />
+                <ReduxProvider store={store}>
+                    <StaticRouter context={context} location={req.url}>
+                        <NotFound>
+                            <Switch>
+                                {routes.map(route => <Route key={route.path} {...route} />)}
+                            </Switch>
+                        </NotFound>
+                    </StaticRouter>
+                </ReduxProvider>
+                
             );
             const reactDom = renderToString(jsx);
             const reduxState = store.getState();
             const helmetData = Helmet.renderStatic();
 
             reduxState.isError = true;
-            data = {reactDom, reduxState, helmetData, version};
+            let data = {reactDom, reduxState, helmetData, version};
 
             res.writeHead(500, { "Content-Type": "text/html" });
             let html = minify(renderHTML(data), {
@@ -115,7 +131,7 @@ app.get("*", async (req, res) => {
         });
 
     } else {
-        console.log("request file" + req.url);
+        // console.log("request file" + req.url);
     }
 
 });

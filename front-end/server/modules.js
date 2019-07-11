@@ -3,11 +3,12 @@ const path = require("path");
 const staticDomain = '';
 
 const filename = path.resolve(__dirname, '../dist/template.html');
+// console.log(filename);
 
 const renderHTML = ({ reactDom, reduxState, helmetData, version },callback) => {
 
     fs.readFile(filename,'utf8' , (err, html) => {
-        if (err) throw err;
+        if (err) return callback('<div/>');
         html = trim(html);
 
         let dataHelmet = renderHelmet(helmetData);
@@ -24,7 +25,8 @@ const renderHTML = ({ reactDom, reduxState, helmetData, version },callback) => {
         
         return callback(html.toString());
     });
-    return '<div/>';
+    // return callback('<div/>');
+    
 
 }
 

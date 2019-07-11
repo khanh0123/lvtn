@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"
-import RBCarousel from "react-bootstrap-carousel";
+import RBCarousel from   "../../assets/js/react-bootstrap-carousel";
+// const RBCarousel = require('react-bootstrap-carousel')
 import LazyLoad from 'react-lazy-load';
 // import withStyles from 'isomorphic-style-loader/withStyles'
 // import s from "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
@@ -16,54 +17,12 @@ class SliderBanner extends React.Component {
         };
     }
 
-    onSelect = (active, direction) => {
-        this.animateSlide();
-
-    };
-    animateSlide = () => {
-        if (typeof window == 'undefined') return;
-        let arrList = document.querySelectorAll('#bootstrap-touch-slider .item');
-        for (let i = 0; i < arrList.length; i++) {
-            let needed = arrList[i].querySelectorAll('.animate');
-
-            for (let j = 0; j < needed.length; j++) {
-                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInLeft')) {
-                    needed[j].classList.remove('fadeInLeft');
-                    needed[j].classList.remove('animated');
-                }
-                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInRight')) {
-                    needed[j].classList.remove('fadeInRight');
-                    needed[j].classList.remove('animated');
-                }
-                if (arrList[i].classList.contains('active')) {
-                    needed[j].className += needed[j].classList.contains('delay-1s') ? ' fadeInLeft animated' : ' fadeInRight animated';
-                }
-            }
-
-
-        }
-    }
-    visiableOnSelect = active => {
-        console.log(`visiable onSelect active=${active}`);
-    };
-    slideNext = () => {
-        this.slider.slideNext();
-    };
-    slidePrev = () => {
-        this.slider.slidePrev();
-    };
-    // goToSlide = () => {
-    //     this.slider.goToSlide(4);
-    // };
-    autoplay = () => {
-        this.setState({ autoplay: !this.state.autoplay });
-    };
-
-    _setIconPlay = () => {
-        this.setState({ leftIcon: <span className="flaticon-send" />, rightIcon: <span className="flaticon-send" /> });
-    };
+    
     componentDidMount() {
         this._setIconPlay();
+    }
+    shouldComponentUpdate(nextProps){
+        return this.props.data != nextProps.data;
     }
     render() {
         let { data } = this.props;
@@ -119,6 +78,52 @@ class SliderBanner extends React.Component {
             </div>
         ) || <div />
     }
+    onSelect = (active, direction) => {
+        this.animateSlide();
+
+    };
+    animateSlide = () => {
+        if (typeof window == 'undefined') return;
+        let arrList = document.querySelectorAll('#bootstrap-touch-slider .item');
+        for (let i = 0; i < arrList.length; i++) {
+            let needed = arrList[i].querySelectorAll('.animate');
+
+            for (let j = 0; j < needed.length; j++) {
+                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInLeft')) {
+                    needed[j].classList.remove('fadeInLeft');
+                    needed[j].classList.remove('animated');
+                }
+                if (needed[j].classList.contains('animated') && needed[j].classList.contains('fadeInRight')) {
+                    needed[j].classList.remove('fadeInRight');
+                    needed[j].classList.remove('animated');
+                }
+                if (arrList[i].classList.contains('active')) {
+                    needed[j].className += needed[j].classList.contains('delay-1s') ? ' fadeInLeft animated' : ' fadeInRight animated';
+                }
+            }
+
+
+        }
+    }
+    visiableOnSelect = active => {
+        //console.log(`visiable onSelect active=${active}`);
+    };
+    slideNext = () => {
+        this.slider.slideNext();
+    };
+    slidePrev = () => {
+        this.slider.slidePrev();
+    };
+    // goToSlide = () => {
+    //     this.slider.goToSlide(4);
+    // };
+    autoplay = () => {
+        this.setState({ autoplay: !this.state.autoplay });
+    };
+
+    _setIconPlay = () => {
+        this.setState({ leftIcon: <span className="flaticon-send" />, rightIcon: <span className="flaticon-send" /> });
+    };
 }
 
 export default (SliderBanner);

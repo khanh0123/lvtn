@@ -4,22 +4,25 @@ class Loading extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            display:'',
-            opacity:1,
-            title:'Chào mừng bạn đến với Movie Star. Vui lòng đợi trong giây lát ..'
+            title:'Chào mừng bạn đến với Movie Star. Vui lòng đợi trong giây lát ..',
+            type:props.type ? props.type : 1,
         }
     }
     render() {
-        return (
-            <div className="preloader" style={{display:this.state.display,opacity:this.state.opacity}}>
-                <div className="preloader-lod" style={{display:this.state.display,opacity:this.state.opacity}}/>
-                <div className="preloader-lod" style={{display:this.state.display,opacity:this.state.opacity}}/>
-                <div className="preloader-lod" style={{display:this.state.display,opacity:this.state.opacity}}/>
-                <div className="preloader-loding">{this.state.title}</div>
-                <div className="large-square" />
+        let {type} = this.state
+        return type == 1 && (
+            <div className="preloader" >
+                <div className="preloader-wraper">
+                    <div className="preloader-lod" />
+                    <div className="preloader-lod" />
+                    <div className="preloader-lod" />
+                    <div className="preloader-loding">{this.state.title}</div>
+                    <div className="large-square" />
+                </div>
+                
             </div>
 
-        )
+        ) || <div className="preloader-small"><div className="lds-dual-ring" ></div></div>
     }
 }
 

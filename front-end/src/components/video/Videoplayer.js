@@ -36,7 +36,7 @@ class PlayerMovie extends Component {
 
         this.player = null;
         // if (_linkPlay && _linkPlay.src != '') {
-        //     console.log("1");
+        //     //console.log("1");
 
 
         this.player = window.videojs(this.refs.player, {}).ready(() => {
@@ -81,10 +81,10 @@ class PlayerMovie extends Component {
         try {
             this.player.dispose();
             // clearInterval(this.userEndTimeEpisode);
-            // console.log("dispose player");
+            // //console.log("dispose player");
 
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
     }
 
@@ -140,7 +140,7 @@ class PlayerMovie extends Component {
         return null;
     }
     _onPlayerReady = (player) => {
-        console.log("Player is ready: ", player);
+        //console.log("Player is ready: ", player);
         // this.player = player;
     }
 
@@ -148,7 +148,7 @@ class PlayerMovie extends Component {
         if (this.userEndTimeEpisode !== null) return;
         this.userEndTimeEpisode = setInterval(() => {
             this._trackingUserEndTimeEpisode()
-            console.log("tracking");
+            //console.log("tracking");
 
         }, config.time.user_end_time);
     }
@@ -163,22 +163,22 @@ class PlayerMovie extends Component {
     }
 
     _onVideoSeeking = (duration) => {
-        console.log("Video seeking: ", duration);
+        //console.log("Video seeking: ", duration);
     }
 
     _onVideoSeeked = (from, to) => {
-        console.log(`Video seeked from ${from} to ${to}`);
+        //console.log(`Video seeked from ${from} to ${to}`);
     }
 
     _onVideoEnd = () => {
-        console.log("Video ended");
+        //console.log("Video ended");
     }
     _onVideoError = () => {
-        console.log("Video error");
+        //console.log("Video error");
     }
 
     _trackingUserEndTimeEpisode = () => {
-        if (this.userEndTimeEpisode !== null && typeof this.props.onUpdateUserEndTime !== undefined) {
+        if (this.userEndTimeEpisode !== null && typeof this.props.onUpdateUserEndTime !== undefined && this.player.currentTime()) {
             let currentTime = this.player.currentTime();
             this.props.onUpdateUserEndTime(currentTime);
         }

@@ -22,24 +22,52 @@ class Home extends React.Component {
         };
 
     }
+
     componentDidMount() {
-        Promise.all([
-            getMovie(this,this.props,'home_movies',MovieAction),
-            // getMovie(this,this.props,'hot_movies',MovieAction),
-            // getMovie(this,this.props,'recommend_movies',MovieAction),
-        ]).then(() => {            
+        //console.log("Did mount");
+        if (!this.props[MovieAction.ACTION_GET_HOME_MOVIES]) {
+            this.props.get_home_movies().then((res) => {
+                let r = res.payload.data;
+                let {banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies} = r;
+                this.setState({banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies});               
+                this.props.set_loading(false);
+            });
+        } else  {
+            let {banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies} = this.props[MovieAction.ACTION_GET_HOME_MOVIES];
+            this.setState({banner_movies,recommend_movies,hot_movies,hot_series_movies,hot_retail_movies});
             this.props.set_loading(false);
-        }).catch(() => {
-            this.props.set_loading(false);
-        });
+        }
+        // Promise.all([
+
+        //     // getMovie(this,this.props,'home_movies',MovieAction),
+        //     // getMovie(this,this.props,'hot_movies',MovieAction),
+        //     // getMovie(this,this.props,'recommend_movies',MovieAction),
+        // ]).then(() => {            
+        //     this.props.set_loading(false);
+        // }).catch(() => {
+        //     this.props.set_loading(false);
+        // });
         
         // getMovie(this,this.props,'hot_series_movies',MovieAction);
         // getMovie(this,this.props,'hot_retail_movies',MovieAction);
     }
-    componentWillReceiveProps(nextProps) {
-
+    // componentWillReceiveProps(nextProps) {
+    //     //console.log("recevice prop");
+    // }
+    componentWillUnmount(){
+        this.setState({
+            banner_movies: [],
+            recommend_movies:[],
+            hot_movies: [],
+            hot_series_movies: [],
+            hot_retail_movies: [],
+        })
+    }
+    shouldComponentUpdate(nextProps){
+        return nextProps[MovieAction.ACTION_GET_HOME_MOVIES] != this.props[MovieAction.ACTION_GET_HOME_MOVIES];
     }
     render() {
+        //console.log("render");
         let { hot_movies, hot_series_movies, hot_retail_movies, banner_movies , recommend_movies } = this._getDataRender();
         
         return (
@@ -47,7 +75,7 @@ class Home extends React.Component {
                 <CreateHelmetTag
                     page="home"
                 />
-                {banner_movies && <SliderBanner data={banner_movies} />}
+                {banner_movies.length > 0 && <SliderBanner data={banner_movies} />}
                 
                 {recommend_movies && recommend_movies.length > 0 &&
                     <section className="top-rating pt-75">
@@ -89,7 +117,7 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-                {hot_series_movies && hot_series_movies.length > 0 &&
+                {hot_series_movies.length > 0 &&
                     <section className="new-movie pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -104,7 +132,7 @@ class Home extends React.Component {
                         </div>
                     </section>
                 }
-                {hot_retail_movies && hot_retail_movies.length > 0 &&
+                {hot_retail_movies.length > 0 &&
                     <section className="new-movie pt-75">
                         <div className="haddings">
                             <div className="container">
@@ -205,54 +233,6 @@ class Home extends React.Component {
         
         return { hot_movies, hot_series_movies, hot_retail_movies, banner_movies ,recommend_movies};
     }
-    // _getRecommendMovies = async () => {
-
-    // }
-    // _getHotMovies = async (props) => {
-    //     if (!props[MovieAction.ACTION_GET_HOT_MOVIES]) {
-    //         await props.get_hot_movies().then((res) => {
-    //             let r = res.payload.data;
-    //             this.setState({ hot_movies: r.data });
-    //         });
-    //     } else {
-    //         let data = props[MovieAction.ACTION_GET_HOT_MOVIES].data;
-    //         this.setState({ hot_movies: data });
-    //     }
-    // }
-    // _getHotSeriesMovies = async (props) => {
-    //     if (!props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES]) {
-    //         await props.get_hot_series_movies().then((res) => {
-    //             let r = res.payload.data;
-    //             this.setState({ hot_series_movies: r.data });
-    //         });
-    //     } else {
-    //         let data = props[MovieAction.ACTION_GET_HOT_SERIES_MOVIES].data;
-    //         this.setState({ hot_series_movies: data });
-    //     }
-    // }
-    // _getHotRetailMovies = async (props) => {
-    //     if (!props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES]) {
-    //         await props.get_hot_retail_movies().then((res) => {
-    //             let r = res.payload.data;
-    //             this.setState({ hot_retail_movies: r.data });
-    //         });
-    //     } else {
-    //         let data = props[MovieAction.ACTION_GET_HOT_RETAIL_MOVIES].data;
-    //         this.setState({ hot_retail_movies: data });
-    //     }
-    // }
-
-    // _getBannerMovies = async (props) => {
-    //     if (!props[MovieAction.ACTION_GET_BANNER_MOVIES]) {
-    //         await props.get_banner_movies().then((res) => {
-    //             let r = res.payload.data;
-    //             this.setState({ banner_movies: r.data });
-    //         });
-    //     } else {
-    //         let data = props[MovieAction.ACTION_GET_BANNER_MOVIES].data;
-    //         this.setState({ banner_movies: data });
-    //     }
-    // }
 }
 
 Home.serverFetch = ServerAction.init_data_home;
@@ -263,11 +243,6 @@ function mapStateToProps({ movie_results, loading_results }) {
 
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
-        // get_hot_movies: MovieAction.get_hot_movies,
-        // get_hot_retail_movies: MovieAction.get_hot_retail_movies,
-        // get_hot_series_movies: MovieAction.get_hot_series_movies,
-        // get_banner_movies: MovieAction.get_banner_movies,
-        // get_recommend_movies: MovieAction.get_recommend_movies,
         get_home_movies: MovieAction.get_home_movies,
         set_loading: LoadingAction.set_loading,
 

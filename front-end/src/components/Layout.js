@@ -19,36 +19,36 @@ import config from "../config";
 
 class Layout extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
+        
         this.state = {
             is_loading: false
         }
         this.loading = null;
         this._autoClearLoading = this._autoClearLoading.bind(this);
+        this.childDiv = React.createRef()
     }
 
-    componentDidMount() {
-
-        if (!this.props[LoadingAction.ACTION_SET_LOADING]) {
-            this.props.set_loading(true);
-            this.setState({ is_loading: true });
-            this._autoClearLoading();
-            window.scrollTo(0, 0);
-        }
-    }
+    componentDidMount = () => this.handleScroll()
 
     componentWillReceiveProps(nextProps) {
 
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.props.set_loading(true);
-            this.setState({ is_loading: true });
-            this._autoClearLoading();
-            window.scrollTo(0, 0);
+            if( nextProps.location.pathname == "/" ){
+                this.props.set_loading(true);
+                this.setState({ is_loading: true });
+                this._autoClearLoading();
+            }
+            
+            setTimeout(() => {
+                this.childDiv.current.scrollIntoView({ behavior: 'smooth' })
+              }, 100)
+            
         }
 
-        if (nextProps[LoadingAction.ACTION_SET_LOADING] == false) {
+        if (nextProps[LoadingAction.ACTION_SET_LOADING] == false && this.state.is_loading) {
             this.setState({ is_loading: false });
-        } else if (!this.state.is_loading) {
+        } else if (nextProps[LoadingAction.ACTION_SET_LOADING] == true && !this.state.is_loading) {
             this.setState({ is_loading: true });
             this._autoClearLoading();
         }
@@ -58,9 +58,9 @@ class Layout extends React.Component {
 
         let { is_loading } = this._getDataRender();
         return (
-            <div className="App">
+            <div className="App" ref={this.childDiv}>
 
-                <Header />
+                <Header clearCache={this._clearCache.bind(this)}/>
                 {this.props.children}
                 <Footer />                
                 {is_loading && <Loading />}
@@ -69,6 +69,13 @@ class Layout extends React.Component {
 
             </div>
         );
+    }
+    _clearCache = (callback) => {        
+        if(typeof this.props.clearCache == 'function'){            
+            this.props.clearCache(() => {                
+                callback();
+            })
+        }
     }
     _getDataRender = () => {
         let { is_loading } = this.state;
@@ -83,11 +90,29 @@ class Layout extends React.Component {
             return;
         }
         this.loading = setTimeout(() => {
-            this.props.set_loading(false);
-            this.setState({ is_loading: false });
-            this.loading = null;
+            if(this.state.is_loading){
+                this.props.set_loading(false);
+                this.setState({ is_loading: false });
+                this.loading = null;
+            }
+            
         }, config.time.clearLoading);
     }
+    handleScroll = () => {
+        const { index, selected } = this.props
+        if (index === selected) {
+            setTimeout(() => {
+              this.childDiv.current.scrollIntoView({ behavior: 'smooth' })
+            }, 1000)
+          }
+        if (!this.props[LoadingAction.ACTION_SET_LOADING]) {
+            this.props.set_loading(true);
+            this.setState({ is_loading: true });
+            this._autoClearLoading();
+            
+        }
+        
+      }
 }
 
 function mapStateToProps({ loading_results }) {

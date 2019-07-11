@@ -8,7 +8,9 @@ class SlideItem extends React.Component {
     constructor(props) {
         super(props)
     }
-
+    shouldComponentUpdate(nextProps){
+        return nextProps.item != this.props.item && nextProps.type != this.props.type;
+    }
 
     render() {
         let { item, type } = this.props;

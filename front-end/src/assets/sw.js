@@ -15,7 +15,7 @@ const isLocalhost = Boolean(
     )
 );
 let host = location.hostname;
-const domain_host_api = (isLocalhost ? "dev.lvtn/api/v1/" : "api.viettelbaolam.com/api/v1/");
+const domain_host_api = '/api/v1/';
 var version = "1.0.0";
 var urlsToCache = [
     "/",
@@ -103,11 +103,11 @@ self.addEventListener("fetch", function (event) {
         caches.match(event.request)
             .then(function (response) {
                 if (response) {
-                    console.log('Found ', event.request.url, ' in cache');
+                    // console.log('Found ', event.request.url, ' in cache');
                     return response;
                 }
 
-                console.warn('##Service Worker##  Not in Cache... Making Network request for ', event.request.url);
+                // console.warn('##Service Worker##  Not in Cache... Making Network request for ', event.request.url);
 
                 return fetch(event.request)
                     .then(function (response) {
@@ -116,12 +116,14 @@ self.addEventListener("fetch", function (event) {
                             return caches.match('/');
                         }
                         //This code prevents caching Github api responses.
-                        if (event.request.url.indexOf('facebook') > -1 || event.request.url.indexOf('google') > -1 || event.request.url.indexOf('fonts.gstatic.com') > -1) {
-                            console.info('##Service Worker##  facebook and google , fontawesome requests will not be cached.');
+                        if (event.request.url.indexOf('facebook') > -1 || event.request.url.indexOf('google') > -1 || event.request.url.indexOf('fonts.gstatic.com') > -1 || event.request.url.indexOf("user/get_login_status") > -1) {
+                            // console.info('##Service Worker##  facebook and google , fontawesome requests will not be cached.');
                             return response;
                         }
                         for (let i = 0; i < api_to_cache.length; i++) {
                             if((event.request.url.indexOf(domain_host_api) > -1 && event.request.url.indexOf(api_to_cache[i]) > -1 )){
+                                // console.log(event.request.url);
+                                
                                 caches.open(CACHE_NAME).then(function (cache) {
                                     cache.add(event.request.url);
                         
@@ -130,6 +132,7 @@ self.addEventListener("fetch", function (event) {
                             
                         }
                         if( event.request.url.indexOf(host) > -1 ){
+                            // console.log(event.request.url);
                             caches.open(CACHE_NAME).then(function (cache) {
                                 cache.add(event.request.url);
                     
@@ -141,7 +144,7 @@ self.addEventListener("fetch", function (event) {
                     });
             })
             .catch(function (error) {
-                console.error('##Service Worker##  Failed to fetch', event.request.url);
+                // console.error('##Service Worker##  Failed to fetch', event.request.url);
                 return caches.match('/offline.html');
             })
     );

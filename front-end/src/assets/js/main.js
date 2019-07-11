@@ -4,9 +4,8 @@
 //     e.preventDefault();   // does nothing since the listener is passive
 //     console.log(e.defaultPrevented);  // still false
 //   }, Modernizr.passiveeventlisteners ? {passive: true} : false);
-  
 jQuery(document).ready(function ($) {
-    
+    $(this).scrollTop(0);
     
     // $('[data-toggle="tooltip"]').tooltip();
     //------------- wow js ---------------//

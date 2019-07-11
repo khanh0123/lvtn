@@ -21,6 +21,9 @@ class ScrollRight extends React.Component {
         getMovie(this, this.props, 'hot_retail_movies', MovieAction);
 
     }
+    shouldComponentUpdate(nextProps,nextState){
+        return nextState.hot_retail_movies != this.state.hot_retail_movies || nextState.hot_series_movies != this.state.hot_series_movies;
+    }
 
     render() {
         let { hot_series_movies, hot_retail_movies } = this.state;

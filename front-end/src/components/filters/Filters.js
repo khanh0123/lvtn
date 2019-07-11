@@ -9,6 +9,7 @@ import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 import CreateHelmetTag from "../metaseo";
+import Loading from "../others/Loading";
 
 
 class Filters extends React.Component {
@@ -16,7 +17,7 @@ class Filters extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: null,
             tags: [],
             page: 1,
             per_page: 12,
@@ -32,46 +33,67 @@ class Filters extends React.Component {
 
 
     async componentDidMount() {
+        this.props.set_loading(false);
         let tags = this._getTagsFromRoute(this.props);
-        console.log(this.props.location.search);
 
         let { page } = queryString.parse(this.props.location.search);
         if (!page) page = 1;
-        await this.setState({ tags: tags, page: page });
-        try {
-            await this._getDataPage(page);
-            await this.props.set_loading(false);
-        } catch (error) {
-            await this.props.set_loading(false);
-        }
+        await this.setState({ tags,page });
+        await this._getDataPage(this.props,page);
     }
     async componentWillReceiveProps(nextProps) {
+        let diff = false;
         let new_tags = this._getTagsFromRoute(nextProps);
-        let { tags } = this.state;
-        if (tags.length > 0) {
-            for (let i = 0; i < new_tags.length; i++) {
-                if (tags[i] && tags[i] != new_tags[i]) {
-                    await this._resetDataPage();
-                    await this.setState({ tags: new_tags });
-                    try {
-                        await this._getDataPage();
-                        await this.props.set_loading(false);
-                    } catch (error) {
-                        await this.props.set_loading(false);
-                    }
-                    return;
+        let tags = this._getTagsFromRoute(this.props);
+        if(tags.length == new_tags.length){
+            for (let i = 0; i < tags.length; i++) {
+                if(tags[i] !== new_tags[i]){
+                    diff = true;
+                    break;
                 }
-
+                
             }
+        } else {
+            diff = true;
         }
+        
+        if (diff) {
+            await this._resetDataPage();
+            await this.setState({ tags: new_tags });
+            this._getDataPage(nextProps);
+        }
+    }
+    shouldComponentUpdate(nextProps , nextState){
+        // var bol_tag = this._getTagsFromRoute(nextProps) != this._getTagsFromRoute(this.props);
+        let { url } = nextProps.match;
+        let { page } = queryString.parse(nextProps.location.search);
+        if (!page) page = 1;
 
+        if(this.state.data != nextState.data ){
+            return true;
+        }
+        if(
+            nextProps[MovieAction.ACTION_GET_MOVIE_FILTER] && 
+            nextProps[MovieAction.ACTION_GET_MOVIE_FILTER][url] && 
+            nextProps[MovieAction.ACTION_GET_MOVIE_FILTER][url][page] && 
+            this.props[MovieAction.ACTION_GET_MOVIE_FILTER] &&
+            this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url] && (
+                this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page] != nextProps[MovieAction.ACTION_GET_MOVIE_FILTER][url][page]                    
 
+            )){            
+            return true;
+        }
+        
+        return page != this.state.page
     }
 
-
     render() {
-        let { data, meta, tags, page, url } = this._getDataRender();
-
+        let { data, meta, tags, page, url } = this._getDataRender();   
+        // console.log(data);
+             
+        
+        // data = null;
+        // let {loading} = this.state;
         return (
             <React.Fragment>
                 <CreateHelmetTag
@@ -94,23 +116,20 @@ class Filters extends React.Component {
                     <div className="container">
                         <div className="row" >
 
-                            <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
-                                {data.length > 0 &&
-                                    (
-                                        <div className="row">
-                                            {data.map((item, i) => {
-                                                return (
-                                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                            <div className="col-lg-9 col-md-9 col-xs-12" style={{ marginTop: '2em', display: 'inline-block', }}>
+                                {data == null &&  <Loading type="2"/>}
+                                {data && data.length > 0 &&
+                                        data.map((item, i) => {
+                                            return (
+                                                <div className="col-lg-3 col-xs-6 owl-item cloned" key={item.id}>
                                                         <SlideItem item={item} />
-                                                    </div>
-                                                )
-                                            })}
-                                        </div>
-                                    )
-                                    ||
+                                                </div>
+                                            )
+                                        })
+                                    || data &&
                                     <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
                                 }
-                                {data.length > 0 && this.state.total / 10 > 1 &&
+                                {this.state.total / this.state.per_page > 1 &&
                                     <div className="row">
                                         <div className="text-center">
                                             <Pagination
@@ -129,28 +148,29 @@ class Filters extends React.Component {
                                 <ScrollRight />
                             </div>
 
-
                         </div>
-
-
                     </div>
-
-                    }
                 </div>
             </React.Fragment>
-        )
+        ) 
     }
 
     _getDataRender = () => {
+        
         let { url } = this.props.match;
         let { data, meta } = this.state;
         let tags = this._getTagsFromRoute(this.props);
-        if (data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_FILTER]) {
-            data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].info.data;
-            meta = this.props[MovieAction.ACTION_GET_MOVIE_FILTER].meta;
-        }
         let { page } = queryString.parse(this.props.location.search);
-        page = !page ? 1 : parseInt(page);
+            page = !page ? 1 : parseInt(page);
+        
+        if (data == null && this.props[MovieAction.ACTION_GET_MOVIE_FILTER] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page]) {
+            
+            
+            data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page].info.data;
+            meta = this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page].meta;
+            // console.log(data);
+        }
+        
 
         return { data, meta, tags, page, url };
     }
@@ -179,32 +199,40 @@ class Filters extends React.Component {
         if (tag_3 != undefined) tags.push(tag_3);
         return tags;
     }
-    _getDataPage = async (page) => {
-        const { tags, per_page } = this.state;
-        let p = page != '' ? page : this.state.page;
+    _getDataPage = async (props,page) => {
+        
+        const { tags } = this.state;
+        let p = page != '' ? page : 1;
+        let { url } = props.match;
         if (tags.length > 0) {
-            let data = await this.props.get_movie_filter(tags, per_page, p);
-
-            let res = data.payload.data;
-            await this.setState({
-                data: res.info.data,
-                total: res.info.total,
-                per_page: res.info.per_page,
-                meta: res.meta,
-            });
+            let result = "";
+            if(props[MovieAction.ACTION_GET_MOVIE_FILTER] && props[MovieAction.ACTION_GET_MOVIE_FILTER][url] && props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page]){
+                result = props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page];
+            } else {
+                this.setState({ data: null});
+                result = await props.get_movie_filter(tags, per_page, p , url);
+                result = result.payload.data;
+            }
+            let {data , total , per_page} = result.info;
+            let { meta } = result;
+            this.setState({ data,total,per_page, meta});
         }
     }
     _handlePageChange = async (pageNumber) => {
-        await this.setState({ page: pageNumber });
-        this.props.history.push({
-            pathname: window.location.pathname,
-            search: "?" + new URLSearchParams({ page: pageNumber }).toString()
-        })
-        this._getDataPage(pageNumber);
+        if(pageNumber != this.state.page){
+            window.scrollTo(0,0);
+            await this.setState({ page: pageNumber });
+            this.props.history.push({
+                pathname: window.location.pathname,
+                search: "?" + new URLSearchParams({ page: pageNumber }).toString()
+            })
+            this._getDataPage(this.props,pageNumber);
+        }
+        
     }
     _resetDataPage = async () => {
         await this.setState({
-            data: [],
+            data: null,
             tags: [],
             page: 1,
             per_page: 12,

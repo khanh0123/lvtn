@@ -66,7 +66,7 @@ class Comment extends React.Component {
 
     render() {
         let { data, total, is_login, page, last_page, is_openPopupLogin } = this.state;
-        // console.log(this.display_reply);
+        // //console.log(this.display_reply);
 
         return (
             <div className="comment-area">
@@ -102,7 +102,8 @@ class Comment extends React.Component {
 
         )
     }
-    _openPopupLogin = async () => {
+    _openPopupLogin = async (e) => {
+        e.preventDefault();
         await this.setState({ is_openPopupLogin: true });
     }
     _closePopupLogin = async () => {

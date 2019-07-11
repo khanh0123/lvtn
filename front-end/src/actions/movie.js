@@ -134,13 +134,15 @@ function get_linkplay_movie(mov_id,episode) {
         };
     });
 }
-function get_movie_filter(tags,limit,page) {
+function get_movie_filter(tags,limit,page,path = '') {
     return Api.get_movie_filter(tags,limit,page).then((res) => {
         return {            
             type: ACTION_GET_MOVIE_FILTER,
             payload: {
                 data: res.data
-            }
+            },
+            path:path,
+            page:page,
         };
 
     }).catch((err) => {

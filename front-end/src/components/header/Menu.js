@@ -18,15 +18,19 @@ class Menu extends React.Component {
 
     }
     async componentDidMount(){
-        if(typeof window == 'undefined') return;
-
-        let res = await this.props.get_menu();
-        let menu = res.payload.data;
-        this.setState({ data_menu: menu });
+        if(!this.props[MenuAction.ACTION_GET_MENU]){
+            let res = await this.props.get_menu();
+            let menu = res.payload.data;
+            this.setState({ data_menu: menu });
+        }
         
-        document.querySelector('.wrap-sticky').style.height = '5em';
+        if(typeof window != 'undefined')  document.querySelector('.wrap-sticky')?  document.querySelector('.wrap-sticky').style.height = '5em' : '';
+        
     }
-    
+    shouldComponentUpdate(nextProps){
+        return this.props[MenuAction.ACTION_GET_MENU] != nextProps[MenuAction.ACTION_GET_MENU]
+
+    }
     render() {
         let { data_menu } = this._getDataRender();
         return (
@@ -39,7 +43,7 @@ class Menu extends React.Component {
                             </ul>
                         </div>
                     </div> */}
-                    <div className="col-lg-3 col-md-3 col-sm-3 col-xs-12 header-logos sm-width">
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-12 header-logos sm-width">
                         <div className="header-logo">
                             <Link to="/">
                                 <img src='/images/logo.png' alt="logo" />
@@ -49,7 +53,7 @@ class Menu extends React.Component {
 
 
 
-                    <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 sm-width">
+                    <div className="col-lg-7 col-md-7 col-sm-7 col-xs-12 sm-width">
                         <div className="navbar-header">
                             <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
                                 <i className="fa fa-align-justify" />
@@ -98,6 +102,7 @@ class Menu extends React.Component {
     }
     _getDataRender = () => {
         let { data_menu } = this.state
+        
         if(data_menu.length == 0 && this.props[MenuAction.ACTION_GET_MENU]){
             data_menu = this.props[MenuAction.ACTION_GET_MENU];
         }

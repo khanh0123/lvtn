@@ -46,7 +46,7 @@ class LoginSignupModal extends React.Component {
                             <h1>Tạo tài khoản</h1>
                             <div className="social-container">
                                 <a href="#" aria-label="link" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
-                                <a href="javascript:void(0)" aria-label="link" className="social"><i className="fa fa-google-plus" /></a>
+                                <a href="#" aria-label="link" className="social" onClick={this._onLoginGoogle}><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng email để đăng ký</span>
                             <input type="text" placeholder="Tên hiển thị" ref={inputName => this.inputName = inputName} />
@@ -60,7 +60,7 @@ class LoginSignupModal extends React.Component {
                             <h1>Đăng nhập</h1>
                             <div className="social-container">
                                 <a href="#" aria-label="link" className="social" onClick={this._onLoginFacebook}><i className="fa fa-facebook-f" /></a>
-                                <a href="javascript:void(0)" aria-label="link" className="social"><i className="fa fa-google-plus" /></a>
+                                <a href="#" aria-label="link" className="social" onClick={this._onLoginGoogle}><i className="fa fa-google-plus" /></a>
                             </div>
                             <span>hoặc sử dụng tài khoản</span>
                             <input ref={inputEmail => this.inputEmail = inputEmail} type="email" placeholder="Email" />
@@ -72,13 +72,13 @@ class LoginSignupModal extends React.Component {
                     <div className="overlay-container hidden-xs">
                         <div className="overlay">
                             <div className="overlay-panel overlay-left">
-                                <h1>Xin chào bạn</h1>
-                                <p>Bạn đã có tài khoản? hãy đăng nhập để xem các bộ phim yêu thích nhé!</p>
+                                <h1>Chào bạn!</h1>
+                                <p>Bạn đã có tài khoản rồi? Đăng nhập ngay để xem các bộ phim yêu thích nhé!</p>
                                 <button className="ghost" id="signIn" onClick={this._showTab.bind('login')}>Đăng nhập</button>
                             </div>
                             <div className="overlay-panel overlay-right">
-                                <h1>Xin chào bạn</h1>
-                                <p>Nếu chưa có tài khoản hãy tạo cho mình một tài khoản để bắt đầu khám phá nhé!</p>
+                                <h1>Chào bạn!</h1>
+                                <p>Nếu chưa có tài khoản hãy tạo tài khoản để xem phim nhé!</p>
                                 <button className="ghost" id="signUp" onClick={this._showTab.bind('signup')}>Tạo tài khoản</button>
                             </div>
                         </div>
@@ -120,7 +120,7 @@ class LoginSignupModal extends React.Component {
                 window.location.reload();
             }
         } else {
-            console.log("err");
+            //console.log("err");
             
             toast.warn(config.msg.miss_field);
         }
@@ -187,6 +187,10 @@ class LoginSignupModal extends React.Component {
                 }
             }
         }, { scope: 'email' });
+    }
+    _onLoginGoogle = (e) => {
+        e.preventDefault();
+        this.toastId = toast.warn('Chức năng đang được nâng cấp.', { autoClose: 3000 });
     }
 
     _init_ = () => {

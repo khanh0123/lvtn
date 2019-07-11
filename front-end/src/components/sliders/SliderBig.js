@@ -9,8 +9,12 @@ class SliderBig extends React.Component {
     constructor(props){
         super(props);
     }
-
+    shouldComponentUpdate(nextProps){
+        
+        return this.props.data != nextProps.data;
+    }
     render() {
+        //console.log("render");
         let {data} = this.props;
         const options = {
             autoplay: false,
@@ -45,21 +49,19 @@ class SliderBig extends React.Component {
             onDragged: function (event) { },
             onChanged: function (event) { }
         };
-        return (
+        return data.length > 0 && (
             <div className="container slide-big">
                 <div className="row">
-                    <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div className="col-lg-8 col-md-8 col-sm-12 col-xs-12 hidden-xs">
                         <div className="movie-big">
-                            {data && data.length > 0 &&
-                                <OwlCarousel options={options} events={events}>
-                                    {data.map((item,i) => {
-                                        return <SlideItem item={item} key={i} type={2}/>
-                                    })}
-                                </OwlCarousel>
-                            }
+                            <OwlCarousel options={options} events={events}>
+                                {data.map((item,i) => {
+                                    return <SlideItem item={item} key={i} type={2}/>
+                                })}
+                            </OwlCarousel>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 hidden-xs">
+                    <div className="col-lg-4 col-md-4 col-sm-12 col-xs-12 ">
                     <div className="movie-item-playlist">
                         {/* {title &&
                             <div className="movi-plylist-top">
@@ -75,7 +77,7 @@ class SliderBig extends React.Component {
                         } */}
                         <div className="movie-item-playlist-items scroll-up ">
                             <div className="item">
-                                {data.length > 0 && data.map((item,i) => {
+                                {data.map((item,i) => {
                                     
                                     return (
                                         <div className="plylist-single" key={i}>

@@ -1,8 +1,9 @@
 
-// let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
-let isLocal = false;
+let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
+// let isLocal = true;
 let protocol = typeof window == 'undefined' ? 'http://' : "//";
-let domain_host_api = (isLocal ? "dev.lvtn/api/v1/" : "api.viettelbaolam.com/api/v1/");
+let domain_host_api = "api-lvtn.herokuapp.com/api/v1/";
+domain_host_api = "dev.lvtn/api/v1/";
 let domain_api = protocol + domain_host_api;
 let config = {
     domain: {
@@ -18,7 +19,7 @@ let config = {
         cookie_token: 'access_token',
         cookie_token_anonymous: 'token_anonymous',
         platform: "web",
-        version: "1.0",
+        version: "version",
     },
     api: {
         menu: domain_api + "menu",
@@ -70,16 +71,16 @@ let config = {
         content_not_found: "Nội dung không tìm thấy hoặc lỗi. Xin thử lại sau.",
     },
     images: {
-        empty_thumbnail: "/assets/images/movie-thumbnail.jpg",
-        empty_poster: "/assets/images/movie-poster.png",
-        empty_avatar: "/assets/images/empty_avatar.jpg"
+        empty_thumbnail: "/images/movie-thumbnail.jpg",
+        empty_poster: "/images/movie-poster.png",
+        empty_avatar: "/images/empty_avatar.jpg"
     },
     seo_default: {
         title: 'Movie star - Phim Hay | Phim hd | Xem Phim Online Chất Lượng Cao | Phim HD vietsub hay nhất',
         description: 'Xem phim mới miễn phí nhanh chất lượng cao. Xem Phim online Việt Sub, Thuyết minh, lồng tiếng chất lượng HD. Xem phim nhanh online chất lượng cao',
         url: '/',
         contentType: 'website',
-        img: '/assets/css/img/logo.png',
+        img: '/css/img/logo.png',
         name_site: 'Movie star',
         fb_app_id: '432269870590246',
         robots: 'index',
@@ -91,7 +92,7 @@ let config = {
         detail_episode:"/phim/:id([0-9]+)/:slug([a-z0-9-]+)/tap-:episode([0-9]+)?/xem-phim",
         search:"/tim-kiem",
         filter:"/:tag_1([a-z-]+)/:tag_2([a-z-]+)?/:tag_3([a-z-]+)?",
-    }
+    },
 };
 
 module.exports = config;

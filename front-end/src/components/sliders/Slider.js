@@ -6,7 +6,12 @@ class Slider extends React.Component {
     constructor(props) {
         super(props);
     }
-
+    shouldComponentUpdate(nextProps){
+        if(this.props.data != nextProps.data){
+            return true;
+        }
+        return false;
+    }
     render() {
         let { data } = this.props;
         // let speed =  Math.floor(Math.random()*(2000-1500+1) + 1500);

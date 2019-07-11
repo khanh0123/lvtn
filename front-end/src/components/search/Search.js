@@ -9,14 +9,14 @@ import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";
 import queryString from 'query-string';
 import CreateHelmetTag from "../metaseo";
-
+import Loading from "../others/Loading";
 
 class Search extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
+            data: null,
             keyword: '',
             page: 1,
             per_page: 12,
@@ -30,15 +30,12 @@ class Search extends React.Component {
 
 
     async componentDidMount() {
+        await this.props.set_loading(false);
         let { page, q } = queryString.parse(this.props.location.search);
         if (!page) page = 1;
         await this.setState({ page: page, keyword: q });
-        try {
-            await this._getDataPage(page);
-            await this.props.set_loading(false);
-        } catch (error) {
-            await this.props.set_loading(false);
-        }
+        await this._getDataPage(page);
+
 
     }
     async componentWillReceiveProps(nextProps) {
@@ -82,33 +79,31 @@ class Search extends React.Component {
                     <div className="container">
                         <div className="row" >
 
-                            <div className="col-lg-9 col-md-9" style={{ marginTop: '2em', display: 'inline-block', }}>
-                                {data.length > 0 &&
-                                    (   
+                            <div className="col-lg-9 col-md-9 col-xs-12" style={{ marginTop: '2em', display: 'inline-block', }}>
+                                {data == null &&  <Loading type="2"/>}
+                                {data && data.length > 0 &&
+                                    (
                                         <React.Fragment>
-                                            <div className="row">
-                                                {data.map((item, i) => {
-                                                    return (
-                                                        <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
-                                                            <SlideItem item={item} />
-                                                        </div>
-                                                    )
-                                                })}
-                                            </div>
-                                            <div className="row">
-                                                <div className="text-center">
-                                                    <Pagination
-                                                        activePage={page}
-                                                        itemsCountPerPage={10}
-                                                        totalItemsCount={this.state.total}
-                                                        pageRangeDisplayed={5}
-                                                        onChange={this._handlePageChange}
-                                                    />
-                                                </div>
+                                            {data.map((item, i) => {
+                                                return (
+                                                    <div className="owl-item cloned col-lg-3 col-xs-6" key={item.id}>
+                                                        <SlideItem item={item} />
+                                                    </div>
+                                                )
+                                            })}
+
+                                            <div className="text-center">
+                                                <Pagination
+                                                    activePage={page}
+                                                    itemsCountPerPage={10}
+                                                    totalItemsCount={this.state.total}
+                                                    pageRangeDisplayed={5}
+                                                    onChange={this._handlePageChange}
+                                                />
                                             </div>
                                         </React.Fragment>
                                     )
-                                    ||
+                                    || data &&
                                     <h3 style={{ textAlign: "center", color: "black", margin: "1em 0" }}>Không có kết quả</h3>
                                 }
 
@@ -125,7 +120,7 @@ class Search extends React.Component {
     _getDataRender = () => {
         let { url } = this.props.match;
         let { data } = this.state;
-        if (data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_SEARCH]) {
+        if (data && data.length == 0 && this.props[MovieAction.ACTION_GET_MOVIE_SEARCH]) {
             data = this.props[MovieAction.ACTION_GET_MOVIE_SEARCH];
         }
         let { page } = queryString.parse(this.props.location.search);
@@ -163,7 +158,7 @@ class Search extends React.Component {
     }
     _resetDataPage = async () => {
         await this.setState({
-            data: [],
+            data: null,
             keyword: '',
             page: 1,
             per_page: 12,
