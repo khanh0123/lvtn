@@ -361,6 +361,24 @@
     </form>
     </div>
     <!--  End Modal -->
+    <!-- confirmDeleteModal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-small ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h5>Bạn có chắc muốn thực hiện hành động này </h5>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-simple" data-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-success btn-simple btn-confirm-yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    end confirmDeleteModal -->
 </body>
 <!--   Core JS Files   -->
 <script src="/assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
@@ -413,6 +431,18 @@
         });
         $('.my-container').scroll(function() {
             $(window).trigger('scroll');
+        });
+
+        //logic for modal confirm delete
+        $('.confirmModal').on('click', function(event) {
+            event.preventDefault();
+            $('#confirmDeleteModal').modal('show');
+        });
+
+        $('#confirmDeleteModal .btn-confirm-yes').click(function(event) {
+            var url = $('.confirmModal').data('href');
+            if(url) window.location.href = url;
+            else showNotification( 'error' , 'Có lỗi. Vui lòng thử lại sau' , 4000);
         });
 
         @if(!empty($message))

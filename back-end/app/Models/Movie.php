@@ -27,7 +27,6 @@ class Movie extends Model
                 "genre.name as gen_name",
                 "genre.slug as gen_slug",
                 'views',
-
             ])
             ->leftJoin("category"       ,"category.id"          ,"=" , "movie.cat_id")
             ->leftJoin("movie_country"  ,"movie_country.mov_id" ,"=" , "movie.id")
@@ -38,15 +37,7 @@ class Movie extends Model
             ->whereIn('movie.id',$list_mov_id);
         // $data = addConditionsToQuery($filter['conditions'],$data);
         $data = $data->get();
-        $arr_keys = $result->keys();
-        for ($i = 0; $i < count($result); $i++) {
-            $result->forget($result[$i]);     
-        }
-        for ($i = 0; $i < count($data); $i++) {
-            $result->offsetSet($i,$data[$i]);     
-        }
-        
-        return $result;
+        return new \Illuminate\Pagination\LengthAwarePaginator($data,$result->total(),$result->perPage(),$result->currentPage(),['path' => $req->url(), 'query' => $req->all()]);
     }
 
 

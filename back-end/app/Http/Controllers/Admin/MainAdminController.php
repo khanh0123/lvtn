@@ -14,18 +14,12 @@ class MainAdminController extends BaseController
 {
     protected $limit = 20;
     protected $req;
-	protected $status = 1;
+    protected $status = 1;
     protected $columns_filter = [];
     protected $columns_search = [];
     protected $columns_search_multi = [];
 
     public function __construct(Request $request , $variable = null) {
-        // if (!isset($this->model)) {
-        //     throw new Exception("ModelNotSet");
-        // }
-        // if (!isset($this->view_folder)) {
-        //     throw new Exception("ViewFolderNotSet");
-        // }
         $this->req = $request;
     }
     /*
@@ -99,14 +93,32 @@ class MainAdminController extends BaseController
      */
 
     public function delete(Request $request, $id) {
+
         $item = $this->model::find($id);        
         if(empty($item)){
             return abort('404');
         }
-        $item->delete();
+        list($controller, $action) = $this->getCurrentController();
+        $msg = ['type' => 'success','msg' => 'Xóa dữ liệu thành công'];
+        try {
+            if(Schema::hasColumn($this->model->getTable(), 'status')){
+                $item->status = -1;
+                $item->save();
+            } else {
+                $item->delete();
+            }
+        } catch (Exception $e) {
+            $msg = ['type' => 'error','msg' => 'Xóa dữ liệu không thành công'];
+        }
+        return Redirect::route('Admin.'.$controller.'.index')
+                ->withMessage($msg);
+    }
 
-        return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
-                ->withMessage(['type' => 'success','msg' => 'Xóa dữ liệu thành công']);
+    protected function getCurrentController()
+    {
+        $action = app('request')->route()->getAction();
+        $controller = class_basename($action['controller']);
+        return explode('@', $controller);
     }
 
 
@@ -169,6 +181,9 @@ class MainAdminController extends BaseController
             'or'    => [],
             'multi' => [],
         ];
+        if(Schema::hasColumn($this->model->getTable(), 'status')){
+            $conditions['and'][] = [$this->model->getTable().'.status', '!=' ,-1];
+        }
         foreach ($columns as $key => $value) {
             if( $req->get($key) !== null ){
                 if($key === "name"){                    
@@ -188,7 +203,6 @@ class MainAdminController extends BaseController
                             $conditions['multi'][$key] = $arr_val;
                         }
                         
-
                     } else {
                         $conditions['and'][] = [$value, '=' ,$req->input($key)];
                     }

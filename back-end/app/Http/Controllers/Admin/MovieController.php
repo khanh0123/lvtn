@@ -175,6 +175,7 @@ class MovieController extends MainAdminController
     public function index(Request $request )
     {
         $filter         = $this->getFilter($request);
+
         $data['info']   = $this->model->get_page($filter , $request);
         $data['info']   = formatResult($data['info'],[
             'genre'         => ['gen_id','gen_name','gen_slug'] ,
@@ -199,11 +200,11 @@ class MovieController extends MainAdminController
                 if($item->save()){
 
 
-                //add data genre and country
+                    //add data genre and country
                     $arr_gen = array();
                     $arr_cot = array();
 
-                //check exists genre
+                    //check exists genre
                     for ($i = 0; $i < count($request->genre); $i++) {
                         $gen_id = $request->genre[$i];
 
@@ -214,7 +215,7 @@ class MovieController extends MainAdminController
                             ];
                         }
                     }
-                //check exists country
+                    //check exists country
                     for ($i = 0; $i < count($request->country); $i++) {
                         $cou_id = $request->country[$i];
 
@@ -226,11 +227,11 @@ class MovieController extends MainAdminController
                         }
                     }               
 
-                //insert genre
+                    //insert genre
                     if(!empty($arr_gen)){
                         Movie_genre::insert($arr_gen);
                     }
-                //insert country
+                    //insert country
                     if(!empty($arr_cot)){
                         Movie_country::insert($arr_cot);
                     }

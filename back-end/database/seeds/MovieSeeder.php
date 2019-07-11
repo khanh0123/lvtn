@@ -171,7 +171,7 @@ class MovieSeeder extends Seeder
                     $arr_movie_episode  = [];
                     $arr_video_episode  = [];
                     $arr_movie_country  = [];
-                    $arr_movie_genre  = [];
+                    $arr_movie_genre    = [];
                 }
 
                 $_id++;

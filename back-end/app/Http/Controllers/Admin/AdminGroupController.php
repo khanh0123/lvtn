@@ -139,18 +139,18 @@ class AdminGroupController extends MainAdminController
         if(empty($item)){
             return abort('404');
         }
-
+        list($controller, $action) = $this->getCurrentController();
         if($this->model->check_group_exists_admin($id)){
-            return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
-                ->withMessage(['type' => 'error','message' => 'Nhóm này đang chứa thành viên. Lệnh xóa không thể thực hiện']);
+            return Redirect::route('Admin.'.$controller.'.index')
+                ->withMessage(['type' => 'error','msg' => 'Nhóm này đang chứa thành viên. Lệnh xóa không thể thực hiện']);
         }
         $admin_gr_per = new Admin_group_permission();
         $admin_gr_per->where('gad_id',$id)->delete();
         $item->delete();
         
 
-        return Redirect::route('Admin.'.getUriFromUrl($request->url()).'.index')
-                ->withMessage(['type' => 'success','message' => 'Xóa dữ liệu thành công']);
+        return Redirect::route('Admin.'.$controller.'.index')
+                ->withMessage(['type' => 'success','msg' => 'Xóa dữ liệu thành công']);
     }
     protected function getDataNeed(){
     	$ad_group_model = new Permission();

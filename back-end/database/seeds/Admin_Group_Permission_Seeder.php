@@ -15,28 +15,28 @@ class Admin_Group_Permission_Seeder extends Seeder
     	if(count($result) == 0){
     		DB::table('admin_group_permission')->insert([
     			[
-    			'gad_id' => DB::table('admin_group')->where('name','Demo')->get()[0]->id,
-    			'per_id' => DB::table('permission')->where('name','Đọc')->get()[0]->id,
+    			'gad_id' => 5,
+    			'per_id' => 5,
     			// 'name' => 'Xem',
     			],
     			[
-    			'gad_id' => DB::table('admin_group')->where('name','Writer')->get()[0]->id,
-    			'per_id' => DB::table('permission')->where('name','Ghi')->get()[0]->id,
+    			'gad_id' => 4,
+    			'per_id' => 4,
     			// 'name' => 'Thêm',
     			],
     			[
-    			'gad_id' => DB::table('admin_group')->where('name','Editer')->get()[0]->id,
-    			'per_id' => DB::table('permission')->where('name','Sửa')->get()[0]->id,
+    			'gad_id' => 3,
+    			'per_id' => 3,
     			// 'name' => 'Sửa',
     			],
     			[
-    			'gad_id' => DB::table('admin_group')->where('name','Editer With Delete')->get()[0]->id,
-    			'per_id' => DB::table('permission')->where('name','Xóa')->get()[0]->id,
+    			'gad_id' => 2,
+    			'per_id' => 2,
     			// 'name' => 'Xóa',
     			],
     			[
-    			'gad_id' => DB::table('admin_group')->where('name','Super Admin')->get()[0]->id,
-    			'per_id' => DB::table('permission')->where('name','Quản Trị')->get()[0]->id,
+    			'gad_id' => 1,
+    			'per_id' => 1,
     			// 'name' => 'Quản Trị',
     			],
     		]);

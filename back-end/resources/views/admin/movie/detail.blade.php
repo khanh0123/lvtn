@@ -111,7 +111,7 @@
                             <div class="tab-pane" id="more">
                                 <div class="card-content form-horizontal">
                                     <div class="row">
-                                        <div class="col-md-8">
+                                        <div class="col-md-12">
                                             <div class="row">
                                                 <label class="col-sm-3 label-on-left">Chọn mục</label>
                                                 <div class="form-group label-floating is-empty">
@@ -279,7 +279,9 @@
 
                                 @if (session()->get('permission')->canDelete)
 
-                                <a class="btn btn-danger using-tooltip" href="{{ base_url('admin/movie/del/'.$data['info']->id) }}" data-toggle="tooltip" data-placement="top" title="Xóa phim này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <a class="btn btn-danger using-tooltip confirmModal" data-href="{{ base_url('admin/movie/del/'.$data['info']->id) }}" data-placement="top" title="Xóa phim này?" data-toggle="modal" ><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                
+                                <div class="ripple-container"></div></button>
                                 @endif
 
                                 @if (session()->get('permission')->canWrite)

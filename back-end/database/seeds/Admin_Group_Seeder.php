@@ -15,18 +15,23 @@ class Admin_Group_Seeder extends Seeder
     	if(count($result) == 0){
     		DB::table('admin_group')->insert([
     			[
-    			'name' => 'Super Admin',
+                    'id' => 1,
+        			'name' => 'Super Admin',
     			],
     			[
-    			'name' => 'Editer With Delete',
+                    'id' => 2,
+        			'name' => 'Editer With Delete',
     			],
     			[
-    			'name' => 'Editer',
+                    'id' => 3,
+    			    'name' => 'Editer',
     			],
     			[
+                    'id' => 4,
     			'name' => 'Writer',
     			],
     			[
+                    'id' => 5,
     			'name' => 'Demo',
     			],
     		]);

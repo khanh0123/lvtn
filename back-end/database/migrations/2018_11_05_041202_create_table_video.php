@@ -22,7 +22,7 @@ class CreateTableVideo extends Migration
             $table->text('link_play')->nullable();
             $table->integer('ad_id')->unsigned();
             $table->text('more_info')->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('ad_id', 'fk_video_admin')->references('id')->on('admin')->onDelete('cascade');
         });

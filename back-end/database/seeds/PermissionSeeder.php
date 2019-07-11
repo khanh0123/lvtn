@@ -16,6 +16,7 @@ class PermissionSeeder extends Seeder
     	if(count($result) == 0){
     		DB::table('permission')->insert([
     			[
+                    'id' => 5,
     			'name' => 'Đọc',
     			'canRead' => 1,
     			'canWrite' => 0,
@@ -24,6 +25,7 @@ class PermissionSeeder extends Seeder
     			'isAdmin' => 0
     			],
     			[
+                    'id' => 4,
     			'name' => 'Ghi',
     			'canRead' => 1,
     			'canWrite' => 1,
@@ -32,6 +34,7 @@ class PermissionSeeder extends Seeder
     			'isAdmin' => 0
     			],
     			[
+                    'id' => 3,
     			'name' => 'Sửa',
     			'canRead' => 1,
     			'canWrite' => 1,
@@ -40,6 +43,7 @@ class PermissionSeeder extends Seeder
     			'isAdmin' => 0
     			],
     			[
+                    'id' => 2,
     			'name' => 'Xóa',
     			'canRead' => 1,
     			'canWrite' => 1,
@@ -48,7 +52,8 @@ class PermissionSeeder extends Seeder
     			'isAdmin' => 0
     			],
     			[
-    			'name' => 'Quản Trị',
+                    'id' => 1,
+    			'name' => 'Supper Admin',
     			'canRead' => 1,
     			'canWrite' => 1,
     			'canUpdate' => 1,

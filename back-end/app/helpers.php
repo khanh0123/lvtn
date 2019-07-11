@@ -321,7 +321,7 @@ if (!function_exists('get_table_name')) {
 
 if (!function_exists('encode_password')) {
     /**
-     * Global helpers auto create id
+     * Global helpers encode password
      * 
      * @return string
      */
@@ -391,6 +391,7 @@ if (!function_exists('getIdFromLinkFb')) {
         return false;
     }
 }
+
 function getStatus($status = 1)
 {
     switch ($status) {
@@ -507,8 +508,6 @@ if (!function_exists('formatResult')) {
             for ($i = 0; $i < count($arr_keys); $i++) {
                 $results->forget($arr_keys[$i]);     
             }
-
-
 
             foreach ($new_data as $key => $value) {
 

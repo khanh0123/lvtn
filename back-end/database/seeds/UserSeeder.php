@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 				'password' => encode_password("123123"),
 				'name'     => 'Nguyễn Khánh',
 				'fb_id'    => '1402203609912995',
-				'avatar'   => 'http://graph.facebook.com/1402203609912995/picture?type=large',
+				'avatar'   => 'https://graph.facebook.com/1402203609912995/picture?type=large',
 				'status'   => 1,
 			],
 		]);

@@ -36,15 +36,8 @@ class Episode extends Model
                     ->orderBy($filter['orderBy'], $filter['sort'])
                     ->whereIn('episode.id',$list_epi_id);
         $data = $data->get();
-        $arr_keys = $result->keys();
-        for ($i = 0; $i < count($result); $i++) {
-            $result->forget($result[$i]);     
-        }
-        for ($i = 0; $i < count($data); $i++) {
-            $result->offsetSet($i,$data[$i]);     
-        }
-        
-        return $result;
+
+        return new \Illuminate\Pagination\LengthAwarePaginator($data,$result->total(),$result->perPage(),$result->currentPage(),['path' => $req->url(), 'query' => $req->all()]);
     }
 
     public function getById($filter = [] , $req = '')

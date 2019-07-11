@@ -91,7 +91,7 @@
                                 
                                 <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thay Đổi"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
 
-                                <a class="btn using-tooltip" href="{{base_url('admin/user')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
+                                <a class="btn using-tooltip" href="{{base_url('admin/admins')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
                                 
                                 @if ($data['info']['status'] === 1)
                                 <a class="btn btn-danger using-tooltip" href="{{ base_url('admin/admins/lock/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Khóa tài khoản này?"><i class="material-icons">lock</i>Khóa<div class="ripple-container"></div></a>

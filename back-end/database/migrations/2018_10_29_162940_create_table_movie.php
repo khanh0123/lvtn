@@ -36,8 +36,8 @@ class CreateTableMovie extends Migration
             $table->string('cat_id',255);
             $table->string('trailer',255)->nullable();
             $table->text('more_info')->nullable();
-            
-            $table->timestamp('created_at')->useCurrent();
+            $table->tinyInteger('status')->default(1);
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
             $table->foreign('cat_id', 'fk_movie_category')->references('id')->on('category')->onDelete('cascade');
             $table->foreign('ad_id', 'fk_movie_admin_')->references('id')->on('admin')->onDelete('cascade');

@@ -21,7 +21,8 @@ class CreateTableCountry extends Migration
             $table->string('code',10)->nullable();
             $table->string('seo_des',255)->nullable();
             $table->string('seo_title',255)->nullable();
-            $table->timestamp('created_at')->useCurrent();
+            $table->tinyInteger('status')->default(1);
+            $table->timestamp('created_at');
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
         });
     }
