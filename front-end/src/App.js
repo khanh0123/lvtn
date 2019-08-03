@@ -1,40 +1,41 @@
-import React, { Component, lazy, Suspense } from 'react';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
-// import routes from './setup/routes';
-import Layout from "./components/layout";
-// import Lazy from "./components/lazy/lazy";
-// import Async from "./components/lazy/async";
+import React, { Suspense } from 'react';
+import {hydrate} from "react-dom";
+import { customStore, createCustomStore } from './reducers';
+import { BrowserRouter as Router , Route, Switch } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
+import { routeslazy } from './setup/routesLazy';
+import Layout from "./components/Layout";
 import Loading from "./components/others/Loading";
-import NotFound from './components/notfound/notfound';
-// const routeComponents = routes.map(({ path, component }, key) =>
-//     <Route exact={true} path={path} component={component} key={key} />);
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './assets/css/style.css';
+import './assets/css/loginsignup.css';
+import config from "./config";
+import * as serviceWorker from './registerServiceWorker';
+// import cookie from "react-cookies";
 
-const Home = lazy(() => import('./components/home'));
-const Detail = lazy(() => import('./components/details/detail'));
-const Info = lazy(() => import('./components/details/info'));
-
-export default class App extends Component {
-    constructor(props) {
-        super(props);
-    }
-    componentDidMount() {
-
-    }
-    render() {
-
-        return (
-            <Router >
-                <Layout>
-                    <Suspense fallback={<Loading />}>
-                        <Switch>
-                            <Route exact path="/" component={Home} />
-                            <Route exact path="/phim/:slug-:id" component={Info} />
-                            <Route exact path="/phim/:slug-:id/xem-phim" component={Detail} />
-                            <Route path="**" component={NotFound} />
-                        </Switch>
-                    </Suspense>
+const store = window.__REDUX_DATA__ != "" ? createCustomStore(window.__REDUX_DATA__) : customStore;
+// delete window.__REDUX_DATA__;
+hydrate(
+    <ReduxProvider store={store}>
+        <Suspense fallback={<Loading />}>
+            <Router>
+                <Layout clearCache={clearCacheServiceWorker}>
+                    <Switch>
+                        {routeslazy.map(route => <Route key={route.path} {...route} />)}
+                    </Switch>
+                    <ToastContainer autoClose={config.time.default_toast} position={toast.POSITION.TOP_RIGHT} />
                 </Layout>
             </Router>
-        )
+        </Suspense>
+    </ReduxProvider>
+    , document.getElementById('root')
+);
+serviceWorker.register();
+async function clearCacheServiceWorker (callback) {
+    
+    await serviceWorker.unregisterAndClearCaches();
+    if(typeof callback == "function"){        
+        callback();
     }
 }

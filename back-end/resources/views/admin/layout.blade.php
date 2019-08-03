@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/apple-icon.png" />
-    <link rel="icon" type="image/png" href="http://demos.creative-tim.com/material-dashboard-pro/assets/img/favicon.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('assets/img/apple-icon.png')}}" />
+    <link rel="icon" type="image/png" href="{{asset('assets/img/favicon.png')}}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>@yield('title')</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -16,9 +16,17 @@
     <link href="{{asset('assets/css/material-dashboard.css')}}" rel="stylesheet" />
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="{{asset('assets/css/demo.css')}}" rel="stylesheet" />
+    
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
+    <link href="{{asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" />
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" /> -->
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/font-roboto-material-icon.css')}}" />
+    <style>
+        .btn-group{
+            margin: 0 !important;
+        }
+    </style>
     @yield('css')
 </head>
 
@@ -32,182 +40,37 @@
     -->
             <div class="logo">
                 <a href="#" class="simple-text">
-                    Creative Tim
+                    Quản Trị Hệ Thống
                 </a>
             </div>
             <div class="logo logo-mini">
                 <a href="#" class="simple-text">
-                    Ct
+                    CT
                 </a>
             </div>
             <div class="sidebar-wrapper">
                 <div class="user">
                     <div class="photo">
-                        <img src="/assets/img/faces/avatar.jpg" />
+                        <img src="/assets/img/faces/card-profile1-square.jpg" />
                     </div>
                     <div class="info">
-                        <a data-toggle="collapse" href="#" class="collapsed">
-                            Tania Andrew
+                        <a data-toggle="collapse" href="{{ base_url('admin#profile') }}" class="collapsed">
+                            {{ session()->get('user')->first_name }} {{ session()->get('user')->last_name }} 
                             <b class="caret"></b>
                         </a>
-                        <div class="collapse" id="collapseExample">
+                        <div class="collapse" id="profile">
                             <ul class="nav">
                                 <li>
-                                    <a href="#">My Profile</a>
+                                    <a href="/admin/profile">Trang cá nhân</a>
                                 </li>
                                 <li>
-                                    <a href="#">Edit Profile</a>
-                                </li>
-                                <li>
-                                    <a href="#">Settings</a>
+                                    <a href="/admin/settings">Thiết lập</a>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <ul class="nav">
-                    <li class="active">
-                        <a href="{{ base_url('admin') }}">
-                            <i class="material-icons">dashboard</i>
-                            <p>Trang chính</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="{{ base_url('admin#config') }}">
-                            <i class="material-icons">image</i>
-                            <p>Cấu hình
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="config">
-                            <ul class="nav">
-                                <li>
-                                    <a href="{{ base_url('admin/config') }}">Danh sách cấu hình</a>
-                                </li>
-                                <li>
-                                    <a href="{{ base_url('admin/config/add') }}">Thêm cấu hình</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="dashboard.html#componentsExamples">
-                            <i class="material-icons">apps</i>
-                            <p>Components
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="componentsExamples">
-                            <ul class="nav">
-                                <li>
-                                    <a href="components/buttons.html">Buttons</a>
-                                </li>
-                                <li>
-                                    <a href="components/grid.html">Grid System</a>
-                                </li>
-                                <li>
-                                    <a href="components/panels.html">Panels</a>
-                                </li>
-                                <li>
-                                    <a href="components/sweet-alert.html">Sweet Alert</a>
-                                </li>
-                                <li>
-                                    <a href="components/notifications.html">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="components/icons.html">Icons</a>
-                                </li>
-                                <li>
-                                    <a href="components/typography.html">Typography</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="dashboard.html#formsExamples">
-                            <i class="material-icons">content_paste</i>
-                            <p>Forms
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="formsExamples">
-                            <ul class="nav">
-                                <li>
-                                    <a href="forms/regular.html">Regular Forms</a>
-                                </li>
-                                <li>
-                                    <a href="forms/extended.html">Extended Forms</a>
-                                </li>
-                                <li>
-                                    <a href="forms/validation.html">Validation Forms</a>
-                                </li>
-                                <li>
-                                    <a href="forms/wizard.html">Wizard</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="dashboard.html#tablesExamples">
-                            <i class="material-icons">grid_on</i>
-                            <p>Tables
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="tablesExamples">
-                            <ul class="nav">
-                                <li>
-                                    <a href="tables/regular.html">Regular Tables</a>
-                                </li>
-                                <li>
-                                    <a href="tables/extended.html">Extended Tables</a>
-                                </li>
-                                <li>
-                                    <a href="tables/datatables.net.html">DataTables.net</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a data-toggle="collapse" href="dashboard.html#mapsExamples">
-                            <i class="material-icons">place</i>
-                            <p>Maps
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse" id="mapsExamples">
-                            <ul class="nav">
-                                <li>
-                                    <a href="maps/google.html">Google Maps</a>
-                                </li>
-                                <li>
-                                    <a href="maps/fullscreen.html">Full Screen Map</a>
-                                </li>
-                                <li>
-                                    <a href="maps/vector.html">Vector Map</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <a href="widgets.html">
-                            <i class="material-icons">widgets</i>
-                            <p>Widgets</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="charts.html">
-                            <i class="material-icons">timeline</i>
-                            <p>Charts</p>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="calendar.html">
-                            <i class="material-icons">date_range</i>
-                            <p>Calendar</p>
-                        </a>
-                    </li>
-                </ul>
+                @include('admin/menu_left')
             </div>
         </div>
         <div class="main-panel">
@@ -230,18 +93,12 @@
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a href="dashboard.html#pablo" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="material-icons">dashboard</i>
-                                    <p class="hidden-lg hidden-md">Dashboard</p>
-                                </a>
-                            </li>
-                            <li class="dropdown">
+                            <li class="dropdown" title="Thông báo">
                                 <a href="dashboard.html#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">notifications</i>
-                                    <span class="notification">5</span>
+                                    <span class="notification">2</span>
                                     <p class="hidden-lg hidden-md">
-                                        Notifications
+                                        Thông báo
                                         <b class="caret"></b>
                                     </p>
                                 </a>
@@ -252,28 +109,62 @@
                                     <li>
                                         <a href="dashboard.html#">You have 5 new tasks</a>
                                     </li>
-                                    <li>
-                                        <a href="dashboard.html#">You're now friend with Andrew</a>
-                                    </li>
-                                    <li>
-                                        <a href="dashboard.html#">Another Notification</a>
-                                    </li>
-                                    <li>
-                                        <a href="dashboard.html#">Another One</a>
-                                    </li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="dashboard.html#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                            <li class="dropdown" title="Admin">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="material-icons">person</i>
-                                    <p class="hidden-lg hidden-md">Profile</p>
+                                    <p class="hidden-lg hidden-md">
+                                    Cá nhân
+                                        <b class="caret"></b>
+                                    </p>
                                 </a>
+
+                                <form method="POST" action="{{base_url('admin/logout')}}" id="formLogout">
+                                    @csrf
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="admin/profile">Trang cá nhân</a>
+                                        </li>
+                                        <li>
+                                            <a  href="javascript:void(0)" data-toggle="modal" data-target="#modalChangePass">Đổi mật khẩu</a>
+                                        </li>
+                                        <li>
+    
+                                            <a href="javascript:void(0)" onclick="document.getElementById('formLogout').submit()">Đăng xuất</a>
+                                            <noscript>
+                                              <input type="submit" value="Đăng xuất" />
+                                          </noscript>
+
+                                        </li>
+                                       
+
+                                    </ul>
+                                 </form>
+                                <!-- <form method="POST" action="{{base_url('admin/changepass')}}" id="formChangepass">
+                                    @csrf
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="admin/profile">Trang cá nhân</a>
+                                        </li>
+
+                                        <li>
+
+                                            <a href="javascript:void(0)" onclick="document.getElementById('formLogout').submit()">Đăng xuất</a>
+                                            <noscript>
+                                              <input type="submit" value="Đăng xuất" />
+                                          </noscript>
+
+                                        </li>
+
+                                    </ul>
+                                </form> -->
                             </li>
-                            <li class="separator hidden-lg hidden-md"></li>
+                            <!-- <li class="separator hidden-lg hidden-md"></li> -->
                         </ul>
-                        <form class="navbar-form navbar-right" role="search">
+                        <form action="{{route('Admin.MovieController.index')}}" method="get" class="navbar-form navbar-right" role="search">
                             <div class="form-group form-search is-empty">
-                                <input type="text" class="form-control" placeholder="Search">
+                                <input type="text" class="form-control" name="name" placeholder="Tìm kiếm">
                                 <span class="material-input"></span>
                             </div>
                             <button type="submit" class="btn btn-white btn-round btn-just-icon">
@@ -318,7 +209,7 @@
                         <script>
                             document.write(new Date().getFullYear())
                         </script>
-                        <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
+                        <a href="/">Creative Tim</a>, made with love for a better web
                     </p>
                 </div>
             </footer>
@@ -399,10 +290,10 @@
                 </li>
                 <li class="button-container">
                     <div class="">
-                        <a href="http://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-rose btn-block">Buy Now</a>
+                        <a href="/" target="_blank" class="btn btn-rose btn-block">Buy Now</a>
                     </div>
                     <div class="">
-                        <a href="http://www.creative-tim.com/product/material-dashboard" target="_blank" class="btn btn-info btn-block">Get Free Demo</a>
+                        <a href="/" target="_blank" class="btn btn-info btn-block">Get Free Demo</a>
                     </div>
                 </li>
                 <li class="header-title">Thank you for 95 shares!</li>
@@ -413,6 +304,81 @@
             </ul>
         </div>
     </div>
+
+    <!-- modal change pass -->
+    <div class="modal fade" id="modalChangePass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <form id="RegisterValidation" action="{{ base_url('admin/changepass')}}" method="POST" novalidate="novalidate">
+           {{ csrf_field() }}
+           <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title">Đổi mật khẩu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="card">
+
+                            <div class="card-content">
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Mật khẩu cũ
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_old" type="password" required aria-required="true" id="password_old">
+                                    <span class="material-input"></span>
+                                </div>
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Mật khẩu mới
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_new" type="password" required aria-required="true" id="password_new">
+                                    <span class="material-input"></span>
+                                </div>
+                                <div class="form-group label-floating is-empty">
+                                    <label class="control-label">
+                                        Xác nhận lại mật khẩu
+                                        <small>*</small>
+                                    </label>
+                                    <input class="form-control" name="password_new_confirm" id="password_new_confirm" type="password" required="true" equalto="#password_new" aria-required="true">
+                                    <span class="material-input"></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">                            
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-success" >Xác nhận</button>                        
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+    <!--  End Modal -->
+    <!-- confirmDeleteModal -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-small ">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="material-icons">clear</i></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h5>Bạn có chắc muốn thực hiện hành động này </h5>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-simple" data-dismiss="modal">Không</button>
+                    <button type="button" class="btn btn-success btn-simple btn-confirm-yes">Có</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    end confirmDeleteModal -->
 </body>
 <!--   Core JS Files   -->
 <script src="/assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
@@ -436,7 +402,7 @@
 <!-- <script src="/assets/js/nouislider.min.js"></script> -->
 
 <!-- Select Plugin -->
-<!-- <script src="/assets/js/jquery.select-bootstrap.js"></script> -->
+<script src="/assets/js/jquery.select-bootstrap.js"></script>
 
 <!-- Sweet Alert 2 plugin -->
 <!-- <script src="/assets/js/sweetalert2.js"></script> -->
@@ -449,8 +415,45 @@
 <!-- Material Dashboard javascript methods -->
 <script src="/assets/js/material-dashboard.js"></script>
 <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-<script src="/assets/js/demo.js"></script>
 
+<script src="/assets/js/demo.js"></script>
+<script src="/assets/js/main.js"></script>
 @yield('js')
+<script>
+    var base_url = "{{ base_url("/")}}/";
+    $(document).ready(function() {
+        $('li.disabled>a,li.active>a').click(function(event) {
+            event.preventDefault();
+        });
+        $('.main-panel').on('scroll', function(event) {
+            $('.btn-group.bootstrap-select.open').removeClass('open');
+            $('.dropdown-menu.open').removeClass('open');
+        });
+        $('.my-container').scroll(function() {
+            $(window).trigger('scroll');
+        });
+
+        //logic for modal confirm delete
+        $('.confirmModal').on('click', function(event) {
+            event.preventDefault();
+            $('#confirmDeleteModal').modal('show');
+        });
+
+        $('#confirmDeleteModal .btn-confirm-yes').click(function(event) {
+            var url = $('.confirmModal').data('href');
+            if(url) window.location.href = url;
+            else showNotification( 'error' , 'Có lỗi. Vui lòng thử lại sau' , 4000);
+        });
+
+        @if(!empty($message))
+            var type = '{{ $message['type'] == 'success' ? 'success' : 'danger' }}';
+            var msg = '{{ $message['msg'] }}';
+            showNotification( type , msg , 4000);
+        @endif
+
+    });
+</script>
+
+
 
 </html>

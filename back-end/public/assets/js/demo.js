@@ -280,26 +280,26 @@ demo = {
 
     initMaterialWizard: function(){
         // Code for the Validator
-        var $validator = $('.wizard-card form').validate({
-    		  rules: {
-    		    firstname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    lastname: {
-    		      required: true,
-    		      minlength: 3
-    		    },
-    		    email: {
-    		      required: true,
-    		      minlength: 3,
-    		    }
-            },
+     //    var $validator = $('.wizard-card form').validate({
+    	// 	  rules: {
+    	// 	    firstname: {
+    	// 	      required: true,
+    	// 	      minlength: 3
+    	// 	    },
+    	// 	    lastname: {
+    	// 	      required: true,
+    	// 	      minlength: 3
+    	// 	    },
+    	// 	    email: {
+    	// 	      required: true,
+    	// 	      minlength: 3,
+    	// 	    }
+     //        },
 
-            errorPlacement: function(error, element) {
-                $(element).parent('div').addClass('has-error');
-             }
-    	});
+     //        errorPlacement: function(error, element) {
+     //            $(element).parent('div').addClass('has-error');
+     //         }
+    	// });
 
         // Wizard Initialization
       	$('.wizard-card').bootstrapWizard({
@@ -308,17 +308,18 @@ demo = {
             'previousSelector': '.btn-previous',
 
             onNext: function(tab, navigation, index) {
-            	var $valid = $('.wizard-card form').valid();
-            	if(!$valid) {
-            		$validator.focusInvalid();
-            		return false;
-            	}
+            	// var $valid = $('.wizard-card form').valid();
+            	// if(!$valid) {
+            	// 	$validator.focusInvalid();
+            	// 	return false;
+            	// }
             },
 
             onInit : function(tab, navigation, index){
 
               //check number of tabs and fill the entire row
               var $total = navigation.find('li').length;
+
               $width = 100/$total;
               var $wizard = navigation.closest('.wizard-card');
 
@@ -327,6 +328,7 @@ demo = {
               if($display_width < 600 && $total > 3){
                   $width = 50;
               }
+              console.log($total);
 
                navigation.find('li').css('width',$width + '%');
                $first_li = navigation.find('li:first-child a').html();
@@ -337,13 +339,13 @@ demo = {
            },
 
             onTabClick : function(tab, navigation, index){
-                var $valid = $('.wizard-card form').valid();
+                // var $valid = $('.wizard-card form').valid();
 
-                if(!$valid){
-                    return false;
-                } else{
-                    return true;
-                }
+                // if(!$valid){
+                //     return false;
+                // } else{
+                //     return true;
+                // }
             },
 
             onTabShow: function(tab, navigation, index) {
@@ -438,7 +440,7 @@ demo = {
         });
 
         function refreshAnimation($wizard, index){
-            total_steps = $wizard.find('li').length;
+            total_steps = $wizard.find('li.wizard-menu-top').length;
             move_distance = $wizard.width() / total_steps;
             step_width = move_distance;
             move_distance *= index;
@@ -511,7 +513,7 @@ demo = {
 
         var RoundedLineChart = new Chartist.Line('#roundedLineChart', dataRoundedLineChart, optionsRoundedLineChart);
 
-        md.startAnimationForLineChart(RoundedLineChart);
+        //md.startAnimationForLineChart(RoundedLineChart);
 
 
         /*  **************** Straight Lines Chart - single line with points ******************** */
@@ -538,7 +540,7 @@ demo = {
 
         var straightLinesChart = new Chartist.Line('#straightLinesChart', dataStraightLinesChart, optionsStraightLinesChart);
 
-        md.startAnimationForLineChart(straightLinesChart);
+        //md.startAnimationForLineChart(straightLinesChart);
 
 
         /*  **************** Coloured Rounded Line Chart - Line Chart ******************** */
@@ -571,7 +573,7 @@ demo = {
 
         var colouredRoundedLineChart = new Chartist.Line('#colouredRoundedLineChart', dataColouredRoundedLineChart, optionsColouredRoundedLineChart);
 
-        md.startAnimationForLineChart(colouredRoundedLineChart);
+        //md.startAnimationForLineChart(colouredRoundedLineChart);
 
 
         /*  **************** Coloured Rounded Line Chart - Line Chart ******************** */
@@ -606,7 +608,7 @@ demo = {
 
         var colouredBarsChart = new Chartist.Line('#colouredBarsChart', dataColouredBarsChart, optionsColouredBarsChart);
 
-        md.startAnimationForLineChart(colouredBarsChart);
+        //md.startAnimationForLineChart(colouredBarsChart);
 
 
 
@@ -653,7 +655,7 @@ demo = {
         var simpleBarChart = Chartist.Bar('#simpleBarChart', dataSimpleBarChart, optionsSimpleBarChart, responsiveOptionsSimpleBarChart);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(simpleBarChart);
+        //md.startAnimationForBarChart(simpleBarChart);
 
 
         var dataMultipleBarsChart = {
@@ -686,7 +688,7 @@ demo = {
         var multipleBarsChart = Chartist.Bar('#multipleBarsChart', dataMultipleBarsChart, optionsMultipleBarsChart, responsiveOptionsMultipleBarsChart);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(multipleBarsChart);
+        //md.startAnimationForBarChart(multipleBarsChart);
     },
 
     initDashboardPageCharts: function(){
@@ -711,7 +713,7 @@ demo = {
 
         var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
 
-        md.startAnimationForLineChart(dailySalesChart);
+        //md.startAnimationForLineChart(dailySalesChart);
 
 
 
@@ -736,7 +738,7 @@ demo = {
         var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
 
         // start animation for the Completed Tasks Chart - Line Chart
-        md.startAnimationForLineChart(completedTasksChart);
+        //md.startAnimationForLineChart(completedTasksChart);
 
 
         /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
@@ -769,7 +771,7 @@ demo = {
         var websiteViewsChart = Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
 
         //start animation for the Emails Subscription Chart
-        md.startAnimationForBarChart(websiteViewsChart);
+        //md.startAnimationForBarChart(websiteViewsChart);
 
     },
 
@@ -1149,23 +1151,6 @@ demo = {
 		});
     },
 
-	showNotification: function(from, align){
-        type = ['','info','success','warning','danger','rose','primary'];
-
-        color = Math.floor((Math.random() * 6) + 1);
-
-    	$.notify({
-        	icon: "notifications",
-        	message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
-
-        },{
-            type: type[color],
-            timer: 3000,
-            placement: {
-                from: from,
-                align: align
-            }
-        });
-	}
+	
 
 }

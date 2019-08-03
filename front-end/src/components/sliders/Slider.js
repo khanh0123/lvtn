@@ -3,16 +3,33 @@ import SlideItem from "./SlideItem";
 import OwlCarousel from 'react-owl-carousel2';
 
 class Slider extends React.Component {
-    
+    constructor(props) {
+        super(props);
+    }
+    shouldComponentUpdate(nextProps){
+        if(this.props.data != nextProps.data){
+            return true;
+        }
+        return false;
+    }
     render() {
+        let { data } = this.props;
+        // let speed =  Math.floor(Math.random()*(2000-1500+1) + 1500);
+        // let timeout = Math.floor(Math.random()*(2000-1500+1) + 1500);
         const options = {
-            items:3,
-            autoplay: false, 
-            center: true, 
-            loop: true, 
-            nav: true, 
-            smartSpeed: 1800, 
-            navText:["<span class='flaticon-send'></span>", "<span class='flaticon-send'></span>"],
+            items: 3,
+            autoplay: false,
+            // autoplaySpeed:true,
+            // autoplayTimeout:timeout,
+            // autoplayHoverPause:true,
+            center: true,
+            loop: true,
+            nav: true,
+            // touchDrag:true,
+            mouseDrag:true,
+            // lazyLoad:true,
+            // smartSpeed: speed,
+            navText: ["<span class='flaticon-send'></span>", "<span class='flaticon-send'></span>"],
             responsive: {
                 0: {
                     items: 2
@@ -37,24 +54,20 @@ class Slider extends React.Component {
                 }
             }
         };
-         
+
         const events = {
-            onDragged: function(event) {},
-            onChanged: function(event) {}
+            onDragged: function (event) { },
+            onChanged: function (event) { }
         };
         return (
             <ul className="slider">
-                <OwlCarousel options={options} events={events}>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                    <SlideItem/>
-                </OwlCarousel>
+                {data && data.length > 0 &&
+                    <OwlCarousel options={options} events={events}>
+                    {data.map((item, i) => {
+                        return <SlideItem item={item} key={i} />
+                    })}
+                    </OwlCarousel>
+                }
             </ul>
 
         )

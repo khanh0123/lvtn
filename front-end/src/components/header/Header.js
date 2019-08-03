@@ -1,8 +1,62 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
+import React, { } from 'react';
+import { Link } from 'react-router-dom';
+import Menu from './Menu';
+import cookie from "react-cookies";
+// import LoginModal from "../popup/LoginModal";
+import LoginSignupModal from "../popup/LoginSignupModal";
+import { UserAction } from "../../actions"
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import config from "../../config"
+// import * as serviceWorker from '../../registerServiceWorker';
 
 class Header extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            is_open_popup_login: false,
+            data_user: '',
+
+        };
+        this._togglePopupLogin = this._togglePopupLogin.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.get_status_login().then(async (res) => {
+            let data = res.payload.data;
+            if (data && data.isLogged) {
+                this.setState({ data_user: data.info })
+            }
+            if(data && data.version && typeof window != 'undefined'){
+                
+                let current_version = cookie.load(config.constant.version)
+                if(current_version != data.version){
+                    
+                    this.props.clearCache(() => {
+                        cookie.save(config.constant.version, data.version, {
+                            path: '/',
+                            maxAge: 600000,
+                        })
+                        if(typeof current_version != 'undefined'){
+                            var k = confirm('Đã có cập nhật mới. Bạn có muốn refresh trình duyệt không?');
+                            if(k){
+                                window.location.reload()
+                            }
+                        }
+                        
+                    });
+                    
+                }
+                
+            }
+
+        });
+    }
+
+
     render() {
+        let { is_open_popup_login, data_user } = this.state;
         return (
             <header className="header-section">
                 <div className="top-header">
@@ -11,11 +65,23 @@ class Header extends React.Component {
                             <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 top-account sm-width sm-width-33">
                                 <div className="top-accounts">
                                     <ul>
-                                        <li><Link to="/"><span className="fa fa-user" />Đăng Ký</Link></li>
-                                        <li><Link to="/"><span className="fa fa-lock" />Đăng Nhập</Link></li>
+                                        {
+                                            data_user !== '' &&
+                                            <li className="dropdown">
+                                                <a href="javascript:void(0)" aria-label="link" className="dropdown-toggle" data-toggle="dropdown"><span className="fa fa-lock" />Xin chào {data_user.name} <i className="fa fa-angle-down"></i></a>
+                                                <ul className="dropdown-menu">
+                                                    <li><a href="javascript:void(0)" aria-label="link" onClick={this._logout}>Đăng xuất</a></li>
+                                                </ul>
+                                            </li>
+
+                                            ||
+                                            <li onClick={this._togglePopupLogin} ><a href="javascript:void(0)" aria-label="link"><span className="fa fa-lock" />Đăng Nhập</a></li>
+                                        }
                                     </ul>
                                 </div>
+
                             </div>
+
                             <div className="col-lg-4 col-md-4 col-sm-6 col-xs-12 top-message sm-width sm-width-33 hidden-xs">
                                 <div className="top-messages">
                                     <p><span className="fa fa-envelope-o" /> Chào Mừng Bạn Đến Với <strong className="green"> ** Movie Star **</strong></p>
@@ -29,156 +95,39 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className="header-center">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 header-logos sm-width">
-                                <div className="header-logo">
-                                    <Link to="/">
-                                        <img src='/assets/images/logo.png' alt="logo" />
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-12 header-search-area sm-width">
-                                <div className="header-search categorie-search-box">
-                                    <form action="#">
-                                        <div className="form-group">
-                                            <select className="selectpicker" name="poscats" data-dropup-auto="true">
-                                                <option value={0}>Theo Tên</option>
-                                                <option value={2}>Theo tác giả</option>
-                                                <option value={3}>Theo diễn viên</option>
-                                            </select>
-                                        </div>
-                                        <input className="form-control" type="text" placeholder="Nhập vào từ khóa" />
-                                        <button><span className="fa fa-search" /></button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Menu />
+                <LoginSignupModal isOpen={is_open_popup_login} onClose={this._togglePopupLogin} handleLoginSucess={this._handleLoginSucess.bind(this)} />
 
-                <nav className="navbar navbar-default bootsnav navbar-sticky">
-                    <div className="container">
-                        <div className="social">
-                            <div className="attr-nav">
-                                <ul>
-                                    <li><Link to="/#"><i className="fa fa-facebook" /></Link></li>
-                                    <li><Link to="/#"><i className="fa fa-twitter" /></Link></li>
-                                    <li><Link to="/#"><i className="fa fa-linkedin" /></Link></li>
-                                    <li><Link to="/#"><i className="fa fa-instagram" /></Link></li>
-                                    <li><Link to="/#"><i className="fa fa-google-plus" /></Link></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div className="navbar-header">
-                            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
-                                <i className="fa fa-align-justify" />
-                            </button>
-                        </div>
-
-                        <div className="collapse navbar-collapse" id="navbar-menu">
-                            <ul className="nav navbar-nav navbar-left" data-in="" data-out="">
-                                <li>
-                                    <Link to="/" >Trang Chủ</Link>
-                                </li>
-                                <li className="dropdown">
-                                    <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">Phim Lẻ</a>
-                                    <ul className="dropdown-menu">
-                                        <li><Link to="/phim-le/phim-hanh-dong" >Phim Hành Động</Link></li>
-                                        <li><Link to="/phim-le/phim-tam-ly" >Phim Tâm Lý</Link></li>
-                                        <li><Link to="/phim-le/phim-tinh-cam" >Phim Tình Cảm</Link></li>
-                                        <li><Link to="/phim-le/phim-kinh-di" >Phim Kinh Dị</Link></li>
-                                        <li><Link to="/phim-le/phim-vien-tuong" >Phim Viễn Tưởng</Link></li>
-                                    </ul>
-                                </li>
-                                <li className="dropdown">
-                                    <Link to="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">Phim bộ</Link>
-                                    <ul className="dropdown-menu">
-                                        <li><Link to="/phim-bo/phim-hanh-dong" >Phim bộ Việt Nam</Link></li>
-                                        <li><Link to="/phim-le/phim-tam-ly" >Phim bộ Trung Quốc</Link></li>
-                                        <li><Link to="/phim-le/phim-tinh-cam" >Phim bộ Hàn Quốc</Link></li>
-                                        <li><Link to="/phim-le/phim-tinh-cam" >Phim bộ Mỹ</Link></li>
-                                        <li><Link to="/phim-le/phim-tinh-cam" >Phim bộ Thái Lan</Link></li>
-                                    </ul>
-                                </li>
-                                <li className="dropdown megamenu-fw">
-                                    <a href="javascript:void(0)" className="dropdown-toggle" data-toggle="dropdown">Quốc Gia</a>
-                                    <ul className="dropdown-menu megamenu-content" role="menu">
-                                        <li>
-                                            <div className="row">
-                                                <div className="col-menu col-md-3">
-                                                <h6 className="title">Châu Âu</h6>
-                                                    <div className="content">
-                                                        <ul className="menu-col">
-                                                            <li><Link to="/grid-page.html/">Việt Nam</Link></li>
-                                                            <li><Link to="/grid-left.html/">Trung Quốc</Link></li>
-                                                            <li><Link to="/grid-right.html/">Mỹ</Link></li>
-                                                            <li><Link to="/list-page.html/">Đài Loan</Link></li>
-                                                            <li><Link to="/list-left.html/">Châu Âu</Link></li>
-                                                            <li><Link to="/list-right.htm/l">Nhật Bản</Link></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* end col-3 */}
-                                                <div className="col-menu col-md-3">
-                                                <h6 className="title">Châu Á</h6>
-                                                    <div className="content">
-                                                        <ul className="menu-col">
-                                                            <li><Link to="/details.html/">Hồng Kông</Link></li>
-                                                            <li><Link to="/detail">Thái Lan</Link></li>
-                                                            <li><Link to="/call-to-action.html/">Châu Á</Link></li>
-                                                            <li><Link to="/shortcode-alerts.html/">Ấn Độ</Link></li>
-                                                            <li><Link to="/tag.html/">Pháp</Link></li>
-                                                            <li><Link to="/toggle.html/">Anh</Link></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* end col-3 */}
-                                                <div className="col-menu col-md-3">
-                                                <h6 className="title">Châu Mỹ</h6>
-                                                    <div className="content">
-                                                        <ul className="menu-col">
-                                                            <li><Link to="/details.html/">Hồng Kông</Link></li>
-                                                            <li><Link to="/detail">Thái Lan</Link></li>
-                                                            <li><Link to="/call-to-action.html/">Châu Á</Link></li>
-                                                            <li><Link to="/shortcode-alerts.html/">Ấn Độ</Link></li>
-                                                            <li><Link to="/tag.html/">Pháp</Link></li>
-                                                            <li><Link to="/toggle.html/">Anh</Link></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* end col-3 */}
-                                                <div className="col-menu col-md-3">
-                                                <h6 className="title">Châu Đại Dương</h6>
-                                                    <div className="content">
-                                                        <ul className="menu-col">
-                                                            <li><Link to="/details.html/">Hồng Kông</Link></li>
-                                                            <li><Link to="/detail">Thái Lan</Link></li>
-                                                            <li><Link to="/call-to-action.html/">Châu Á</Link></li>
-                                                            <li><Link to="/shortcode-alerts.html/">Ấn Độ</Link></li>
-                                                            <li><Link to="/tag.html/">Pháp</Link></li>
-                                                            <li><Link to="/toggle.html/">Anh</Link></li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                {/* end col-3 */}
-                                            </div>
-                                            {/* end row */}
-                                        </li>
-                                    </ul>
-                                </li>
-                                
-                                <li><Link to="/phim-chieu-rap">Phim Chiếu Rạp</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
             </header>
-
         )
+    }
+    _logout = () => {        
+        cookie.remove(config.constant.cookie_token,{ path: '/' });
+        window.location.reload();
+    }
+    _handleLoginSucess(data) {
+        if (data && data.access_token) {
+            this.setState({ data_user: data.info })
+        }
+    }
+
+    _togglePopupLogin(status) {       
+        if(status !== true && status !== false){
+            status = !this.state.is_open_popup_login;
+        }
+         
+        this.setState({ is_open_popup_login: status });
     }
 }
 
-export default Header;
+const mapStateToProps = ({ user_result }) => {
+    return Object.assign({}, user_result || {});
+}
+
+const mapDispatchToProps = (dispatch) => {
+    let actions = bindActionCreators({
+        get_status_login: UserAction.user_get_status_login
+    }, dispatch);
+    return { ...actions, dispatch };
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

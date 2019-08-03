@@ -15,10 +15,13 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \App\Http\Middleware\CheckForMaintenanceMode::class,
+        // \App\Http\Middleware\Authenticate::class,
+        // \App\Http\Middleware\AuthAdmin::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
+
     ];
 
     /**
@@ -38,8 +41,6 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
-            'bindings',
         ],
     ];
 
@@ -51,14 +52,23 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'auth'               => \App\Http\Middleware\Authenticate::class,
+        'auth.admin'         => \App\Http\Middleware\AuthAdmin::class,
+        'auth.writer'        => \App\Http\Middleware\WriterUser::class,
+        'auth.editer'        => \App\Http\Middleware\EditerUser::class,
+        'auth.editer.delete' => \App\Http\Middleware\EditerDelete::class,
+        'auth.master'        => \App\Http\Middleware\SupperAdmin::class,
+        'auth.user'          => \App\Http\Middleware\AuthUser::class,
+        'auth.basic'         => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'cors'               => \Barryvdh\Cors\HandleCors::class,
+        'api.cors'           => \App\Http\Middleware\Cors::class, 
+        'bindings'           => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'cache.headers'      => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can'                => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'              => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'signed'             => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        'throttle'           => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'           => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
     ];
 }

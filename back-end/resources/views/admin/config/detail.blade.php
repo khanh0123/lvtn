@@ -1,11 +1,12 @@
-@extends('admin/layout')
+@extends('admin/layout' , ['message' => !empty($message) ? $message : []])
 @section('title', 'Cấu hình')
 @section('main')
 <div class="container-fluid">
     <div class="alert alert-light" role="alert">
         <strong class="">Chi tiết cấu hình</strong>
     </div>
-    <form action="">
+    <form action="" method="post">
+        {{ csrf_field()}}
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
@@ -14,13 +15,14 @@
                             <div class="card-header card-header-text" data-background-color="rose">
                                 <h4 class="card-title">Chi tiết</h4>
                             </div>
+
                             <div class="card-content form-horizontal">
                                 <div class="row">
                                     <label class="col-sm-2 label-on-left">Khóa</label>
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="key" value="{{ $data['key'] }}">
+                                            <input type="text" class="form-control" name="key" value="{{ $data['info']['key'] }}" required="required">
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
@@ -30,12 +32,11 @@
                                     <div class="col-sm-10">
                                         <div class="form-group label-floating is-empty">
                                             <label class="control-label"></label>
-                                            <input type="text" class="form-control" name="value" value="{{ $data['value'] }}">
+                                            <input type="text" class="form-control" name="value" value="{{ $data['info']['value'] }}" required>
                                             <span class="material-input"></span>
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -50,10 +51,15 @@
                                 <h4 class="card-title">Hành động</h4>
                             </div>
                             <div class="card-content">
+                                @if (session()->get('permission')->canUpdate)
+                                <button type="submit" class="btn btn-info using-tooltip" data-toggle="tooltip" data-placement="top" title="Xác Nhận Thay Đổi"><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
+                                @endif
 
-                                <button type="submit" class="btn btn-info" href=""><i class="material-icons">check</i>Xác Nhận<div class="ripple-container"></div></button>
-                                <a class="btn" href="">Hủy bỏ<div class="ripple-container"></div></a>
-                                <a class="btn btn-danger" href=""><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                <a class="btn using-tooltip" href="{{base_url('admin/config')}}" data-toggle="tooltip" data-placement="top" title="Hủy bỏ thao tác">Hủy bỏ<div class="ripple-container"></div></a>
+                                
+                                @if (session()->get('permission')->canDelete)
+                                <a class="btn btn-danger using-tooltip" href="{{base_url('admin/config/del/'.$data['info']['id'])}}" data-toggle="tooltip" data-placement="top" title="Xóa phần tử này?"><i class="material-icons">close</i>Xóa<div class="ripple-container"></div></a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -75,6 +81,10 @@
 <!-- <script src="/assets/js/jquery.datatables.js"></script>
 --><script type="text/javascript">
     $(document).ready(function() {
+        $('.using-tooltip').tooltip({animation:true});
+        $('.menu-left-custom >li.active').removeClass('active');
+        $('#config').parent('li').addClass('active');
+        $('#config').collapse();
 
     });
 </script>

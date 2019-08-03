@@ -1,0 +1,192 @@
+
+data Create category
+{
+	slug: "category-demo",
+	status: 1,
+	lang: [
+		{
+			lang_id: 1,
+			title: 'cateogry-demo-vn',
+			image: '',
+			status: 1
+		}
+	],
+	sites: [
+		{
+			site_id: 1,
+			status: 1
+		},
+		{
+			site_id: 2,
+			status: 1
+		},
+		{
+			site_id: 3,
+			status: 1
+		}
+	]
+}
+
+// ============================================================
+// ============================================================
+// ============================================================	
+Category id : 1
+Thuoc Site: 1 2 3
+Lang: 1 (VN)
+
+// ============================================================
+// ============================================================
+// ============================================================
+
+data Update category
+{
+	id: 1,
+	slug: "category-demo",
+	status: 1,
+	lang: [
+		{
+			lang_id: 1,
+			title: 'cateogry-demo-vn',
+			image: '',
+			status: 1
+		}
+	],
+	sites: [
+		{
+			site_id: 1,
+			status: 1
+		},
+		{
+			site_id: 3,
+			status: 1
+		}
+	]
+}
+
+// ============================================================
+// ============================================================
+// ============================================================	
+Category id : 1
+Thuoc Site: 1 3
+Lang: 1 (VN)
+
+// ============================================================
+// ============================================================
+// ============================================================
+
+data Clone lang category
+{
+	id: 1,
+	lang: [
+		{
+			lang_id: 2,
+			title: 'cateogry-demo-vn',
+			image: '',
+			status: 1
+		}
+	],
+}
+
+// ============================================================
+// ============================================================
+// ============================================================	
+Category id : 1
+Thuoc Site: 1 3
+Lang: 1 (VN) , 2 (EN)
+
+// ============================================================
+// ============================================================
+// ============================================================
+
+data Update category
+{
+	id: 1,
+	slug: "category-demo",
+	status: 1,
+
+	lang: [
+		{
+			lang_id: 2,
+			title: 'cateogry-demo-en',
+			image: '',
+			status: 1
+		}
+	],
+
+	sites: [
+		{
+			site_id: 1,
+			status: 1
+		},
+		{
+			site_id: 3,
+			status: 1
+		}
+	]
+}
+
+
+get data category theo id = 1
+{
+	id: 1,
+	slug: "category-demo",
+	status: 1,
+	lang: [
+		{
+			lang_id: 1,
+			title: 'cateogry-demo-vn',
+			image: '',
+			status: 1
+		},
+		{
+			lang_id: 2,
+			title: 'cateogry-demo-en',
+			image: '',
+			status: 1
+		}
+	],
+	sites: [
+		{
+			site_id: 1,
+			status: 1
+		},
+		{
+			site_id: 3,
+			status: 1
+		}
+	]
+}
+
+
+get list category
+[
+	{
+		id: 1,
+		slug: "category-demo",
+		status: 1,
+        	lang: [
+            		{
+                		lang_id: 1,
+                		title: 'cateogry-demo-vn',
+                		image: '',
+                		status: 1
+            		},
+           		 {
+               			lang_id: 2,
+               	 		title: 'cateogry-demo-en',
+                		image: '',
+                		status: 1
+            		}
+        	],
+        	sites: [
+            		{
+                		site_id: 1,
+                		status: 1
+            		},
+            		{
+                		site_id: 3,
+                		status: 1
+            		}
+        	]
+	}
+]

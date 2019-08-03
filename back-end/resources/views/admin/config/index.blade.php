@@ -1,4 +1,4 @@
-@extends('admin/layout')
+@extends('admin/layout' , ['message' => !empty($message) ? $message : []])
 @section('title', '.:AdminCpannel:.')
 @section('main')
 <div class="container-fluid">
@@ -14,12 +14,12 @@
                     <div class="toolbar">
                         <!--        Here you can write extra buttons/actions for the toolbar              -->
                     </div>
-                    @if(!empty($data))
+                    @if(!empty($data['info']))
                     <div class="row">
                         <div class="col-sm-6">
                                 <span>Hiển thị</span>
                                 <div class="dropdown custom-group" style="display: inline-block">
-                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data->perPage()}}
+                                    <button href="#pablo" class="dropdown-toggle btn btn-primary btn-round " data-toggle="dropdown">{{ $data['info']->perPage()}}
                                         <b class="caret"></b>
                                         <div class="ripple-container"></div>
                                     </button>
@@ -57,53 +57,24 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($data as $value)
+                                @foreach ($data['info'] as $value)
                                 <tr>
                                     <td>{{ $value->key }}</td>
-                                    <td>{{ $value->value }}</td>
+                                    <td style="max-width: 10em;word-break: break-word;">{{ $value->value }}</td>
                                     <td>{{ $value->created_at }}</td>
                                     <td>{{ $value->updated_at }}</td>
                                     <td class="text-right">
                                         <a href="{{base_url('admin/config/detail/'.$value->id) }}" class="btn btn-simple btn-warning btn-icon edit">Chi tiết</a>
-                                        <a href="{{base_url('admin/config/delete/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        @if (session()->get('permission')->canDelete)
+                                        <a href="{{base_url('admin/config/del/'.$value->id) }}" class="btn btn-simple btn-danger btn-icon remove">Xóa</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
                                 
                             </tbody>
                         </table>
-                        @if( $data->hasPages() )
-                        <div class="row">
-                            <div class="col-sm-5">
-                                <div class="dataTables_info" role="status" aria-live="polite">
-                                    Hiển thị từ {{ ($data->currentPage()-1)*$data->perPage() + 1 }} tới {{ ($data->currentPage()-1)*$data->perPage() + $data->count() }} trong tổng số {{ $data->total() }} kết quả
-                                </div>
-                            </div>
-                            <div class="col-sm-7">
-                                <div class="dataTables_paginate" style="text-align: right">
-                                    <ul class="pagination" style="margin: 0">
-                                        <li class="paginate_button previous {{ $data->currentPage() <= 1 ? 'disabled' : ''}} " >
-                                            <a href="{{ $data->previousPageUrl() }}" aria-controls="datatables" data-dt-idx="0" tabindex="0">Trước</a>
-                                        </li>
-                                        <?php 
-                                            $begin = ($data->currentPage() - 5) < 1 ? 1 : $data->currentPage() - 5;
-                                            $end = ($data->currentPage() + 5) > $data->lastPage() ? $data->lastPage() : $data->currentPage() + 5;
-
-                                         ?>
-                                        @for($i = $begin ; $i <= $end ; $i++)
-                                        <li class="paginate_button {{ $data->currentPage() == $i ? 'active' : '' }}">
-                                            <a href="{{ $data->url($i) }}" aria-controls="datatables" data-dt-idx="1" tabindex="0">{{$i}}</a>
-                                        </li>
-                                        @endfor
-                                        <li class="paginate_button next {{ $data->currentPage() >= $data->lastPage() ? 'disabled' : ''}}">
-                                            <a href="{{ $data->nextPageUrl() }}" aria-controls="datatables" data-dt-idx="2" tabindex="0">Sau</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end row -->
-                        @endif
+                        @include('admin/pagination')
                     </div>
                     
                 </div>
@@ -126,9 +97,12 @@
 <script src="/assets/js/jquery.datatables.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        $('li.disabled>a,li.active>a').click(function(event) {
-            event.preventDefault();
-        });
+        
+        $('.menu-left-custom >li.active').removeClass('active');
+        $('#config').parent('li').addClass('active');
+        $('#config .show').addClass('active');
+        $('#config').collapse();
+
         $('#datatables').DataTable({
             paging: false,
             // pagingType: "full_numbers",
@@ -148,7 +122,8 @@
                     next: "Sau",
                     first: "",
                     last: ""
-                }
+                },
+                emptyTable: "Không có dữ liệu nào"
             },
             page:{
 
