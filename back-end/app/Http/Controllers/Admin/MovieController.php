@@ -235,6 +235,7 @@ class MovieController extends MainAdminController
                     if(!empty($arr_cot)){
                         Movie_country::insert($arr_cot);
                     }
+                    $this->upVersion();
 
                     $result['msg'] = 'Thêm dữ liệu thành công';
                 } else {
@@ -268,11 +269,12 @@ class MovieController extends MainAdminController
             $result = $this->setItem('update',$request, $item);
             if($result['type'] == 'success'){
                 if($item->save()){
-                //add data genre and country
+                    $this->upVersion();
+                    //add data genre and country
                     $arr_gen = array();
                     $arr_cot = array();
 
-                //check exists genre
+                    //check exists genre
                     for ($i = 0; $i < count($request->genre); $i++) {
                         $gen_id = $request->genre[$i];
 
@@ -283,7 +285,7 @@ class MovieController extends MainAdminController
                             ];
                         }
                     }
-                //check exists country
+                    //check exists country
                     for ($i = 0; $i < count($request->country); $i++) {
                         $cou_id = $request->country[$i];
 
@@ -396,6 +398,7 @@ class MovieController extends MainAdminController
         }
         
         if($this->model->update()){
+            $this->upVersion();
             return Response()->json(['success' => true,'data' => $this->model]);
         }
         return Response()->json(['error' => true]);

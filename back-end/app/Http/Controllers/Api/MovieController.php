@@ -63,7 +63,9 @@ class MovieController extends Controller
         $data = [];
         $filter = ['sort' => 'desc','orderBy' => 'movie.id','limit' => 20,
             'conditions' => [
-                'and' => [],
+                'and' => [
+                    ['movie.status' , '=',1]
+                ],
                 'or' => [],
                 'filter_or' => [],
             ],

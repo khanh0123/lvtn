@@ -91,7 +91,7 @@ if (!function_exists('apiCurl')) {
         if ($httpcode !== 200) {
             $result = json_decode($result, true);
             $dataResult['http_code'] = $httpcode;
-            $dataResult['message'] = !isset($result['message']) ? $result['message'] : '';
+            $dataResult['message'] = isset($result['message']) ? $result['message'] : '';
             return $dataResult;
         }
         
@@ -556,4 +556,3 @@ if (!function_exists('formatResult')) {
         return $results;
     }
 }
-

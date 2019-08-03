@@ -26,7 +26,7 @@ class MainAdminController extends BaseController
      * Show list item.
      */
     public function index(Request $request ) {        
-        
+
         $filter = $this->getFilter($request);
         $data['info']         = $this->model->get_page($filter , $request);
         $data['filter']       = $filter;
@@ -71,7 +71,7 @@ class MainAdminController extends BaseController
         }
 
         if($request->isMethod('post')){ //update
-        
+
             $result = $this->setItem('update',$request, $item);
             if($result['type'] == 'success'){
                 $item->save();
@@ -101,6 +101,7 @@ class MainAdminController extends BaseController
         list($controller, $action) = $this->getCurrentController();
         $msg = ['type' => 'success','msg' => 'Xóa dữ liệu thành công'];
         try {
+            $this->upVersion();
             if(Schema::hasColumn($this->model->getTable(), 'status')){
                 $item->status = -1;
                 $item->save();
@@ -111,7 +112,7 @@ class MainAdminController extends BaseController
             $msg = ['type' => 'error','msg' => 'Xóa dữ liệu không thành công'];
         }
         return Redirect::route('Admin.'.$controller.'.index')
-                ->withMessage($msg);
+        ->withMessage($msg);
     }
 
     protected function getCurrentController()
@@ -194,7 +195,7 @@ class MainAdminController extends BaseController
                 }
 
                 if(!in_array($key, $this->columns_search)){
-                    
+
                     //multiple value filter
                     if(in_array($key, $this->columns_search_multi)){
                         $arr_val = explode(",", $req->input($key));
@@ -230,6 +231,21 @@ class MainAdminController extends BaseController
         
         // if(method_exists($this,"getDataNeed")) $data['more'] = $this->getDataNeed();
         return view($view)->withData($data)->withMessage($message);
+    }
+
+    protected function upVersion()
+    {
+        $version = DB::table("config")->where("key","version")->first();
+        if(isset($version->value)){
+            $result = [];
+            $match = preg_match("/([0-9])+\.([0-9]).([0-9])/", $version->value,$result );
+            if($match){
+                $version = $result[1].".".$result[2].".".((int)$result[3] + 1);
+            }
+        } else {
+            $version = "1.0.0";
+        }
+        (new \App\Models\Config)->where("key" ,"version")->update(['value' => $version]);
     }
     
 }

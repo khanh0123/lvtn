@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Schema;
 use DB;
 class Controller extends BaseController
 {
@@ -172,6 +173,10 @@ class Controller extends BaseController
             'multi'     => [],
             'filter_or' => [],
         ];
+        // if(Schema::hasColumn($this->model->getTable(), "status")){
+        //     $conditions['and'][] = [$this->model->getTable().".status","=","1"];
+        // }
+        
         foreach ($columns as $key => $value) {
             if( $req->get($key) !== null ){
                 if($key === "name"){                    

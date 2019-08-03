@@ -163,6 +163,7 @@ class EpisodeController extends MainAdminController
             $result = $this->setItem('insert',$request, $item);
             if($result['type'] == 'success'){
                 if($item->save()){
+                    $this->upVersion();
                     //add data genre and country
                     $arr_video = array();
 
@@ -209,6 +210,7 @@ class EpisodeController extends MainAdminController
             $result = $this->setItem('update',$request, $item);
             if($result['type'] == 'success'){
                 if($item->update()){
+                    $this->upVersion();
                     //add data genre and country
                     $arr_video = array();
 
@@ -264,6 +266,7 @@ class EpisodeController extends MainAdminController
             return abort('404');
         }
         $item->delete();
+        $this->upVersion();
 
         return Redirect::to("admin/movie/$mov_id/episode")
                 ->withMessage(['type' => 'success','msg' => 'Xóa dữ liệu thành công']);
