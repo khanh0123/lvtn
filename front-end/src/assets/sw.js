@@ -1,10 +1,3 @@
-
-// importScripts('https://www.gstatic.com/firebasejs/5.4.1/firebase.js');
-// importScripts("../config.js");
-// let config = {
-//     messagingSenderId: "58175360866"
-// };
-
 const isLocalhost = Boolean(
     location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -21,8 +14,10 @@ var urlsToCache = [
     "/",
 ];
 var static_file_to_cache = [
-    // '/index.html',
+    '/index.html',
     `/manifest.json`,
+    '/sw.js',
+    '/firebase-messaging-sw.js',
     // `offline.html?v=${version}`,
 
 ];
@@ -131,7 +126,7 @@ self.addEventListener("fetch", function (event) {
                             }
                             
                         }
-                        if( event.request.url.indexOf(host) > -1 ){
+                        if( event.request.url.indexOf(host) > -1 && (event.request.url.indexOf("/images/") > -1 || event.request.url.indexOf("/vendors/") > -1 || event.request.url.indexOf(".png") > -1 || event.request.url.indexOf(".jpg") > -1 || event.request.url.indexOf(".jpeg") > -1 || event.request.url.indexOf("?v=") > -1) ){
                             // console.log(event.request.url);
                             caches.open(CACHE_NAME).then(function (cache) {
                                 cache.add(event.request.url);
@@ -144,8 +139,34 @@ self.addEventListener("fetch", function (event) {
                     });
             })
             .catch(function (error) {
-                // console.error('##Service Worker##  Failed to fetch', event.request.url);
-                return caches.match('/offline.html');
+                console.error('##Service Worker##  Failed to fetch', event.request.url);
+                return caches.match('/index.html');
             })
     );
 });
+
+self.addEventListener("notificationclick", function(event) {
+    const clickedNotification = event.notification;
+    clickedNotification.close();
+    const promiseChain = clients
+        .matchAll({
+            type: "window",
+            includeUncontrolled: true
+         })
+        .then(windowClients => {
+            let matchingClient = null;
+            for (let i = 0; i < windowClients.length; i++) {
+                const windowClient = windowClients[i];
+                if (windowClient.url === feClickAction) {
+                    matchingClient = windowClient;
+                    break;
+                }
+            }
+            if (matchingClient) {
+                return matchingClient.focus();
+            } else {
+                return clients.openWindow(feClickAction);
+            }
+        });
+        event.waitUntil(promiseChain);
+ });

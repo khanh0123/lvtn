@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter} from 'react-router-dom';
 import { MovieAction, LoadingAction, ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import SlideItem from "../sliders/SlideItem";
 import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";

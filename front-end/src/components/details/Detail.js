@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter,generatePath } from 'react-router-dom';
 import PlayerMovie from '../video/Videoplayer';
 // import '../../assets/vendors/video-react/video-react.css';
 import ScrollRight from "../others/ScrollRight";
 import { MovieAction, LoadingAction, UserAction, ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter,generatePath } from 'react-router';
 import config from "../../config";
 import Comment from "../comment";
 import CreateHelmetTag from "../metaseo";
@@ -21,7 +20,7 @@ class Detail extends React.Component {
             id: '',
             slug: '',
             episode: 1,
-            link_play: [],
+            link_play: null,
         }
         this._getCurrentTimeOnEpisode = this._getCurrentTimeOnEpisode.bind(this);
         this._renderLinkEpisode = this._renderLinkEpisode.bind(this);
@@ -61,8 +60,9 @@ class Detail extends React.Component {
         
     }
     componentDidUpdate(prevProps, prevState) {
+        let {episode} = this.props.match.params;
         
-        if(prevState.episode != this.state.episode){
+        if(episode !== undefined && prevState.episode !== this.state.episode && episode !== prevProps.match.params.episode){
             this._getLinkPlay(this.props).then(() => {
                 this.props.set_loading(false);
             });
@@ -72,7 +72,8 @@ class Detail extends React.Component {
       }
 
     render() {
-        let { data, link_play, id, url } = this._getDataRender();
+        let { data, link_play, id, url,thumbnail } = this._getDataRender();
+        
         // data = null
         let currentTime = this._getCurrentTimeOnEpisode();
 
@@ -111,7 +112,7 @@ class Detail extends React.Component {
                                 <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div className="details-page">
                                         <div className="details-player" style={{ marginTop: '2em' }}>
-                                            <PlayerMovie data={link_play} thumbnail={data ? data.images.poster.url : ''} onUpdateUserEndTime={this._updateUserEndTime.bind(this)} currentTime={currentTime ? currentTime : 0} />
+                                            <PlayerMovie data={link_play} thumbnail={thumbnail} onUpdateUserEndTime={this._updateUserEndTime.bind(this)} currentTime={currentTime ? currentTime : 0} />
                                         </div>
 
                                     </div>
@@ -167,10 +168,15 @@ class Detail extends React.Component {
         let { url } = this.props.match;
         let { id } = this.props.match.params;
         let { data, link_play } = this.state;
-        if (data && data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
+        let thumbnail = "";
+        
+        if (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
             data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
         }
-        return { data, id, url, link_play };
+        if(data && data.images && data.images.poster){
+            thumbnail = data.images.poster.url;
+        }
+        return { data, id, url, link_play,thumbnail };
     }
 
     _updateUserEndTime = async (timestamp) => {

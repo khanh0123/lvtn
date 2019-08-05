@@ -14,7 +14,7 @@ function get_menu() {
     }).catch((err) => {
         return {
             type: 'ERROR',
-            msg: err.res.data.msg
+            msg: err.res ? (err.res.data ? err.res.data.msg : '') : ''
         };
     });
 }

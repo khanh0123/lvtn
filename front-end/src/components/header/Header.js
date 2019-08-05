@@ -1,5 +1,5 @@
 import React, { } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter } from 'react-router-dom';
 import Menu from './Menu';
 import cookie from "react-cookies";
 // import LoginModal from "../popup/LoginModal";
@@ -7,7 +7,6 @@ import LoginSignupModal from "../popup/LoginSignupModal";
 import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import config from "../../config"
 // import * as serviceWorker from '../../registerServiceWorker';
 
@@ -39,10 +38,10 @@ class Header extends React.Component {
                             maxAge: 600000,
                         })
                         if(typeof current_version != 'undefined'){
-                            var k = confirm('Đã có cập nhật mới. Bạn có muốn refresh trình duyệt không?');
-                            if(k){
+                            // var k = confirm('Đã có cập nhật mới. Bạn có muốn refresh trình duyệt không?');
+                            // if(k){
                                 window.location.reload()
-                            }
+                            // }
                         }
                         
                     });

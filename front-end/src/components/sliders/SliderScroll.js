@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { custom_date } from "../helpers";
 import config from "../../config";
-// import LazyLoad from 'react-lazy-load';
 
 class SliderScroll extends React.Component {
 

@@ -92,7 +92,7 @@ function get_detail_movie(id,slug) {
             }
         };
 
-    }).catch((err) => {
+    }).catch((err) => {        
         return {
             type: 'ERROR',
             msg: err.response ? (err.response.data ? (err.response.data.msg ? err.response.data.msg : '') : 'SERVER ERROR') : 'SERVER ERROR'

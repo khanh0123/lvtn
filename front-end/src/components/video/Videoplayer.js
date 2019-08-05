@@ -10,12 +10,13 @@ class PlayerMovie extends Component {
         this.state = {
             sources: [],
             currentTime: 0,
+            thumbnail:null,
 
         };
-        this._onVideoTimeUpdate = this._onVideoTimeUpdate.bind(this);
+        // this._onVideoTimeUpdate = this._onVideoTimeUpdate.bind(this);
         this._onVideoPause = this._onVideoPause.bind(this);
         this._onVideoPlay = this._onVideoPlay.bind(this);
-        this._onVideoEnd = this._onVideoEnd.bind(this);
+        // this._onVideoEnd = this._onVideoEnd.bind(this);
         this._onVideoError = this._onVideoError.bind(this);
 
         this._trackingUserEndTimeEpisode = this._trackingUserEndTimeEpisode.bind(this);
@@ -24,10 +25,10 @@ class PlayerMovie extends Component {
     }
 
     async componentDidMount() {
-        let { data, currentTime } = this.props;
+        let { data, currentTime,thumbnail } = this.props;
         if (data !== '') {
             data = this._initSource(data);            
-            await this.setState({ sources: data, currentTime: currentTime });
+            await this.setState({ sources: data, currentTime: currentTime,thumbnail:thumbnail });
         }
 
         let _linkPlay = this._getLinkFromSources(data);
@@ -47,8 +48,8 @@ class PlayerMovie extends Component {
             this.player.on('pause', this._onVideoPause);
             this.player.on('play', this._onVideoPlay);
             this.player.on('error', this._onVideoError);
-            this.player.on('timeupdate', this._onVideoTimeUpdate);
-            this.player.on('ended', this._onVideoEnd);
+            // this.player.on('timeupdate', this._onVideoTimeUpdate);
+            // this.player.on('ended', this._onVideoEnd);
 
         });
 
@@ -59,10 +60,10 @@ class PlayerMovie extends Component {
 
     }
     async componentWillReceiveProps(nextProps) {
-        let { data, currentTime } = nextProps;
+        let { data, currentTime,thumbnail } = nextProps;
         if (data !== '') {
             data = this._initSource(data);
-            await this.setState({ sources: data, currentTime: currentTime });
+            await this.setState({ sources: data, currentTime: currentTime,thumbnail:thumbnail });
             let _linkPlay = this._getLinkFromSources(data);
             
             if (this.player && _linkPlay && _linkPlay.src != '') {
@@ -80,6 +81,7 @@ class PlayerMovie extends Component {
 
         try {
             this.player.dispose();
+            clearInterval(this.userEndTimeEpisode);
             // clearInterval(this.userEndTimeEpisode);
             // //console.log("dispose player");
 
@@ -89,13 +91,19 @@ class PlayerMovie extends Component {
     }
 
     render() {
-
+        let {thumbnail} = this.state;
+        
         return (
             <div className='player-wrapper'>
                 <video
-                    className="video-js"
+                    className="video-js vjs-default-skin vjs-big-play-centered vjs-big-play-button player-dts"
                     controls
-                    ref="player" style={{ width: "100%" }}>
+                    autoPlay
+                    preload="auto"
+                    ref="player" style={{ width: "100%" }}
+                    poster={thumbnail}
+                    style={{"zIndex":"1"}}
+                >
                 </video>
             </div>
         );
@@ -139,10 +147,10 @@ class PlayerMovie extends Component {
         }
         return null;
     }
-    _onPlayerReady = (player) => {
-        //console.log("Player is ready: ", player);
-        // this.player = player;
-    }
+    // _onPlayerReady = (player) => {
+    //     //console.log("Player is ready: ", player);
+    //     // this.player = player;
+    // }
 
     _onVideoPlay = () => {
         if (this.userEndTimeEpisode !== null) return;
@@ -158,27 +166,27 @@ class PlayerMovie extends Component {
         this.userEndTimeEpisode = null;
     }
 
-    _onVideoTimeUpdate = () => {
+    // _onVideoTimeUpdate = () => {
 
-    }
+    // }
 
-    _onVideoSeeking = (duration) => {
-        //console.log("Video seeking: ", duration);
-    }
+    // _onVideoSeeking = (duration) => {
+    //     //console.log("Video seeking: ", duration);
+    // }
 
-    _onVideoSeeked = (from, to) => {
-        //console.log(`Video seeked from ${from} to ${to}`);
-    }
+    // _onVideoSeeked = (from, to) => {
+    //     //console.log(`Video seeked from ${from} to ${to}`);
+    // }
 
-    _onVideoEnd = () => {
-        //console.log("Video ended");
-    }
+    // _onVideoEnd = () => {
+    //     //console.log("Video ended");
+    // }
     _onVideoError = () => {
-        //console.log("Video error");
+        this.setState({thumbnail:null})
     }
 
     _trackingUserEndTimeEpisode = () => {
-        if (this.userEndTimeEpisode !== null && typeof this.props.onUpdateUserEndTime !== undefined && this.player.currentTime()) {
+        if (this.userEndTimeEpisode !== null && typeof this.props.onUpdateUserEndTime != 'undefined' && this.player.currentTime()) {
             let currentTime = this.player.currentTime();
             this.props.onUpdateUserEndTime(currentTime);
         }

@@ -1,9 +1,8 @@
 import React from "react";
 import { MenuAction } from "../../actions"
-import { Link } from 'react-router-dom';
+import { Link,withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 // import config from "../../config";
 
 class Menu extends React.Component {

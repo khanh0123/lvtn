@@ -12,6 +12,7 @@ import './assets/css/style.css';
 import './assets/css/loginsignup.css';
 import config from "./config";
 import * as serviceWorker from './registerServiceWorker';
+import { initializeFirebase,askForPermissionToReceiveNotifications} from "./push-notification";
 // import cookie from "react-cookies";
 
 const store = window.__REDUX_DATA__ != "" ? createCustomStore(window.__REDUX_DATA__) : customStore;
@@ -31,7 +32,7 @@ hydrate(
     </ReduxProvider>
     , document.getElementById('root')
 );
-serviceWorker.register();
+// serviceWorker.register();
 async function clearCacheServiceWorker (callback) {
     
     await serviceWorker.unregisterAndClearCaches();
@@ -39,3 +40,7 @@ async function clearCacheServiceWorker (callback) {
         callback();
     }
 }
+// initializeFirebase();
+// if(!localStorage.getItem("nofitication-token")){
+//     askForPermissionToReceiveNotifications();
+// }

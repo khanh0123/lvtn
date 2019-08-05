@@ -1,10 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom"
 import RBCarousel from   "../../assets/js/react-bootstrap-carousel";
-// const RBCarousel = require('react-bootstrap-carousel')
-import LazyLoad from 'react-lazy-load';
-// import withStyles from 'isomorphic-style-loader/withStyles'
-// import s from "react-bootstrap-carousel/dist/react-bootstrap-carousel.css";
 
 class SliderBanner extends React.Component {
 
@@ -44,13 +40,7 @@ class SliderBanner extends React.Component {
                                 <div className="slide-item" key={item.id}>
                                     <div className="slider-img">
                                         <div className="bg-top"></div>
-                                        <LazyLoad
-                                            debounce={false}
-                                            offsetVertical={500}
-                                        >
-                                            <img src={item.images.poster ? item.images.poster.url : (item.images.thumbnail ? item.images.thumbnail.url : '')} alt={item.name}/>
-                                        </LazyLoad>
-                                        
+                                        <img src={item.images.poster ? item.images.poster.url : (item.images.thumbnail ? item.images.thumbnail.url : '')} alt={item.name}/>
                                     </div>
                                     <div className="slider-contents">
                                         <div className="container">

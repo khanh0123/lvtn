@@ -1,9 +1,8 @@
 
 let isLocal = typeof window != 'undefined' && window.location.hostname.indexOf("localhost") !== -1;
-// let isLocal = true;
 let protocol = typeof window == 'undefined' ? 'http://' : "//";
 let domain_host_api = "api-lvtn.herokuapp.com/api/v1/";
-domain_host_api = "dev.lvtn/api/v1/";
+// domain_host_api = "dev.lvtn/api/v1/";
 let domain_api = protocol + domain_host_api;
 let config = {
     domain: {
@@ -13,7 +12,7 @@ let config = {
     time: {
         user_end_time:isLocal ? 5000 : 20000,
         default_toast:2000,
-        clearLoading:5000,
+        clearLoading:3000,
     },
     constant: {
         cookie_token: 'access_token',
