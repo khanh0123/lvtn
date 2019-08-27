@@ -8,10 +8,10 @@ const isLocalhost = Boolean(
         /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
 );
-const isWindow = typeof window != 'undefined';
+const isWindow = typeof window !== 'undefined';
 
 export function register() {
-  if ('serviceWorker' in navigator && !isWindow) {
+  if ('serviceWorker' in navigator && doCache) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = "/";
     // if (publicUrl.origin !== window.location.origin) {
@@ -52,13 +52,13 @@ export function clearCache() {
   }
 }
 export async function unregisterAndClearCaches() {
-  const registrations = await navigator.serviceWorker.getRegistrations();
-  const unregisterPromises = registrations.map(registration => registration.unregister());
+  // const registrations = await navigator.serviceWorker.getRegistrations();
+  // const unregisterPromises = registrations.map(registration => registration.unregister());
 
   const allCaches = await caches.keys();
   const cacheDeletionPromises = allCaches.map(cache => caches.delete(cache));
 
-  return await Promise.all([...unregisterPromises, ...cacheDeletionPromises]);
+  return await Promise.all([...cacheDeletionPromises]);
 }
 function registerValidSW(swUrl) {
   navigator.serviceWorker

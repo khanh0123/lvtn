@@ -28,7 +28,7 @@ class Trailer extends React.Component {
                     width='100%'
                     height='100%'
                     controls={true}
-                    style={{ backgroundImage: `url(${image})`,height:'40em' }}
+                    style={{ backgroundImage: `url(${image})`}}
                     width='100%'
                     height='100%'
                 />

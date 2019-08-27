@@ -3,7 +3,7 @@ import React from "react";
 import { CommentAction, UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { times_ago } from "../helpers";
 import LoginSignupModal from "../popup/LoginSignupModal";
 import { toast } from 'react-toastify';

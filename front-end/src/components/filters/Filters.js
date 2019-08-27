@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter } from 'react-router-dom';
 import { MovieAction, LoadingAction, ServerAction } from "../../actions";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import SlideItem from "../sliders/SlideItem";
 import ScrollRight from "../others/ScrollRight";
 import Pagination from "react-js-pagination";
@@ -163,7 +162,7 @@ class Filters extends React.Component {
         let { page } = queryString.parse(this.props.location.search);
             page = !page ? 1 : parseInt(page);
         
-        if (data == null && this.props[MovieAction.ACTION_GET_MOVIE_FILTER] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page]) {
+        if (this.props[MovieAction.ACTION_GET_MOVIE_FILTER] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url] && this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page]) {
             
             
             data = this.props[MovieAction.ACTION_GET_MOVIE_FILTER][url][page].info.data;

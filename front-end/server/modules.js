@@ -1,33 +1,26 @@
-var fs = require("fs");
+import {readFile} from "./helper";
 const path = require("path");
 const staticDomain = '';
 
-const filename = path.resolve(__dirname, '../dist/template.html');
-// console.log(filename);
+const filepath = path.resolve(__dirname, '../dist/template.html');
 
-const renderHTML = ({ reactDom, reduxState, helmetData, version },callback) => {
-
-    fs.readFile(filename,'utf8' , (err, html) => {
-        if (err) return callback('<div/>');
-        html = trim(html);
-
+const renderHTML = async ({ reactDom, reduxState, helmetData, version }) => {
+    try {
+        let html = await readFile(filepath)
         let dataHelmet = renderHelmet(helmetData);
-
-        if (html && html !== 'undefined') {
-            html =  html.replace(/<head>(\n.*)?<\/title>/g, `<head>${dataHelmet}`);
+        if (html !== undefined) {
+            
+            html = html.replace(/<head>(\n.*)?<\/title>/g, `<head>${dataHelmet}`);
             html = html.replace(/<div class="main" id="root"><\/div>/g, `<div class="main" id="root">${reactDom}</div>`);
             html = html.replace(/<script>window.__REDUX_DATA__<\/script>/g, `<script>window.__REDUX_DATA__=${JSON.stringify(reduxState)}</script>`) ;
             html = html.replace(/\%PUBLIC_URL\%\/(js|css|fonts|images|vendors)\/([a-z0-9-.\/]+)(.css|.js|.png)/g,`${staticDomain}/$1/$2$3?v=${version}`) ;
-            html = html.replace(/\%PUBLIC_URL\%\/([a-z0-9-.\/]+)(.json)/,`${staticDomain}/$1$2?v=${version}`) ;
-            // html = html != 'undefined' ? html.replace(/.js/, `.js?v=${version}`) : '';
-            // html = html != 'undefined' ? html.replace(/.css/, `.css?v=${version}`) : '';
+            html = html.replace(/\%PUBLIC_URL\%\/([a-z0-9-.\/]+)(.json)/,`${staticDomain}/$1$2?v=${version}`);            
+            return html.toString();
         }
-        
-        return callback(html.toString());
-    });
-    // return callback('<div/>');
-    
-
+      } catch (e) {
+        console.log('e', e);
+        return '<div/>';
+      }
 }
 
 const renderHelmet = (helmetData) => {

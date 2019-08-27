@@ -1782,7 +1782,7 @@
     }
 
     .movie-item-playlist {
-        margin-top: 30px
+        /* margin-top: 30px; */
     }
 
     .new-movie-inner .owl-nav {
@@ -2292,10 +2292,6 @@
 
     .slider-2 .slider-content {
         padding: 10% 0
-    }
-
-    .top-header {
-        display: none
     }
 
     .plylist-single-content>a {

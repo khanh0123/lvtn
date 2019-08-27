@@ -26,7 +26,7 @@ class Slider extends React.Component {
             loop: true,
             nav: true,
             // touchDrag:true,
-            mouseDrag:true,
+            // mouseDrag:true,
             // lazyLoad:true,
             // smartSpeed: speed,
             navText: ["<span class='flaticon-send'></span>", "<span class='flaticon-send'></span>"],
@@ -55,22 +55,20 @@ class Slider extends React.Component {
             }
         };
 
-        const events = {
-            onDragged: function (event) { },
-            onChanged: function (event) { }
-        };
-        return (
+        // const events = {
+        //     onDragged: function (event) { },
+        //     onChanged: function (event) { }
+        // };
+        return data.length > 0 &&  (
             <ul className="slider">
-                {data && data.length > 0 &&
-                    <OwlCarousel options={options} events={events}>
-                    {data.map((item, i) => {
-                        return <SlideItem item={item} key={i} />
-                    })}
-                    </OwlCarousel>
-                }
+                <OwlCarousel options={options} >
+                {data.map((item, i) => {
+                    return <SlideItem item={item} key={i} />
+                })}
+                </OwlCarousel>
             </ul>
 
-        )
+        ) || null
     }
 }
 

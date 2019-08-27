@@ -3,7 +3,7 @@ import React from "react";
 import { UserAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import cookie from "react-cookies";
 // import withStyles from 'isomorphic-style-loader/withStyles';
 // import s from "../../assets/css/loginsignup.css";

@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,withRouter} from 'react-router-dom';
 import Trailer from "../popup/Trailer";
 import ScrollRight from "../others/ScrollRight";
 import { custom_date } from "../helpers";
-import { MovieAction, LoadingAction, ServerAction } from "../../actions"
+import { MovieAction, ServerAction } from "../../actions"
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import config from "../../config";
 import Comment from "../comment";
 import CreateHelmetTag from "../metaseo";
@@ -28,7 +27,7 @@ class Info extends React.Component {
 
 
     async componentDidMount() {
-        this.props.set_loading(false);
+        // this.props.set_loading(false);
         let { id, slug } = this.props.match.params;
         this.setState({ id: id, slug: slug });
         if (!this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] || (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && !this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id])) {
@@ -50,14 +49,14 @@ class Info extends React.Component {
                 try {
                     let res = await nextProps.get_detail_movie(id, slug);
                     this.setState({ data: res.payload.data });
-                    this.props.set_loading(false);
+                    // this.props.set_loading(false);
                 } catch (error) {
-                    this.props.set_loading(false);
+                    // this.props.set_loading(false);
                 }
             } else {
                 let data = nextProps[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
                 this.setState({ data: data });
-                nextProps.set_loading(false);
+                // nextProps.set_loading(false);
             }
         }
 
@@ -68,6 +67,8 @@ class Info extends React.Component {
 
     render() {
         let { data, id, url } = this._getDataRender();
+        console.log(data);
+        
         return (
             <React.Fragment>
                 {
@@ -96,7 +97,7 @@ class Info extends React.Component {
                                 <React.Fragment>
                                     
                                     <div className="details-big-img ">
-                                        <img src={data.images.poster ? data.images.poster.url : (data.images.thumbnail ? data.images.thumbnail.url : config.images.empty_thumbnail)} alt={data.name} className="hidden-xs" />
+                                        <img src={data.images.poster ? data.images.poster.url : (data.images.thumbnail ? data.images.thumbnail.url : config.images.empty_thumbnail)} alt={data.name} />
                                         <div className="play-icon">
                                             <Link to={`/phim/${data.id}/${data.slug}/xem-phim`} className="flat-icons"><span className="flaticon-play-button" /></Link>
                                         </div>
@@ -108,7 +109,7 @@ class Info extends React.Component {
                                                     <div className="details-reviews">
                                                         <div className="row">
                                                             <div className="col-lg-5 col-md-5 col-sm-6 col-xs-12">
-                                                                <div className="dec-review-img">
+                                                                <div className="dec-review-img hidden-xs">
                                                                     <img src={data.images.thumbnail ? data.images.thumbnail.url : config.images.empty_thumbnail} alt={data.name} />
                                                                 </div>
                                                             </div>
@@ -193,7 +194,8 @@ class Info extends React.Component {
         let { url } = this.props.match;
         let { id, slug } = this.props.match.params;
         let { data } = this.state;
-        if (data && data.length == 0 && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
+        
+        if (this.props[MovieAction.ACTION_GET_DETAIL_MOVIE] && this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id]) {
             data = this.props[MovieAction.ACTION_GET_DETAIL_MOVIE][id];
         }
         return { data, id, url };
@@ -232,7 +234,7 @@ function mapStateToProps({ movie_results, loading_results }) {
 function mapDispatchToProps(dispatch) {
     let actions = bindActionCreators({
         get_detail_movie: MovieAction.get_detail_movie,
-        set_loading: LoadingAction.set_loading,
+        // set_loading: LoadingAction.set_loading,
 
 
     }, dispatch);

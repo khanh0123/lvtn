@@ -181,6 +181,10 @@ footer.footer-section {
     .wrap-sticky {
         min-height: 70px;
     }
+    .popup-content {
+        width: 50%;
+        height: 60%;
+    }
 }
 
 .styles_overlay__CLSq-.styles_overlayCenter__YHoO7.modal-popup-overlay {
@@ -4186,6 +4190,10 @@ span._50f7 {
 }
 
 @media only screen and (max-width: 480px) {
+    .popup-content {
+        width: 50%;
+        height: 20em;
+    }
     .header-search {
         padding:0 0 15px 0
     }
@@ -4310,4 +4318,29 @@ div#root {
 
 .App {
     height: 100%;
+}
+
+.vjs-control-bar {
+    z-index: 10;
+}
+
+button.vjs-big-play-button {
+    z-index: 10;
+}
+
+.vjs-control-bar {
+    z-index: 10;
+}
+
+button.vjs-big-play-button {
+    z-index: 10;
+}
+.vjs-loading-spinner {
+    z-index: 10;
+}
+.video-js .vjs-tech {
+    /* width: unset; */
+}
+#vjs_video_3 {
+    width: 100%;
 }

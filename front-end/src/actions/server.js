@@ -19,15 +19,13 @@ const init_data_home = (obj) => {
 const init_data_page_info = (obj) => {    
     
     
+    
     if (obj) {   
         let { id,slug } = obj.request.params;
         
-        return Promise.all([
-            MovieAction.get_detail_movie(id,slug).then(res => {
-                obj.store.dispatch(res)
-            }),
-            
-        ])     
+        return MovieAction.get_detail_movie(id,slug).then(res => {
+            obj.store.dispatch(res)
+        })
     }
 }
 const init_data_page_detail = (obj) => {    
